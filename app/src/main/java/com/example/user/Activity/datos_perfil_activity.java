@@ -1,0 +1,157 @@
+package com.example.user.Activity;
+
+import android.app.Dialog;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.example.user.R;
+
+public class datos_perfil_activity extends AppCompatActivity {
+
+    private LinearLayout accountDetails;
+    private ImageView arrowIcon;
+
+    private boolean isExpanded = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_datos_perfil);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        // Referencias
+        LinearLayout cuentaSection = findViewById(R.id.cuenta_section);
+        accountDetails = findViewById(R.id.account_details);
+        arrowIcon = findViewById(R.id.arrow_icon);
+
+        // Manejar el clic en la sección "Cuenta"
+        cuentaSection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isExpanded) {
+                    // Ocultar con animación
+                    //Animation slideUp = AnimationUtils.loadAnimation(datos_perfil_activity.this, R.anim.slide_up);
+                    //accountDetails.startAnimation(slideUp);
+                    accountDetails.setVisibility(View.GONE);
+                    arrowIcon.setRotation(0f); // Rotar flecha hacia abajo
+                } else {
+                    // Mostrar con animación
+                    Animation slideDown = AnimationUtils.loadAnimation(datos_perfil_activity.this, R.anim.slide_down);
+                    accountDetails.startAnimation(slideDown);
+                    accountDetails.setVisibility(View.VISIBLE);
+                    arrowIcon.setRotation(180f); // Rotar flecha hacia arriba
+                }
+                isExpanded = !isExpanded;
+            }
+        });
+
+        // Botón "Restablecer"
+        findViewById(R.id.TV_reestablecer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showResetPasswordDialog();
+            }
+        });
+
+        // Botón "Borrar cuenta"
+        findViewById(R.id.TV_eliminar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDeleteAccountDialog();
+            }
+        });
+    }
+
+    private void showResetPasswordDialog() {
+
+        Dialog dialog = new Dialog(this, R.style.BlurBackgroundDialog);
+
+        // Inflar el diseño personalizado
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog_reset_password, null);
+        dialog.setContentView(dialogView);
+
+        // Configurar botones
+        Button btnContinue = dialogView.findViewById(R.id.btn_continue);
+        Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
+
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Acción de continuar
+                dialog.dismiss();
+                Toast.makeText(datos_perfil_activity.this, "Se enviará un correo para restablecer tu contraseña", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(datos_perfil_activity.this, "Cancelar reestablecer", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        // Mostrar el diálogo
+        dialog.show();
+
+
+    }
+
+
+    private void showDeleteAccountDialog() {
+
+        Dialog dialog = new Dialog(this, R.style.BlurBackgroundDialog);
+
+        // Inflar el diseño personalizado
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog_delete_account, null);
+        dialog.setContentView(dialogView);
+
+        // Configurar botones
+        Button btnContinue = dialogView.findViewById(R.id.btn_delete);
+        Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
+
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Acción de continuar
+                dialog.dismiss();
+                Toast.makeText(datos_perfil_activity.this, "Borraste cuenta", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(datos_perfil_activity.this, "Cancelar BorraR", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        // Mostrar el diálogo
+        dialog.show();
+
+
+    }
+
+
+}
