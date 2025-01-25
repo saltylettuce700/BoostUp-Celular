@@ -99,8 +99,8 @@
             android:layout_height="wrap_content"
             android:paddingTop="4dp"
             android:paddingBottom="8dp"
-            android:text="Edad"
-            android:textSize="16sp"/>
+            android:text="Fecha de nacimiento"
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
