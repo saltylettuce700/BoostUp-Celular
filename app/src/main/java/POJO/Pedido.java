@@ -1,4 +1,4 @@
-package com.example.user.POJO;
+package POJO;
 
 public class Pedido {
 

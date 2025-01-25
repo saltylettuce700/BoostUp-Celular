@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.user.POJO.Pedido;
+import POJO.Pedido;
 import com.example.user.R;
 
 import java.util.List;
