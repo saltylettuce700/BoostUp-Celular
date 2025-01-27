@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="4dp"
             android:paddingBottom="8dp"
-            android:text="Edad"
+            android:text="Fecha de nacimiento"
             android:textSize="16sp"/>
 
         <LinearLayout
@@ -79,12 +79,14 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/ET_edad"
+                android:id="@+id/ET_bday"
                 android:layout_width="302dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/et_holder_gray_rectangle"
                 android:ems="10"
-                android:inputType="number"
+                android:clickable="true"
+                android:focusable="false"
+                android:inputType="date"
                 android:paddingLeft="16dp"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"

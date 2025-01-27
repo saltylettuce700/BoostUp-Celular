@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.user.Adapter.CatalogAdapter;
-import com.example.user.POJO.CatalogItem;
+import POJO.CatalogItem;
 import com.example.user.R;
 
 import java.util.ArrayList;

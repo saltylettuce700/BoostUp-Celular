@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.user.Adapter.PedidoAdapter;
-import com.example.user.POJO.Pedido;
+import POJO.Pedido;
 import com.example.user.R;
 
 import java.util.ArrayList;
