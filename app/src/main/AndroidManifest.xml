@@ -13,7 +13,7 @@
         android:theme="@style/Theme.User"
         tools:targetApi="31">
         <activity
-            android:name=".Activity.crear_pedido_activity"
+            android:name=".Activity.home_activity"
             android:exported="true">
 
             <intent-filter>
@@ -22,15 +22,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+        </activity>
+        <activity
+            android:name=".Activity.crear_pedido_activity"
+            android:exported="true">
 
         </activity>
         <activity
             android:name=".Activity.ver_pedido_activity"
-            android:exported="true">
-
-
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".Activity.catalogo_producto_activity"
             android:exported="true" />
@@ -54,7 +54,7 @@
             android:exported="true" />
         <activity
             android:name=".Activity.Registro.registro_medidas_activity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".Activity.Registro.registro_name_activity"
             android:exported="false" />

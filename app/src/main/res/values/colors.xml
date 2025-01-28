@@ -6,4 +6,7 @@
     <color name="base_gray">#D9D9D9</color>
     <color name="dark_gray">#909090</color>
     <color name="orange">#E7681A</color>
+
+    <color name="active_color">#FFFFFF</color>
+    <color name="inactive_color">#80FFFFFF</color>
 </resources>
