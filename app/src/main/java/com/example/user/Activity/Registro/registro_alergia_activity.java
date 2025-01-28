@@ -21,25 +21,6 @@ public class registro_alergia_activity extends AppCompatActivity {
     String [] array_alergenos = {"alergeno1", "alergeno2", "alergeno3", "alergeno4", "alergeno5"};
 
 
-    /*@Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.btn_next){
-            String itemSelected = "Selected Items: ";
-            for (int i = 0; i<LV_alergenos.getCount();i++){
-                if (LV_alergenos.isItemChecked(i)){
-                    itemSelected += LV_alergenos.getItemAtPosition(i) + " ";
-
-                }
-
-            }
-
-            Toast.makeText(this, itemSelected,Toast.LENGTH_SHORT).show();
-
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -13,24 +13,27 @@
 
     <!-- Contenedor principal con scroll -->
     <ScrollView
+        android:id="@+id/mainScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        android:layout_marginTop="200dp">
+        android:layout_marginTop="200dp"
+        android:fillViewport="true">
 
         <LinearLayout
+            android:id="@+id/contentLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/white_rounded_background"
+            android:padding="16dp">
 
             <!-- Información del producto -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/white_rounded_background"
-                android:elevation="8dp"
                 android:orientation="vertical"
-                android:padding="16dp">
+                >
 
                 <TextView
                     android:id="@+id/tvProductName"
@@ -258,7 +261,7 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="25dp" />
+                    android:layout_height="100dp" />
 
 
             </LinearLayout>
