@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -36,6 +37,8 @@ public class ver_pedido_activity extends AppCompatActivity {
                 showQRDialog();
             }
         });
+
+
     }
 
     private void showQRDialog() {
