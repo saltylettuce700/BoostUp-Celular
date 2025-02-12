@@ -1,10 +1,20 @@
 package com.example.user.Activity;
 
+import android.Manifest;
+import android.app.Dialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -12,6 +22,9 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.user.R;
 
 public class account_activity extends AppCompatActivity {
+
+    Button call_button;
+    TextView telefono;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +36,8 @@ public class account_activity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+
 
         findViewById(R.id.idioma_section).setOnClickListener(v -> {
             // Acción para idioma
@@ -43,9 +58,12 @@ public class account_activity extends AppCompatActivity {
             Toast.makeText(this, "TERMINOS Y COND", Toast.LENGTH_SHORT).show();
         });
 
-        findViewById(R.id.ayuda_cliente_section).setOnClickListener(v -> {
-
-            Toast.makeText(this, "AYUDA AL CLIENTE", Toast.LENGTH_SHORT).show();
+        // Botón "Restablecer"
+        findViewById(R.id.ayuda_cliente_section).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCallDialog();
+            }
         });
 
         findViewById(R.id.cerrar_sesion_section).setOnClickListener(v -> {
@@ -69,5 +87,52 @@ public class account_activity extends AppCompatActivity {
             // Acción para Cerrar Sesión
             Toast.makeText(this, "ABRIR METODOS DE PAGO", Toast.LENGTH_SHORT).show();
         });
+    }
+
+    private void showCallDialog() {
+
+        Dialog dialog = new Dialog(this, R.style.BlurBackgroundDialog);
+
+        // Inflar el diseño personalizado
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog_call, null);
+        dialog.setContentView(dialogView);
+
+        // Configurar botones
+        Button btn_call = dialogView.findViewById(R.id.btn_call);
+        Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
+        TextView telefono = dialogView.findViewById(R.id.TV_numero);
+
+        btn_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Acción de continuar
+                dialog.dismiss();
+                Toast.makeText(account_activity.this, "llamando", Toast.LENGTH_SHORT).show();
+
+                Intent llamar = new Intent((Intent.ACTION_CALL));
+
+                llamar.setData(Uri.parse("tel:" + telefono.getText().toString()));
+                if (ActivityCompat.checkSelfPermission(account_activity.this, Manifest.permission.CALL_PHONE)
+                        != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(account_activity.this, new String[] {Manifest.permission.CALL_PHONE},10);
+                    return;
+                }
+                startActivity(llamar);
+
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(account_activity.this, "Cancelar llamar", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        // Mostrar el diálogo
+        dialog.show();
+
+
     }
 }
