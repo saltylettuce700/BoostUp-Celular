@@ -1,8 +1,10 @@
 package com.example.user.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.user.Activity.Registro.registro_terminos_activity;
 import com.example.user.Adapter.BebidaAdapter;
 import com.example.user.Adapter.CarouselAdapter;
 import com.example.user.Adapter.OfertaAdapter;
@@ -97,6 +100,27 @@ public class home_activity extends AppCompatActivity {
         recyclerViewBebidas.addItemDecoration(new PaddingItemDecoration(paddingStart, paddingEnd));
 
         recyclerViewOfertas.addItemDecoration(new PaddingItemDecoration(paddingStart, paddingEnd));
+
+        findViewById(R.id.btn_account).setOnClickListener(v -> {
+            // Acción para siguiente nombre
+            startActivity(new Intent(this, account_activity.class));
+
+
+        });
+
+        findViewById(R.id.btn_comprar).setOnClickListener(v -> {
+            // Acción para siguiente nombre
+            startActivity(new Intent(this, crear_pedido_activity.class));
+            Toast.makeText(this, "Siguiente", Toast.LENGTH_SHORT).show();
+
+        });
+
+        findViewById(R.id.btn_catalogo).setOnClickListener(v -> {
+            // Acción para siguiente nombre
+            startActivity(new Intent(this, catalogo_producto_activity.class));
+            Toast.makeText(this, "Siguiente", Toast.LENGTH_SHORT).show();
+
+        });
 
 
     }

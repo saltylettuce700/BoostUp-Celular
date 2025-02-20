@@ -41,7 +41,7 @@
 
 
             <ImageButton
-                android:id="@+id/button2"
+                android:id="@+id/btn_comprar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -51,7 +51,7 @@
                 android:src="@drawable/cart_icon" />
 
             <ImageButton
-                android:id="@+id/button3"
+                android:id="@+id/btn_catalogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"

@@ -1,6 +1,7 @@
 package com.example.user.Activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.user.Activity.Registro.registro_terminos_activity;
 import com.example.user.R;
 
 public class datos_perfil_activity extends AppCompatActivity {
@@ -69,6 +71,12 @@ public class datos_perfil_activity extends AppCompatActivity {
             public void onClick(View v) {
                 showResetPasswordDialog();
             }
+        });
+
+        findViewById(R.id.medidas_section).setOnClickListener(v -> {
+            // Acción para Cerrar Sesión
+            startActivity(new Intent(this, medidas_edit_activity.class));
+            Toast.makeText(this, "ABRIR METODOS DE PAGO", Toast.LENGTH_SHORT).show();
         });
 
         // Botón "Borrar cuenta"

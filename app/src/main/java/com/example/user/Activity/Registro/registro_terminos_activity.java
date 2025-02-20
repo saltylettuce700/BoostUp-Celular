@@ -1,5 +1,6 @@
 package com.example.user.Activity.Registro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -11,6 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.user.Activity.home_activity;
 import com.example.user.R;
 
 public class registro_terminos_activity extends AppCompatActivity {
@@ -40,6 +42,7 @@ public class registro_terminos_activity extends AppCompatActivity {
 
         // Acción cuando se presiona el botón
         buttonFinish.setOnClickListener(v -> {
+            startActivity(new Intent(this, home_activity.class));
             Toast.makeText(this, "Registro Completado", Toast.LENGTH_SHORT).show();
         });
     }
