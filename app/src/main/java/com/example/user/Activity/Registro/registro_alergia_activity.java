@@ -43,7 +43,6 @@ public class registro_alergia_activity extends AppCompatActivity {
             Toast.makeText(this, "Siguiente nombre", Toast.LENGTH_SHORT).show();
 
 
-
         });
 
         // Configuración del ListView con soporte para selección múltiple
