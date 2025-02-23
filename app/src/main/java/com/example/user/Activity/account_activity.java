@@ -19,6 +19,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.user.Activity.Registro.registro_terminos_activity;
 import com.example.user.R;
 
 public class account_activity extends AppCompatActivity {
@@ -40,7 +41,7 @@ public class account_activity extends AppCompatActivity {
 
 
         findViewById(R.id.idioma_section).setOnClickListener(v -> {
-            // Acción para idioma
+            // Acción para idioma (crear un dialog con 2 radios entre ingles y espanol)
             //startActivity(new Intent(this, InventarioActivity.class));
             Toast.makeText(this, "IDIOMA", Toast.LENGTH_SHORT).show();
         });
@@ -53,8 +54,8 @@ public class account_activity extends AppCompatActivity {
         });
 
         findViewById(R.id.terminos_section).setOnClickListener(v -> {
-
-            //startActivity(new Intent(this, HistorialFallosActivity.class));
+            //terminos y condiciones solo leer activity
+            startActivity(new Intent(this, registro_terminos_activity.class));
             Toast.makeText(this, "TERMINOS Y COND", Toast.LENGTH_SHORT).show();
         });
 
@@ -68,23 +69,26 @@ public class account_activity extends AppCompatActivity {
 
         findViewById(R.id.cerrar_sesion_section).setOnClickListener(v -> {
             // Acción para Cerrar Sesión
+            startActivity(new Intent(this, login_activity.class));
             Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
         });
 
         //Botones de arriba
 
         findViewById(R.id.perfil_section).setOnClickListener(v -> {
-
+            startActivity(new Intent(this, datos_perfil_activity.class));
             Toast.makeText(this, "IR A PERFIL", Toast.LENGTH_SHORT).show();
         });
 
         findViewById(R.id.historial_section).setOnClickListener(v -> {
             // Acción para Cerrar Sesión
+            startActivity(new Intent(this, historial_activity.class));
             Toast.makeText(this, "HISTORIAL", Toast.LENGTH_SHORT).show();
         });
 
         findViewById(R.id.pago_section).setOnClickListener(v -> {
             // Acción para Cerrar Sesión
+            //startActivity(new Intent(this, registro_terminos_activity.class));
             Toast.makeText(this, "ABRIR METODOS DE PAGO", Toast.LENGTH_SHORT).show();
         });
     }

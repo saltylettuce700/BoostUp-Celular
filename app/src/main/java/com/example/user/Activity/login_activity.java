@@ -1,5 +1,6 @@
 package com.example.user.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -9,6 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.user.Activity.Registro.registro_mail_activity;
 import com.example.user.R;
 
 public class login_activity extends AppCompatActivity {
@@ -28,13 +30,13 @@ public class login_activity extends AppCompatActivity {
 
         findViewById(R.id.btn_next).setOnClickListener(v -> {
             // Acción para Inventario
-            //startActivity(new Intent(this, InventarioActivity.class));
+            startActivity(new Intent(this, home_activity.class));
             Toast.makeText(this, "Iniciar Sesion", Toast.LENGTH_SHORT).show();
         });
 
         findViewById(R.id.TV_registarte).setOnClickListener(v -> {
             // Acción para Inventario
-            //startActivity(new Intent(this, InventarioActivity.class));
+            startActivity(new Intent(this, registro_mail_activity.class));
             Toast.makeText(this, "Registrate", Toast.LENGTH_SHORT).show();
         });
     }

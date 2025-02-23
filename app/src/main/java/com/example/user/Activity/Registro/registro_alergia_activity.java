@@ -1,5 +1,6 @@
 package com.example.user.Activity.Registro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -39,11 +40,15 @@ public class registro_alergia_activity extends AppCompatActivity {
 
         findViewById(R.id.btn_next).setOnClickListener(v -> {
             // Acción para siguiente nombre
-            //startActivity(new Intent(this, registro_name_activity.class));
-            Toast.makeText(this, "Siguiente nombre", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, registro_terminos_activity.class));
+            Toast.makeText(this, "Siguiente", Toast.LENGTH_SHORT).show();
 
+        });
 
-
+        findViewById(R.id.btn_back).setOnClickListener(v -> {
+            // Acción para atras mail
+            startActivity(new Intent(this, registro_medidas_activity.class));
+            Toast.makeText(this, "Atras", Toast.LENGTH_SHORT).show();
         });
 
         // Configuración del ListView con soporte para selección múltiple

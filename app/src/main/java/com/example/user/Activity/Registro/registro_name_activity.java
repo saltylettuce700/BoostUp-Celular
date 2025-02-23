@@ -27,13 +27,13 @@ public class registro_name_activity extends AppCompatActivity {
 
         findViewById(R.id.btn_next).setOnClickListener(v -> {
             // Acción para siguiente medidas
-            startActivity(new Intent(this, registro_mail_activity.class));
+            startActivity(new Intent(this, registro_medidas_activity.class));
             Toast.makeText(this, "Siguiente MEDIDAS", Toast.LENGTH_SHORT).show();
         });
 
         findViewById(R.id.btn_back).setOnClickListener(v -> {
             // Acción para atras mail
-            startActivity(new Intent(this, registro_medidas_activity.class));
+            startActivity(new Intent(this, registro_mail_activity.class));
             Toast.makeText(this, "Atras MEDIDAS", Toast.LENGTH_SHORT).show();
         });
 

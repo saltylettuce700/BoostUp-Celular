@@ -255,7 +255,7 @@
             android:textStyle="bold" />
 
         <LinearLayout
-            android:id="@+id/terminos_section"
+            android:id="@+id/medidas_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/white_btn_holder"
@@ -274,7 +274,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:text="Términos y Condiciones"
+                android:text="Medidas del Usuario"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
