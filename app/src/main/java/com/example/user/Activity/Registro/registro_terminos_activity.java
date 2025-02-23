@@ -42,6 +42,7 @@ public class registro_terminos_activity extends AppCompatActivity {
 
         // Acción cuando se presiona el botón
         buttonFinish.setOnClickListener(v -> {
+            finish();
             startActivity(new Intent(this, home_activity.class));
             Toast.makeText(this, "Registro Completado", Toast.LENGTH_SHORT).show();
         });
