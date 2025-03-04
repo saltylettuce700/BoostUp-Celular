@@ -129,6 +129,7 @@
             android:id="@+id/btn_next"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:clickable="true"
             android:background="@android:color/transparent"
             android:scaleType="center"
             android:src="@drawable/xd" />

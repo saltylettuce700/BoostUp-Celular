@@ -38,12 +38,11 @@ public class registro_alergia_activity extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice,array_alergenos);
         LV_alergenos.setAdapter(adapter);
 
-        findViewById(R.id.btn_next).setOnClickListener(v -> {
+        /*findViewById(R.id.btn_next).setOnClickListener(v -> {
             // Acción para siguiente nombre
-            startActivity(new Intent(this, registro_terminos_activity.class));
-            Toast.makeText(this, "Siguiente", Toast.LENGTH_SHORT).show();
 
-        });
+
+        });*/
 
         findViewById(R.id.btn_back).setOnClickListener(v -> {
             // Acción para atras mail
@@ -67,6 +66,8 @@ public class registro_alergia_activity extends AppCompatActivity {
 
             // Mostrar las opciones seleccionadas en un Toast
             Toast.makeText(this, selectedItems.toString(), Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, registro_terminos_activity.class));
+            Toast.makeText(this, "Siguiente", Toast.LENGTH_SHORT).show();
         });
 
 
