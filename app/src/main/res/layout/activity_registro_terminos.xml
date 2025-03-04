@@ -114,14 +114,7 @@
                 android:textSize="16sp"
                  />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Terminar Registro"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="@color/orange"
-                android:elevation="4dp"
-                android:textColor="@android:color/white"/>
+
 
         </LinearLayout>
     </ScrollView>
