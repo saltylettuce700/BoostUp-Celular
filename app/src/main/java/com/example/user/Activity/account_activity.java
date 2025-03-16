@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,8 +25,8 @@ import com.example.user.R;
 
 public class account_activity extends AppCompatActivity {
 
-    Button call_button;
-    TextView telefono;
+
+    TextView TV_idioma;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +41,14 @@ public class account_activity extends AppCompatActivity {
 
 
 
-        findViewById(R.id.idioma_section).setOnClickListener(v -> {
+        findViewById(R.id.idioma_section).setOnClickListener(new View.OnClickListener() {
             // Acción para idioma (crear un dialog con 2 radios entre ingles y espanol)
-            //startActivity(new Intent(this, InventarioActivity.class));
-            Toast.makeText(this, "IDIOMA", Toast.LENGTH_SHORT).show();
+
+            @Override
+            public void onClick(View v) {
+                showLanguageDialog();
+            }
+
         });
 
         findViewById(R.id.progreso_section).setOnClickListener(v -> {
@@ -130,6 +135,44 @@ public class account_activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(account_activity.this, "Cancelar llamar", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        // Mostrar el diálogo
+        dialog.show();
+
+
+    }
+
+    private void showLanguageDialog() {
+
+        Dialog dialog = new Dialog(this, R.style.BlurBackgroundDialog);
+
+        // Inflar el diseño personalizado
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog_language, null);
+        dialog.setContentView(dialogView);
+
+        // Configurar botones
+        Button btnCambiar = dialogView.findViewById(R.id.btn_guardarCambios);
+        Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
+        RadioGroup radioGroup = findViewById(R.id.radioGroupIdioma);
+
+        btnCambiar.setOnClickListener(v -> {
+            int selectedId = radioGroup.getCheckedRadioButtonId();
+            if (selectedId == R.id.rb_espanol) {
+                Toast.makeText(this, "Idioma cambiado a Español", Toast.LENGTH_SHORT).show();
+                TV_idioma.setText("Español");
+            } else if (selectedId == R.id.rb_ingles) {
+                Toast.makeText(this, "Language changed to English", Toast.LENGTH_SHORT).show();
+                TV_idioma.setText("English");
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(account_activity.this, "Cancelar", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
