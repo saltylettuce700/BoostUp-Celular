@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--ACCOUNT ACTIVITY-->
+
+    <string name="welcome_message">Hello,</string>
+    <string name="username">Username</string>
+    <string name="profile_data">Profile Data</string>
+    <string name="history">History</string>
+    <string name="payment_methods">Payment Methods</string>
+    <string name="account_title">My Account</string>
+    <string name="language">Language</string>
+    <string name="spanish">Spanish</string>
+    <string name="progress_suggestions">Progress and Suggestions</string>
+    <string name="information">Information</string>
+    <string name="terms_conditions">Terms and Conditions</string>
+    <string name="customer_support">Customer Support</string>
+    <string name="logout">Logout</string>
+
+
+    <!--LOG IN ACTIVITY-->
+    <string name="login_title">Log In</string>
+    <string name="email_label">Email Address</string>
+    <string name="password_label">Password</string>
+    <string name="register_prompt">Dont have an account?</string>
+    <string name="register_text">Sign Up</string>
+
+    <!-- Button and icon texts -->
+    <string name="login_button_text">Log In</string>
+
+    <!-- EditText hints -->
+    <string name="email_hint">Enter your email address</string>
+    <string name="password_hint">Enter your password</string>
+
+    <!--HOME ACTIVITY-->
+    <string name="bebidas_destacadas_mes">Featured Drinks of the Month</string>
+    <string name="ofertas_promociones">Offers and Promotions</string>
+</resources>

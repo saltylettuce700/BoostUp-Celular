@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:paddingTop="48dp"
-                android:text="Hola,"
+                android:text="@string/welcome_message"
                 android:textColor="#000000"
                 android:textSize="28sp"
                 android:textStyle="bold" />
@@ -102,11 +102,12 @@
                         android:src="@drawable/logo" /> <!-- Ícono de perfil -->
 
                     <TextView
+                        android:id="@+id/profile_data"
                         android:layout_width="68dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:gravity="center"
-                        android:text="Datos de Perfil"
+                        android:text="@string/profile_data"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -126,11 +127,12 @@
                         android:src="@drawable/logo" /> <!-- Ícono de historial -->
 
                     <TextView
+                        android:id="@+id/history"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:gravity="center"
-                        android:text="Historial"
+                        android:text="@string/history"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -150,11 +152,12 @@
                         android:src="@drawable/logo" /> <!-- Ícono de métodos de pago -->
 
                     <TextView
+                        android:id="@+id/payment_methods"
                         android:layout_width="68dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:gravity="center"
-                        android:text="Métodos de Pago"
+                        android:text="@string/payment_methods"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -169,7 +172,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="28dp"
-            android:text="Mi Cuenta"
+            android:text="@string/account_title"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -191,11 +194,12 @@
                 android:src="@drawable/language_small" />
 
             <TextView
+                android:id="@+id/language"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:text="Idioma"
+                android:text="@string/language"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -233,11 +237,12 @@
                 android:src="@drawable/analytics_icon" />
 
             <TextView
+                android:id="@+id/progress_suggestions"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:text="Progreso y Sugerencias"
+                android:text="@string/progress_suggestions"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -249,12 +254,12 @@
 
         <!-- Sección de Gestión de Fallos -->
         <TextView
-            android:id="@+id/gestion_fallos_title"
+            android:id="@+id/information"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
             android:paddingBottom="8dp"
-            android:text="Información"
+            android:text="@string/information"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -276,11 +281,12 @@
                 android:src="@drawable/info_icon" />
 
             <TextView
+                android:id="@+id/terms_conditions"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:text="Términos y Condiciones"
+                android:text="@string/terms_conditions"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -307,11 +313,12 @@
                 android:src="@drawable/atencion_icon" />
 
             <TextView
+                android:id="@+id/customer_support"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:text="Ayuda al Cliente"
+                android:text="@string/customer_support"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -338,11 +345,12 @@
                 android:src="@drawable/logout_small" />
 
             <TextView
+                android:id="@+id/logout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:text="Cerrar Sesión"
+                android:text="@string/logout"
                 android:textColor="#F44336"
                 android:textSize="16sp" />
 

@@ -1,10 +1,49 @@
 <resources>
-    <string name="app_name">User</string>
+    <string name="app_name" translatable="false">User</string>
 
-    <string name="muchomuchotexto">
+    <string name="muchomuchotexto" translatable="false">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis molestie mollis turpis, posuere sagittis dolor. Pellentesque tincidunt felis lacus, vitae sagittis sapien imperdiet ut. Vestibulum consectetur felis diam, ut commodo eros vulputate eu. Nulla porttitor mi risus, ut porta turpis condimentum et. Integer gravida luctus magna, finibus accumsan diam facilisis in. Sed placerat, massa et imperdiet rhoncus, sapien est elementum nulla, facilisis interdum enim ligula vel ex. Morbi vehicula lectus et urna malesuada tristique. Cras mattis, est ac tempus hendrerit, quam lectus fringilla lacus, nec vehicula sem ipsum ac dolor.
 
-Maecenas facilisis tincidunt nisi, a ullamcorper purus pretium ac. Pellentesque eros mauris, vehicula ut volutpat ac, posuere in magna. Etiam ut mattis arcu. Mauris pellentesque pulvinar neque, sed egestas augue fermentum sed. Sed vitae magna eu justo egestas pulvinar. Suspendisse orci ligula, tincidunt quis vulputate ac, consequat a magna. Donec commodo fringilla purus id aliquet. Vestibulum risus velit, efficitur non erat a, maximus posuere sapien. Etiam consequat suscipit purus. Sed sed magna sapien.
+        Maecenas facilisis tincidunt nisi, a ullamcorper purus pretium ac. Pellentesque eros mauris, vehicula ut volutpat ac, posuere in magna. Etiam ut mattis arcu. Mauris pellentesque pulvinar neque, sed egestas augue fermentum sed. Sed vitae magna eu justo egestas pulvinar. Suspendisse orci ligula, tincidunt quis vulputate ac, consequat a magna. Donec commodo fringilla purus id aliquet. Vestibulum risus velit, efficitur non erat a, maximus posuere sapien. Etiam consequat suscipit purus. Sed sed magna sapien.
     </string>
+
+
+    <!--ACCOUNT ACTIVITY-->
+
+    <string name="welcome_message">Hola,</string>
+    <string name="username">Nombre de Usuario</string>
+    <string name="profile_data">Datos de Perfil</string>
+    <string name="history">Historial</string>
+    <string name="payment_methods">Métodos de Pago</string>
+    <string name="account_title">Mi Cuenta</string>
+    <string name="language">Idioma</string>
+    <string name="spanish">Español</string>
+    <string name="progress_suggestions">Progreso y Sugerencias</string>
+    <string name="information">Información</string>
+    <string name="terms_conditions">Términos y Condiciones</string>
+    <string name="customer_support">Ayuda al Cliente</string>
+    <string name="logout">Cerrar Sesión</string>
+
+    <!--LOG IN ACTIVITY-->
+
+    <string name="login_title">Iniciar Sesión</string>
+    <string name="email_label">Correo electrónico</string>
+    <string name="password_label">Contraseña</string>
+    <string name="register_prompt">¿No tienes cuenta?</string>
+    <string name="register_text">Regístrate</string>
+
+    <!-- Texto de los botones e iconos -->
+    <string name="login_button_text">Iniciar Sesión</string>
+
+    <!-- Texto de los campos de texto -->
+    <string name="email_hint">Introduce tu correo electrónico</string>
+    <string name="password_hint">Introduce tu contraseña</string>
+
+    <!--HOME ACTIVITY-->
+
+    <string name="bebidas_destacadas_mes">Bebidas Destacadas del Mes</string>
+    <string name="ofertas_promociones">Ofertas y Promociones</string>
+
+
 
 </resources>
