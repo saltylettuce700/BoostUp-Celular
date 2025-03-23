@@ -40,7 +40,7 @@
             android:background="@drawable/btn_holder_blue"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="Iniciar Sesión"
+            android:text="@string/login_title"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="Correo electrónico"
+            android:text="@string/email_label"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="Contraseña"
+            android:text="@string/password_label"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -119,7 +119,7 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="¿No tienes cuenta?" />
+            android:text="@string/register_prompt" />
 
         <TextView
             android:id="@+id/TV_registarte"
@@ -127,7 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingLeft="8dp"
-            android:text="Regístrate"
+            android:text="@string/register_text"
             android:textStyle="bold" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
