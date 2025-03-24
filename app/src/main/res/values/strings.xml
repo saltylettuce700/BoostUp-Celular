@@ -45,5 +45,48 @@
     <string name="ofertas_promociones">Ofertas y Promociones</string>
 
 
+    <!--CUSTOM DIALOG LANGUAGE ACTIVITY-->
+
+    <string name="dialog_title">Idioma</string>
+    <string name="dialog_message">Seleccione el idioma:</string>
+    <string name="radio_espanol">Español</string>
+    <string name="radio_ingles">English</string>
+    <string name="dialog_message_restart">(Reinicie la aplicación para aplicar los cambios)</string>
+    <string name="btn_guardar">Guardar</string>
+    <string name="btn_cancelar">Cancelar</string>
+
+
+    <!--CUSTOM DIALOG CALL ACTIVITY-->
+
+    <string name="dialog_titlecall">Atención al Cliente</string>
+    <string name="dialog_messagecall">Comuníquese con un profesional</string>
+    <string name="dialog_continue">¿Desea llamar?</string>
+    <string name="btn_call">Llamar</string>
+    <string name="btn_cancel">Cancelar</string>
+
+    <!--DATOS PERFIL ACTIVITY-->
+
+    <string name="profile_dataACT">Datos de Perfil</string>
+    <string name="account">Cuenta</string>
+    <string name="name">Nombre</string>
+    <string name="lastname">Apellido</string>
+    <string name="usernameACT">Username</string>
+    <string name="email">Correo</string>
+    <string name="password">Contraseña</string>
+    <string name="reset_password">Reestablecer</string>
+    <string name="save">Guardar</string>
+    <string name="informationACT">Información</string>
+    <string name="user_measurements">Medidas del Usuario</string>
+    <string name="delete_account">Eliminar cuenta de BoostUp</string>
+
+
+    <!--showDeleteAccountDialog-->
+
+    <string name="delete_account_title">Eliminar Cuenta</string>
+    <string name="delete_account_message">Al eliminar su cuenta perderá la información de su progreso y el saldo vigente.</string>
+    <string name="continue_question">¿Desea continuar?</string>
+    <string name="delete_button">Eliminar cuenta</string>
+    <string name="cancel_button">Cancelar</string>
+
 
 </resources>

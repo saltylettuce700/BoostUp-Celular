@@ -35,4 +35,55 @@
     <!--HOME ACTIVITY-->
     <string name="bebidas_destacadas_mes">Featured Drinks of the Month</string>
     <string name="ofertas_promociones">Offers and Promotions</string>
+
+
+    <!--CUSTOM DIALOG LANGUAGE ACTIVITY-->
+
+    <string name="dialog_title">Language</string>
+    <string name="dialog_message">Select your language:</string>
+    <string name="radio_espanol">Spanish</string>
+    <string name="radio_ingles">English</string>
+    <string name="dialog_message_restart">(Restart the app to apply changes)</string>
+    <string name="btn_guardar">Save</string>
+    <string name="btn_cancelar">Cancel</string>
+
+
+    <!--CUSTOM DIALOG CALL ACTIVITY-->
+
+    <string name="dialog_titlecall">Customer Support</string>
+    <string name="dialog_messagecall">Contact a professional</string>
+    <string name="dialog_continue">Would you like to call?</string>
+    <string name="btn_call">Call</string>
+    <string name="btn_cancel">Cancel</string>
+
+
+    <!--DATOS PERFIL ACTIVITY-->
+
+    <string name="profile_dataACT">Profile Data</string>
+    <string name="account">Account</string>
+    <string name="name">First Name</string>
+    <string name="lastname">Last Name</string>
+    <string name="usernameACT">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="reset_password">Reset</string>
+    <string name="save">Save</string>
+    <string name="informationACT">Information</string>
+    <string name="user_measurements">User Measurements</string>
+    <string name="delete_account">Delete BoostUp Account</string>
+
+
+
+    <!--showDeleteAccountDialog-->
+
+    <string name="delete_account_title">Delete Account</string>
+    <string name="delete_account_message">By deleting your account, you will lose your progress information and the current balance.</string>
+    <string name="continue_question">Do you wish to continue?</string>
+    <string name="delete_button">Delete Account</string>
+    <string name="cancel_button">Cancel</string>
+
+
+
+
+
 </resources>

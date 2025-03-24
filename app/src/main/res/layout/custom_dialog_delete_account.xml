@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Eliminar Cuenta"
+        android:text="@string/delete_account_title"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="Al eliminar su cuenta perderá la información de su progreso y el saldo vigente."
+        android:text="@string/delete_account_message"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="¿Desea continuar?"
+        android:text="@string/continue_question"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/white"
-        android:text="Eliminar cuenta"
+        android:text="@string/delete_button"
         android:textColor="#AF0404" />
 
     <Button
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        android:text="Cancelar"
+        android:text="@string/cancel_button"
         android:textColor="@color/black" />
 
 </LinearLayout>
