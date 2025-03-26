@@ -32,7 +32,7 @@
             android:id="@+id/textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Medidas Corporales"
+            android:text="@string/body_measurements_title"
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="14dp"
-            android:text="Actualiza tus medidas"
+            android:text="@string/update_measurements_prompt"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="4dp"
             android:paddingBottom="8dp"
-            android:text="Peso"
+            android:text="@string/weight_label"
             android:textSize="16sp" />
 
         <LinearLayout
@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="4dp"
             android:paddingBottom="8dp"
-            android:text="Talla (Altura)"
+            android:text="@string/height_label"
             android:textSize="16sp" />
 
 
@@ -149,7 +149,7 @@
             android:paddingTop="4dp"
             android:paddingBottom="8dp"
 
-            android:text="Cintura"
+            android:text="@string/waist_label"
             android:textSize="16sp" />
 
         <LinearLayout
@@ -185,7 +185,7 @@
             android:paddingTop="4dp"
             android:paddingBottom="8dp"
 
-            android:text="Cadera"
+            android:text="@string/hips_label"
             android:textSize="16sp" />
 
         <LinearLayout
@@ -221,7 +221,7 @@
             android:paddingTop="4dp"
             android:paddingBottom="8dp"
 
-            android:text="Circunferencia de brazo"
+            android:text="@string/arm_circumference_label"
             android:textSize="16sp" />
 
         <LinearLayout
@@ -257,7 +257,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:backgroundTint="@color/orange"
-            android:text="Guardar" />
+            android:text="@string/btn_guardar" />
 
 
     </LinearLayout>
