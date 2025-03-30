@@ -1,10 +1,16 @@
 package com.example.user.Activity;
 
+import static com.example.user.Activity.account_activity.LANGUAGE_PREF;
+import static com.example.user.Activity.account_activity.SELECTED_LANGUAGE;
+
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +26,7 @@ import com.example.user.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class catalogo_producto_activity extends AppCompatActivity {
 
@@ -30,6 +37,13 @@ public class catalogo_producto_activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Cargar el idioma guardado y aplicarlo
+        String languageCode = loadLanguagePreference();
+        //changeLanguage(languageCode); // Aplicar idioma guardado
+
+
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_catalogo_producto);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -48,7 +62,7 @@ public class catalogo_producto_activity extends AppCompatActivity {
         catalogItems = obtenerProductosSimulados();
 
         // Configura el adaptador
-        adapter = new CatalogAdapter(this, catalogItems);
+        adapter = new CatalogAdapter(this, catalogItems, languageCode);
         recyclerView.setAdapter(adapter);
 
         horizontalScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -124,5 +138,30 @@ public class catalogo_producto_activity extends AppCompatActivity {
         items.add(new CatalogItem(CatalogItem.TYPE_PRODUCT, "Jengibre genérico", "Descripción breve"));
 
         return items;
+    }
+
+    private void changeLanguage(String languageCode) {
+        // Cambiar el idioma
+        Locale locale = new Locale(languageCode); // Idioma elegido
+        Locale.setDefault(locale);
+
+        // Configuración para cambiar la configuración regional
+        Configuration config = getResources().getConfiguration();
+        config.setLocale(locale);  // Establecer el idioma en la configuración
+
+        // Actualizar los recursos
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+    }
+
+
+    // Cargar el idioma guardado
+    private String loadLanguagePreference() {
+        SharedPreferences preferences = getSharedPreferences(LANGUAGE_PREF, MODE_PRIVATE);
+
+        Toast.makeText(this, "Idioma actual: " + preferences.getString(SELECTED_LANGUAGE, "es"), Toast.LENGTH_SHORT).show(); // Verifica el idioma
+
+        return preferences.getString(SELECTED_LANGUAGE, "es"); // Default is Spanish
+
     }
 }

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Atencion al Cliente"
+        android:text="@string/dialog_titlecall"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -29,7 +29,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="Comuniquese con un profesional "
+        android:text="@string/dialog_messagecall"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="¿Desea llamar?"
+        android:text="@string/dialog_continue"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
@@ -61,7 +61,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/orange"
-        android:text="Llamar"
+        android:text="@string/btn_call"
         android:textColor="@android:color/white"
         app:icon="@drawable/callicon" />
 
@@ -71,7 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        android:text="Cancelar"
+        android:text="@string/btn_cancel"
         android:textColor="@color/black" />
 
 </LinearLayout>

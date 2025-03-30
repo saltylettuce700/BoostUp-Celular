@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="18dp"
-            android:text="Historial de Pedidos"
+            android:text="@string/product_history"
             android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textSize="20sp"

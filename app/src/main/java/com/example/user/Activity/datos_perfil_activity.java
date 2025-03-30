@@ -1,7 +1,12 @@
 package com.example.user.Activity;
 
+import static com.example.user.Activity.account_activity.LANGUAGE_PREF;
+import static com.example.user.Activity.account_activity.SELECTED_LANGUAGE;
+
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +26,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.user.Activity.Registro.registro_terminos_activity;
 import com.example.user.R;
 
+import java.util.Locale;
+
 public class datos_perfil_activity extends AppCompatActivity {
 
     private LinearLayout accountDetails;
@@ -31,6 +38,11 @@ public class datos_perfil_activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Cargar el idioma guardado y aplicarlo
+        String languageCode = loadLanguagePreference();
+        changeLanguage(languageCode); // Aplicar idioma guardado
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_datos_perfil);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -159,6 +171,28 @@ public class datos_perfil_activity extends AppCompatActivity {
         dialog.show();
 
 
+    }
+
+
+    private void changeLanguage(String languageCode) {
+        // Cambiar el idioma
+        Locale locale = new Locale(languageCode); // Idioma elegido
+        Locale.setDefault(locale);
+
+        // Configuración para cambiar la configuración regional
+        Configuration config = getResources().getConfiguration();
+        config.setLocale(locale);  // Establecer el idioma en la configuración
+
+        // Actualizar los recursos
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+    }
+
+
+    // Cargar el idioma guardado
+    private String loadLanguagePreference() {
+        SharedPreferences preferences = getSharedPreferences(LANGUAGE_PREF, MODE_PRIVATE);
+        return preferences.getString(SELECTED_LANGUAGE, "es"); // Default is Spanish
     }
 
 
