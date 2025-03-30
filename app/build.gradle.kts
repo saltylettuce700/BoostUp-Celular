@@ -44,4 +44,8 @@ dependencies {
 
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation ("com.google.zxing:core:3.3.0")
+
+    implementation ("com.google.mlkit:translate:17.0.3")
+    implementation ("com.google.android.gms:play-services-mlkit-language-id:17.0.0")
+
 }

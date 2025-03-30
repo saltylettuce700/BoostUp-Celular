@@ -5,12 +5,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import POJO.Pedido;
 import com.example.user.R;
+import com.google.mlkit.nl.translate.TranslateLanguage;
+import com.google.mlkit.nl.translate.Translation;
+import com.google.mlkit.nl.translate.TranslatorOptions;
+import com.google.mlkit.nl.translate.Translator;
+
+import android.content.Context;
+
 
 import java.util.List;
 
@@ -19,9 +27,16 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
     // Lista de datos que se mostrarán
     private final List<Pedido> pedidos;
 
+    private Context context;
+    private Translator translator;
+    private String languageCode;
+
     // Constructor que recibe la lista de pedidos
-    public PedidoAdapter(List<Pedido> pedidos) {
+    public PedidoAdapter(Context context, List<Pedido> pedidos,  String languageCode) {
         this.pedidos = pedidos;
+        this.context = context;
+        this.languageCode = languageCode;  // Asigna el idioma aqu
+        setupTranslator(languageCode);
     }
 
     @NonNull
@@ -40,6 +55,12 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
         holder.tvSabor.setText("Sabor: " + pedido.getSabor());
         holder.tvProteina.setText("Proteína: " + pedido.getProteina());
         // Puedes cargar imágenes en imgPedido si tienes URLs o recursos
+
+        // Traducir los textos
+        translateText(holder.tvBebidaUsername);
+        translateText(holder.tvSabor);
+        translateText(holder.tvProteina);
+
     }
 
     // Devuelve el número de elementos en la lista
@@ -64,6 +85,43 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
             imgPedido = itemView.findViewById(R.id.imgPedido);
         }
     }
+
+    // Configurar el Traductor ML Kit
+    private void setupTranslator(String targetLang) {
+        String sourceLang = TranslateLanguage.SPANISH;
+        String targetLangCode = targetLang.equals("en") ? TranslateLanguage.ENGLISH : TranslateLanguage.SPANISH;
+
+        TranslatorOptions options = new TranslatorOptions.Builder()
+                .setSourceLanguage(sourceLang)
+                .setTargetLanguage(targetLangCode)
+                .build();
+
+        translator = Translation.getClient(options);
+
+        translator.downloadModelIfNeeded()
+                .addOnSuccessListener(aVoid -> Toast.makeText(context, "Modelo descargado", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(context, "Error al descargar el modelo: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    // Traducir texto con ML Kit
+    private void translateText(TextView textView) {
+        // Usa el languageCode que ya está disponible
+        String sourceText = textView.getText().toString().trim();
+
+        if (sourceText.isEmpty() || !languageCode.equals("en")) {
+            return; // No traducir si no hay texto o no es inglés
+        }
+
+        // Asegúrate de que el modelo esté listo
+        translator.translate(sourceText)
+                .addOnSuccessListener(translatedText -> {
+                    textView.setText(translatedText);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Error al traducir: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
 
 
 }

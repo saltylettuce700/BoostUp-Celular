@@ -200,6 +200,10 @@ public class home_activity extends AppCompatActivity {
     // Cargar el idioma guardado
     private String loadLanguagePreference() {
         SharedPreferences preferences = getSharedPreferences(LANGUAGE_PREF, MODE_PRIVATE);
+
+        Toast.makeText(this, "Idioma actual: " + preferences.getString(SELECTED_LANGUAGE, "es"), Toast.LENGTH_SHORT).show(); // Verifica el idioma
+
         return preferences.getString(SELECTED_LANGUAGE, "es"); // Default is Spanish
+
     }
 }
