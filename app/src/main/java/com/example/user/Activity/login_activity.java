@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -17,6 +18,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.user.Activity.Registro.registro_mail_activity;
+import com.example.user.ConexionBD.BD;
 import com.example.user.R;
 
 import java.util.Locale;
@@ -28,6 +30,11 @@ public class login_activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Crea objeto de la BD
+        BD bd = new BD();
+        EditText email, password;
+
 
         // Cargar el idioma guardado y aplicarlo
         String languageCode = loadLanguagePreference();
@@ -42,6 +49,7 @@ public class login_activity extends AppCompatActivity {
         });
 
         findViewById(R.id.btn_next).setOnClickListener(v -> {
+
             // Acción para Inventario
             startActivity(new Intent(this, home_activity.class));
             Toast.makeText(this, "Iniciar Sesion", Toast.LENGTH_SHORT).show();
@@ -52,6 +60,9 @@ public class login_activity extends AppCompatActivity {
             startActivity(new Intent(this, registro_mail_activity.class));
             Toast.makeText(this, "Registrate", Toast.LENGTH_SHORT).show();
         });
+
+        email = findViewById(R.id.ET_correo);
+        password = findViewById(R.id.ET_password);
 
 
 
