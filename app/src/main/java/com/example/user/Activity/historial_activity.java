@@ -1,6 +1,11 @@
 package com.example.user.Activity;
 
+import static com.example.user.Activity.account_activity.LANGUAGE_PREF;
+import static com.example.user.Activity.account_activity.SELECTED_LANGUAGE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +30,10 @@ public class historial_activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String languageCode = loadLanguagePreference();
+
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_historial);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -42,7 +51,17 @@ public class historial_activity extends AppCompatActivity {
         pedidos.add(new Pedido("Bebida Usuario", "Vainilla", "Animal"));
         pedidos.add(new Pedido("Bebida Usuario", "Fresa", "Vegetal"));
 
-        pedidoAdapter = new PedidoAdapter(pedidos);
+        pedidoAdapter = new PedidoAdapter(this, pedidos, languageCode);
         recyclerView.setAdapter(pedidoAdapter);
+    }
+
+    // Cargar el idioma guardado
+    private String loadLanguagePreference() {
+        SharedPreferences preferences = getSharedPreferences(LANGUAGE_PREF, MODE_PRIVATE);
+
+        Toast.makeText(this, "Idioma actual: " + preferences.getString(SELECTED_LANGUAGE, "es"), Toast.LENGTH_SHORT).show(); // Verifica el idioma
+
+        return preferences.getString(SELECTED_LANGUAGE, "es"); // Default is Spanish
+
     }
 }

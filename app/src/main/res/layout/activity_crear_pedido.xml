@@ -42,7 +42,7 @@
                     android:id="@+id/tvProductName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Bebida Username"
+                    android:text="@string/product_name"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -61,7 +61,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Elige tu Proteína:"
+                    android:text="@string/choose_protein"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -79,7 +79,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Elige tu Saborizante:"
+                    android:text="@string/choose_flavor"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -97,7 +97,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cúrcuma y Jengibre:"
+                    android:text="@string/choose_curcuma_ginger"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -127,7 +127,7 @@
                     android:layout_marginTop="28dp"
                     android:backgroundTint="#8BC34A"
                     android:elevation="4dp"
-                    android:text="Ir a pagar" />
+                    android:text="@string/go_to_pay" />
 
 
             </LinearLayout>

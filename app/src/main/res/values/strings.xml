@@ -45,5 +45,97 @@
     <string name="ofertas_promociones">Ofertas y Promociones</string>
 
 
+    <!--CUSTOM DIALOG LANGUAGE ACTIVITY-->
+
+    <string name="dialog_title">Idioma</string>
+    <string name="dialog_message">Seleccione el idioma:</string>
+    <string name="radio_espanol">Español</string>
+    <string name="radio_ingles">English</string>
+    <string name="dialog_message_restart">(Reinicie la aplicación para aplicar los cambios)</string>
+    <string name="btn_guardar">Guardar</string>
+    <string name="btn_cancelar">Cancelar</string>
+
+
+    <!--CUSTOM DIALOG CALL ACTIVITY-->
+
+    <string name="dialog_titlecall">Atención al Cliente</string>
+    <string name="dialog_messagecall">Comuníquese con un profesional</string>
+    <string name="dialog_continue">¿Desea llamar?</string>
+    <string name="btn_call">Llamar</string>
+    <string name="btn_cancel">Cancelar</string>
+
+    <!--DATOS PERFIL ACTIVITY-->
+
+    <string name="profile_dataACT">Datos de Perfil</string>
+    <string name="account">Cuenta</string>
+    <string name="name">Nombre</string>
+    <string name="lastname">Apellido</string>
+    <string name="usernameACT">Username</string>
+    <string name="email">Correo</string>
+    <string name="password">Contraseña</string>
+    <string name="reset_password">Reestablecer</string>
+    <string name="save">Guardar</string>
+    <string name="informationACT">Información</string>
+    <string name="user_measurements">Medidas del Usuario</string>
+    <string name="delete_account">Eliminar cuenta de BoostUp</string>
+
+
+    <!--showDeleteAccountDialog-->
+
+    <string name="delete_account_title">Eliminar Cuenta</string>
+    <string name="delete_account_message">Al eliminar su cuenta perderá la información de su progreso y el saldo vigente.</string>
+    <string name="continue_question">¿Desea continuar?</string>
+    <string name="delete_button">Eliminar cuenta</string>
+    <string name="cancel_button">Cancelar</string>
+
+    <!--medidas_edit_activity-->
+
+    <string name="body_measurements_title">Medidas Corporales</string>
+    <string name="update_measurements_prompt">Actualiza tus medidas</string>
+    <string name="weight_label">Peso</string>
+    <string name="height_label">Talla (Altura)</string>
+    <string name="waist_label">Cintura</string>
+    <string name="hips_label">Cadera</string>
+    <string name="arm_circumference_label">Circunferencia de brazo</string>
+    <string name="unit_kg">kg</string>
+    <string name="unit_cm">cm</string>
+    <string name="save_button">Guardar</string>
+
+    <!--CREAR PEDIDO ACTIVITY-->
+
+    <string name="product_name">Bebida Username</string>
+    <string name="choose_protein">Elige tu Proteína:</string>
+    <string name="choose_flavor">Elige tu Saborizante:</string>
+    <string name="choose_curcuma_ginger">Cúrcuma y Jengibre:</string>
+    <string name="go_to_pay">Ir a pagar</string>
+
+
+    <!--CUSTOM DIALOG QR-->
+
+    <string name="qr_title">Use este QR para canjear su bebida</string>
+
+    <!--CATALOGO DE PREODUCTOS-->
+
+    <string name="back_description">Regresar</string>
+    <string name="search_hint">Buscar</string>
+    <string name="search_description">Buscar</string>
+    <string name="catalog_title">Catálogo de Productos</string>
+    <string name="filter_proteins">Proteínas</string>
+    <string name="filter_flavorings">Saborizantes</string>
+    <string name="filter_turmeric">Cúrcuma y jengibre</string>
+    <string name="filter_animal_origin">Origen animal</string>
+    <string name="filter_plant_origin">Origen vegetal</string>
+
+    <!--ITEM PRODUCTO-->
+
+    <string name="product_description">Descripción</string>
+    <string name="view_details">Ver detalles</string>
+
+
+    <!--HISTORIAL ACTIVITY-->
+
+    <string name="product_history">Historial de Pedidos</string>
+
+
 
 </resources>

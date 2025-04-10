@@ -21,8 +21,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingBottom="8dp"
-            >
+            android:paddingBottom="8dp">
 
             <!-- Botón de retroceso -->
             <ImageView
@@ -39,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Catálogo de Productos"
+                android:text="@string/catalog_title"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -62,7 +61,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/et_holder_gray_rectangle"
                 android:ems="10"
-                android:hint="Buscar"
+                android:hint="@string/search_hint"
                 android:inputType="text"
                 />
 
@@ -110,7 +109,7 @@
                     android:background="@drawable/et_holder_gray_rectangle"
                     android:clickable="true"
                     android:padding="8dp"
-                    android:text="Proteinas"
+                    android:text="@string/filter_proteins"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -123,7 +122,7 @@
                     android:background="@drawable/et_holder_gray_rectangle"
                     android:clickable="true"
                     android:padding="8dp"
-                    android:text="Saborizantes"
+                    android:text="@string/filter_flavorings"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -136,7 +135,7 @@
                     android:background="@drawable/et_holder_gray_rectangle"
                     android:clickable="true"
                     android:padding="8dp"
-                    android:text="Curcuma y jengibre"
+                    android:text="@string/filter_turmeric"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -149,7 +148,7 @@
                     android:background="@drawable/et_holder_gray_rectangle"
                     android:clickable="true"
                     android:padding="8dp"
-                    android:text="Origen animal"
+                    android:text="@string/filter_animal_origin"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -163,7 +162,7 @@
                     android:clickable="true"
                     android:padding="8dp"
                     android:paddingRight="38dp"
-                    android:text="Origen vegetal"
+                    android:text="@string/filter_plant_origin"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 

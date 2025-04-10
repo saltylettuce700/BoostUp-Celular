@@ -18,19 +18,30 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.user.R;
+import com.google.mlkit.nl.translate.TranslateLanguage;
+import com.google.mlkit.nl.translate.Translation;
+import com.google.mlkit.nl.translate.TranslatorOptions;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import com.google.mlkit.nl.translate.Translator;
+
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class crear_pedido_activity extends AppCompatActivity {
 
     private ListView listProteinas, listSaborizantes, listCurcuma;
     private String selectedProteina, selectedSaborizante, selectedCurcuma, orderString;
+
+    private Translator translator;
 
 
     @Override
@@ -50,15 +61,25 @@ public class crear_pedido_activity extends AppCompatActivity {
         Button btn_pagar = findViewById(R.id.btn_pagar);
         ImageView qr = findViewById(R.id.generated_qr);
 
+        // Configura el traductor
+        setupTranslator();
+
         // Datos de prueba
         String[] proteinas = {"Proteína Genérica Vegetal", "Proteína Genérica Animal", "Proteína Premium"};
         String[] saborizantes = {"Vainilla", "Chocolate", "Fresa"};
         String[] curcuma = {"Con cúrcuma de la chida", "Con cúrcuma de la chafa"};
 
-        // Configurar adaptadores
-        configureListView(listProteinas, proteinas, selected -> selectedProteina = selected);
-        configureListView(listSaborizantes, saborizantes, selected -> selectedSaborizante = selected);
-        configureListView(listCurcuma, curcuma, selected -> selectedCurcuma = selected);
+        // Traducir los elementos antes de configurar los ListView
+        translateListItems(proteinas, translatedProteinas -> {
+            translateListItems(saborizantes, translatedSaborizantes -> {
+                translateListItems(curcuma, translatedCurcuma -> {
+                    // Configurar los ListView con los elementos traducidos
+                    configureListView(listProteinas, translatedProteinas, selected -> selectedProteina = selected);
+                    configureListView(listSaborizantes, translatedSaborizantes, selected -> selectedSaborizante = selected);
+                    configureListView(listCurcuma, translatedCurcuma, selected -> selectedCurcuma = selected);
+                });
+            });
+        });
 
 
         btn_pagar.setOnClickListener(v -> {
@@ -102,6 +123,37 @@ public class crear_pedido_activity extends AppCompatActivity {
 
     }
 
+    // Configurar el traductor ML Kit
+    private void setupTranslator() {
+        TranslatorOptions options = new TranslatorOptions.Builder()
+                .setSourceLanguage(TranslateLanguage.SPANISH)
+                .setTargetLanguage(TranslateLanguage.ENGLISH)
+                .build();
+
+        translator = Translation.getClient(options);
+
+        translator.downloadModelIfNeeded()
+                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Modelo descargado", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(this, "Error al descargar el modelo: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    // Traducir los elementos de la lista
+    private void translateListItems(String[] items, OnItemsTranslatedListener listener) {
+        List<String> translatedItems = new ArrayList<>();
+        for (String item : items) {
+            translator.translate(item)
+                    .addOnSuccessListener(translatedText -> {
+                        translatedItems.add(translatedText);
+                        if (translatedItems.size() == items.length) {
+                            listener.onItemsTranslated(translatedItems.toArray(new String[0]));
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Error al traducir: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        }
+    }
+
     // Formatea el pedido en un string estructurado
     private String formatOrder() {
         try {
@@ -127,5 +179,10 @@ public class crear_pedido_activity extends AppCompatActivity {
     // Interfaz para manejar selección
     interface OnItemSelectedListener {
         void onItemSelected(String selected);
+    }
+
+    // Interfaz para manejar los elementos traducidos
+    interface OnItemsTranslatedListener {
+        void onItemsTranslated(String[] translatedItems);
     }
 }
