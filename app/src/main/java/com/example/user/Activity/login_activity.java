@@ -25,16 +25,13 @@ import java.util.Locale;
 
 public class login_activity extends AppCompatActivity {
 
-
+    //Crea objeto de la BD
+    BD bd = new BD(this);
+    EditText email, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Crea objeto de la BD
-        BD bd = new BD();
-        EditText email, password;
-
 
         // Cargar el idioma guardado y aplicarlo
         String languageCode = loadLanguagePreference();
@@ -51,8 +48,19 @@ public class login_activity extends AppCompatActivity {
         findViewById(R.id.btn_next).setOnClickListener(v -> {
 
             // Acción para Inventario
-            startActivity(new Intent(this, home_activity.class));
-            Toast.makeText(this, "Iniciar Sesion", Toast.LENGTH_SHORT).show();
+            //startActivity(new Intent(this, home_activity.class));
+            //Toast.makeText(this, "Iniciar Sesion", Toast.LENGTH_SHORT).show();
+
+            String correo = email.getText().toString();
+            String pass = password.getText().toString();
+
+            if (correo.isEmpty() || pass.isEmpty()) {
+                Toast.makeText(this, "Campos vacíos, favor de llenarlos", Toast.LENGTH_SHORT).show();
+            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+                Toast.makeText(this, "El formato del correo no es válido", Toast.LENGTH_SHORT).show();
+            } else {
+                bd.iniciaSesion(correo, pass);
+            }
         });
 
         findViewById(R.id.TV_registarte).setOnClickListener(v -> {
