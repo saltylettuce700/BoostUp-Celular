@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,6 +54,11 @@ public class BD {
 
     public interface JsonCallback {
         void onSuccess(JsonObject obj);
+        void onError(String mensaje);
+    }
+
+    public interface JsonArrayCallback {
+        void onSuccess(JsonArray array);
         void onError(String mensaje);
     }
 
@@ -259,6 +265,8 @@ public class BD {
         });
     }
 
+    //Get los detalles del pedido (proteina, marca, monto, fecha de compra, estado de canje,
+    // gr de proteina y curcuma, marca de curcuma, sabor, tipo de saborizante, marca saborizante)
     public void getDetallesPedido(String id, JsonCallback callback) {
         String ruta = "pedido/"+ id+"/";
 
@@ -314,6 +322,33 @@ public class BD {
             }
 
 
+        });
+    }
+
+    //Get opciones de proteina: id, nombre, tipo y precio
+    public void getOpcionesProteinas(JsonArrayCallback callback){
+        String ruta= "proteina/opciones/";
+
+        getRequest(ruta, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError("Error de conexión");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    try {
+                        JsonArray array = JsonParser.parseString(json).getAsJsonArray();
+                        callback.onSuccess(array);
+                    } catch (Exception e) {
+                        callback.onError("Error al procesar datos");
+                    }
+                } else {
+                    callback.onError("Error en la respuesta del servidor");
+                }
+            }
         });
     }
 
