@@ -38,6 +38,7 @@ public class BD {
     private final OkHttpClient client;
     private Context context;
 
+    //Funciones uso comun
     public void runOnUiThread(Runnable action) {
         if (context instanceof Activity) {
             ((Activity) context).runOnUiThread(action);
@@ -48,6 +49,25 @@ public class BD {
         this.context = context;
         gson = new GsonBuilder().create();
         client = new OkHttpClient();
+    }
+
+    public interface JsonCallback {
+        void onSuccess(JsonObject obj);
+        void onError(String mensaje);
+    }
+
+    private void getRequest(String route, Callback callback) {
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(BASE_URL + route)
+                .addHeader("accept", "application/json")
+                .addHeader("Content-Type", "application/json")
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(callback);
     }
 /*--------------------------------------------------------------------------------*/
     //GETS:
@@ -150,8 +170,7 @@ public class BD {
         return -1;  // Devuelve -1 si algo falla
     }
 
-    //Token
-
+    //Token e inicio de sesion
     public void iniciaSesion(String email, String pass){
 
 
@@ -237,6 +256,64 @@ public class BD {
                     }
                 }
             }
+        });
+    }
+
+    public void getDetallesPedido(String id, JsonCallback callback) {
+        String ruta = "pedido/"+ id+"/";
+
+        getRequest(ruta, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(() -> Toast.makeText(context, "Error de red", Toast.LENGTH_SHORT).show());
+                callback.onError("Error de red: " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    callback.onError("Error HTTP: " + response.message());
+                    return;
+                }
+
+                ResponseBody responseBody = response.body();
+                if (responseBody == null) {
+                    runOnUiThread(() -> Toast.makeText(context, "Pedido no encontrado", Toast.LENGTH_SHORT).show());
+                    callback.onError("Pedido no encontrado");
+                    return;
+                }
+
+                try {
+                    String json = responseBody.string();
+                    JsonObject obj = gson.fromJson(json, JsonObject.class);
+
+                    String proteina = obj.get("proteina").getAsString();
+                    double monto = obj.get("monto_total").getAsDouble();
+                    String fechacompra = obj.get("fec_hora_compra").getAsString();
+                    String estadocanje = obj.get("estado_canje").getAsString();
+                    int proteinagr = obj.get("proteina_gr").getAsInt();
+                    String sabor = obj.get("sabor").getAsString();
+                    String tipoSabor = obj.get("tipo_saborizante").getAsString();
+                    String marcaProteina = obj.get("proteina_marca").getAsString();
+                    String marcaSaborizante = obj.get("saborizante_marca").getAsString();
+
+                    String curcumaMarca = obj.has("curcuma_marca") && !obj.get("curcuma_marca").isJsonNull()
+                            ? obj.get("curcuma_marca").getAsString()
+                            : "N/A";
+
+                    int curcumaGr = obj.has("curcuma_gr") && !obj.get("curcuma_gr").isJsonNull()
+                            ? obj.get("curcuma_gr").getAsInt()
+                            : 0;
+
+                    // Retornar los datos al callback
+                    callback.onSuccess(obj);
+
+                } catch (Exception e) {
+                    callback.onError("Error al procesar JSON: " + e.getMessage());
+                }
+            }
+
+
         });
     }
 
