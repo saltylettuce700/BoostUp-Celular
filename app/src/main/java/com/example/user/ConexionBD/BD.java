@@ -159,8 +159,8 @@ public class BD {
     }
 
     //Get precio de una curcuma especifica
-    public double getPrecioCurcuma(int idCurcuma) {
-        String url = BASE_URL + "curcuma/" + idCurcuma + "/precio/";
+    public double getPrecioSaborizante(int idSaborizante) {
+        String url = BASE_URL + "curcuma/" + idSaborizante + "/precio/";
 
         Request request = new Request.Builder()
                 .url(url)
@@ -359,32 +359,32 @@ public class BD {
     }
 
     public void getPrecioProteina(int id, PrecioCallback callback) {
-            String ruta = "proteina/" + id + "/precio/";
+        String ruta = "proteina/" + id + "/precio/";
 
-            getRequest(ruta, new Callback() {
-               @Override
-                public void onFailure(Call call, IOException e) {
-                    callback.onError("Error de conexión");
-                }
+        getRequest(ruta, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError("Error de conexión");
+            }
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        String json = response.body().string();
-                        try {
-                            JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
-                            double precio = obj.get("precio").getAsDouble();
-                            callback.onSuccess(precio);
-                        } catch (Exception e) {
-                            callback.onError("Error al procesar el precio");
-                        }
-                    } else {
-                        callback.onError("Error en la respuesta del servidor");
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    try {
+                        JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
+                        double precio = obj.get("precio").getAsDouble();
+                        callback.onSuccess(precio);
+                    } catch (Exception e) {
+                        callback.onError("Error al procesar el precio");
                     }
+                } else {
+                    callback.onError("Error en la respuesta del servidor");
                 }
-            });
-        }
-
+            }
+        });
+    }
+    
     //Get alergenos de una proteina en especifico
     public void getAlergenosProteina(int id, JsonArrayCallback callback){
         String ruta = "proteina/"+ id + "/alergenos/";
