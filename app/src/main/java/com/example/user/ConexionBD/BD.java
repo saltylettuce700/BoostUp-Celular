@@ -354,7 +354,7 @@ public class BD {
 
     //Get alergenos de una proteina en especifico
     public void getAlergenosProteina(int id, JsonArrayCallback callback){
-        String ruta = "proteina/"+id + "/alergenos/";
+        String ruta = "proteina/"+ id + "/alergenos/";
 
         getRequest(ruta, new Callback() {
             @Override
