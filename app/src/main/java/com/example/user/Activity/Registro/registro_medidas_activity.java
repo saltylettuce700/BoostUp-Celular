@@ -36,7 +36,7 @@ public class registro_medidas_activity extends AppCompatActivity {
             return insets;
         });
 
-        ET_bday=findViewById(R.id.ET_bday);
+        //ET_bday=findViewById(R.id.ET_bday);
 
 
 
@@ -52,7 +52,7 @@ public class registro_medidas_activity extends AppCompatActivity {
             Toast.makeText(this, "Atras NAME", Toast.LENGTH_SHORT).show();
         });
 
-        ET_bday.setOnClickListener(new View.OnClickListener() {
+        /*ET_bday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Obtener la fecha actual
@@ -86,7 +86,7 @@ public class registro_medidas_activity extends AppCompatActivity {
 
                 date.show();
             }
-        });
+        });*/
 
     }
 
