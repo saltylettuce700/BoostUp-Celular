@@ -26,5 +26,7 @@ public class Preferences {
         editor.remove("access_token");
         editor.apply();
     }
+
+
 }
 

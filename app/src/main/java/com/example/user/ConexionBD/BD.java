@@ -434,6 +434,8 @@ public class BD {
         });
     }
 
+    //Get Nombre, username, email, edad, sexo, fec. nacimiento, fec. registro, pk de sus medida y
+    // pk de sus cantidades
     public void getInfoUser(JsonCallback callback){
         String ruta = "usuario/yo/";
 
@@ -459,6 +461,7 @@ public class BD {
             }
         });
     }
+
 
     public void getMedidasUser(JsonCallback callback){
         String ruta = "usuario/medidas/";
