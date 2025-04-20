@@ -81,6 +81,28 @@ public class BD {
         client.newCall(request).enqueue(callback);
     }
 
+    private void authGetRequest(String route, Callback callback) {
+        Preferences preferences = new Preferences(context);
+        String token = preferences.obtenerToken();
+
+        if (token == null || token.isEmpty()) {
+            callback.onFailure(null, new IOException("Token no encontrado"));
+            return;
+        }
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(BASE_URL + route)
+                .addHeader("accept", "application/json")
+                .addHeader("Authorization", "Bearer " + token)
+                .addHeader("Content-Type", "application/json")
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
 /*--------------------------------------------------------------------------------*/
     //GETS:
 
@@ -404,6 +426,32 @@ public class BD {
                         callback.onSuccess(array);
                     } catch (Exception e) {
                         callback.onError("Error al procesar los alérgenos");
+                    }
+                } else {
+                    callback.onError("Error en la respuesta del servidor");
+                }
+            }
+        });
+    }
+
+    public void getMedidasUser(JsonCallback callback){
+        String ruta = "usuario/medidas/";
+
+        authGetRequest(ruta, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError("Error de conexión");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    try {
+                        JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
+                        callback.onSuccess(obj);
+                    } catch (Exception e) {
+                        callback.onError("Error al procesar datos");
                     }
                 } else {
                     callback.onError("Error en la respuesta del servidor");
