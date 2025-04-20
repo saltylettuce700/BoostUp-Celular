@@ -516,6 +516,33 @@ public class BD {
         });
     }
 
+    //GET id pedido, tipo proteina, proteina, sabor y fecha y hora de compra
+    public void getInfoPedidosGeneralUser(JsonArrayCallback callback){
+        String ruta = "usuario/pedidos/general/";
+
+        authGetRequest(ruta, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError("Error de conexión");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    try {
+                        JsonArray array = JsonParser.parseString(json).getAsJsonArray();
+                        callback.onSuccess(array);
+                    } catch (Exception e) {
+                        callback.onError("Error al procesar datos");
+                    }
+                } else {
+                    callback.onError("Error en la respuesta del servidor");
+                }
+            }
+        });
+    }
+
     /*---------------------------------------------------------------------------------------*/
     //POSTS:
 
