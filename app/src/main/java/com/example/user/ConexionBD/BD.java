@@ -462,7 +462,7 @@ public class BD {
         });
     }
 
-
+    //Get peso, talla, cintura, cadera, circ. brazo y edad
     public void getMedidasUser(JsonCallback callback){
         String ruta = "usuario/medidas/";
 
@@ -479,6 +479,33 @@ public class BD {
                     try {
                         JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
                         callback.onSuccess(obj);
+                    } catch (Exception e) {
+                        callback.onError("Error al procesar datos");
+                    }
+                } else {
+                    callback.onError("Error en la respuesta del servidor");
+                }
+            }
+        });
+    }
+
+    //GET las alergias y el id de la alergia del usuario
+    public void getAlergiasUser(JsonArrayCallback callback){
+        String ruta= "usuario/alergenos/";
+
+        authGetRequest(ruta, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError("Error de conexión");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    try {
+                        JsonArray array = JsonParser.parseString(json).getAsJsonArray();
+                        callback.onSuccess(array);
                     } catch (Exception e) {
                         callback.onError("Error al procesar datos");
                     }
