@@ -11,9 +11,29 @@ public class Preferences {
         prefs = context.getSharedPreferences(NOMBRE_PREF, Context.MODE_PRIVATE);
     }
 
+    public void guardarCredenciales(String token, String user, String password) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("access_token", token);
+        editor.putString("user", user);
+        editor.putString("password", password);
+        editor.apply();
+    }
+
     public void guardarToken(String token) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("access_token", token);
+        editor.apply();
+    }
+
+    public void guardarUser(String user) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("user", user);
+        editor.apply();
+    }
+
+    public void guardarPassword(String password) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("password", password);
         editor.apply();
     }
 
@@ -21,9 +41,15 @@ public class Preferences {
         return prefs.getString("access_token", null);
     }
 
-    public void borrarToken() {
+    public String obtenerPassword() {return prefs.getString("password", null);}
+
+    public String obtenerUser() {return prefs.getString("user", null);}
+
+    public void borrarCredenciales() {
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove("access_token");
+        editor.remove("user");
+        editor.remove("password");
         editor.apply();
     }
 
