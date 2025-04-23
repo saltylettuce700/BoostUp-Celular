@@ -23,6 +23,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.user.Activity.Registro.registro_terminos_activity;
+import com.example.user.ConexionBD.Preferences;
 import com.example.user.R;
 
 import java.util.Locale;
@@ -86,8 +87,14 @@ public class account_activity extends AppCompatActivity {
         });
 
         findViewById(R.id.cerrar_sesion_section).setOnClickListener(v -> {
+
             // Acción para Cerrar Sesión
-            startActivity(new Intent(this, login_activity.class));
+            Preferences pref = new Preferences(this);
+            pref.borrarCredenciales();
+            //startActivity(new Intent(this, login_activity.class));
+            Intent intent = new Intent(this, login_activity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
         });
 

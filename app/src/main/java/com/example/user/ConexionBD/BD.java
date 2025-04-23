@@ -213,7 +213,7 @@ public class BD {
             public void onSuccess(String token) {
 
                 Preferences preferencias = new Preferences(context);
-                preferencias.guardarToken(token);
+                preferencias.guardarCredenciales(token, email, pass);
 
                 Intent intent = new Intent(context, home_activity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -458,6 +458,20 @@ public class BD {
                 } else {
                     callback.onError("Error en la respuesta del servidor");
                 }
+            }
+        });
+    }
+
+    public void probarToken(JsonCallback callback) {
+        getInfoUser(new JsonCallback() {
+            @Override
+            public void onSuccess(JsonObject obj) {
+                callback.onSuccess(obj); // Token válido
+            }
+
+            @Override
+            public void onError(String mensaje) {
+                callback.onError(mensaje); // Token inválido
             }
         });
     }
