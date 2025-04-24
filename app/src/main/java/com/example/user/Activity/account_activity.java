@@ -23,8 +23,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.user.Activity.Registro.registro_terminos_activity;
+import com.example.user.ConexionBD.BD;
 import com.example.user.ConexionBD.Preferences;
 import com.example.user.R;
+import com.google.gson.JsonObject;
 
 import java.util.Locale;
 
@@ -34,7 +36,7 @@ public class account_activity extends AppCompatActivity {
     public static final String SELECTED_LANGUAGE = "selected_language";
 
 
-    TextView TV_idioma;
+    TextView TV_idioma, usernametxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,7 @@ public class account_activity extends AppCompatActivity {
         });
 
         TextView TV_idioma = findViewById(R.id.TV_idioma);
-
+        usernametxt = findViewById(R.id.textView4);
 
 
         findViewById(R.id.idioma_section).setOnClickListener(new View.OnClickListener() {
@@ -115,6 +117,28 @@ public class account_activity extends AppCompatActivity {
             // Acción para Cerrar Sesión
             //startActivity(new Intent(this, registro_terminos_activity.class));
             Toast.makeText(this, "ABRIR METODOS DE PAGO", Toast.LENGTH_SHORT).show();
+        });
+
+        mostrarUsername();
+    }
+
+    private void mostrarUsername() {
+        BD bd = new BD(this);
+
+        bd.getInfoUser(new BD.JsonCallback() {
+            @Override
+            public void onSuccess(JsonObject obj) {
+                runOnUiThread(()-> {
+                    String username = obj.get("username").getAsString();
+                    usernametxt.setText(username);
+                });
+            }
+            @Override
+            public void onError(String mensaje) {
+                runOnUiThread(() -> {
+                    Toast.makeText(account_activity.this, mensaje, Toast.LENGTH_SHORT).show();
+                });
+            }
         });
     }
 
