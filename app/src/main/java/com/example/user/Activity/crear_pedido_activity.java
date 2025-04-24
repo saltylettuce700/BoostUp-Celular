@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -17,7 +18,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.user.ConexionBD.BD;
 import com.example.user.R;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.mlkit.nl.translate.TranslateLanguage;
 import com.google.mlkit.nl.translate.Translation;
 import com.google.mlkit.nl.translate.TranslatorOptions;
@@ -35,11 +40,18 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class crear_pedido_activity extends AppCompatActivity {
 
     private ListView listProteinas, listSaborizantes, listCurcuma;
     private String selectedProteina, selectedSaborizante, selectedCurcuma, orderString;
+
+    String[] proteinas;
+    String[] saborizantes;
+    String[] curcuma;
+
+    TextView txtBebidasUsername;
 
     private Translator translator;
 
@@ -60,26 +72,30 @@ public class crear_pedido_activity extends AppCompatActivity {
         listCurcuma = findViewById(R.id.listCurcuma);
         Button btn_pagar = findViewById(R.id.btn_pagar);
         ImageView qr = findViewById(R.id.generated_qr);
+        txtBebidasUsername = findViewById(R.id.tvProductName);
 
         // Configura el traductor
         setupTranslator();
 
         // Datos de prueba
-        String[] proteinas = {"Proteína Genérica Vegetal", "Proteína Genérica Animal", "Proteína Premium"};
-        String[] saborizantes = {"Vainilla", "Chocolate", "Fresa"};
-        String[] curcuma = {"Con cúrcuma de la chida", "Con cúrcuma de la chafa"};
+        //String[] proteinas = {"Proteína Genérica Vegetal", "Proteína Genérica Animal", "Proteína Premium"};
+        //String[] saborizantes = {"Vainilla", "Chocolate", "Fresa"};
+        //String[] curcuma = {"Con cúrcuma de la chida", "Con cúrcuma de la chafa"};
+
+        llenarUsername();
+        llenarCadenas();
 
         // Traducir los elementos antes de configurar los ListView
-        translateListItems(proteinas, translatedProteinas -> {
-            translateListItems(saborizantes, translatedSaborizantes -> {
-                translateListItems(curcuma, translatedCurcuma -> {
-                    // Configurar los ListView con los elementos traducidos
-                    configureListView(listProteinas, translatedProteinas, selected -> selectedProteina = selected);
-                    configureListView(listSaborizantes, translatedSaborizantes, selected -> selectedSaborizante = selected);
-                    configureListView(listCurcuma, translatedCurcuma, selected -> selectedCurcuma = selected);
-                });
-            });
-        });
+//        translateListItems(proteinas, translatedProteinas -> {
+//            translateListItems(saborizantes, translatedSaborizantes -> {
+//                translateListItems(curcuma, translatedCurcuma -> {
+//                    // Configurar los ListView con los elementos traducidos
+//                    configureListView(listProteinas, translatedProteinas, selected -> selectedProteina = selected);
+//                    configureListView(listSaborizantes, translatedSaborizantes, selected -> selectedSaborizante = selected);
+//                    configureListView(listCurcuma, translatedCurcuma, selected -> selectedCurcuma = selected);
+//                });
+//            });
+//        });
 
 
         btn_pagar.setOnClickListener(v -> {
@@ -119,6 +135,107 @@ public class crear_pedido_activity extends AppCompatActivity {
 
 
         });
+
+
+    }
+
+    private void llenarUsername() {
+        BD bd = new BD(this);
+
+        bd.getInfoUser(new BD.JsonCallback() {
+            @Override
+            public void onSuccess(JsonObject obj) {
+
+                runOnUiThread(() ->{
+                    String username = obj.get("username").getAsString();
+                    txtBebidasUsername.setText("Bebidas "+ username);
+                });
+            }
+
+            @Override
+            public void onError(String mensaje) {
+                runOnUiThread(() -> {
+                    Toast.makeText(crear_pedido_activity.this, mensaje, Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+
+    private void llenarCadenas() {
+        BD bd = new BD(this);
+
+        bd.getOpcionesProteinas(new BD.JsonArrayCallback() {
+            @Override
+            public void onSuccess(JsonArray array) {
+                proteinas = new String[array.size()];
+                int i = 0;
+                for (JsonElement elemento : array) {
+                    JsonObject obj = elemento.getAsJsonObject();
+                    String nombre = obj.get("nombre").getAsString();
+                    proteinas[i++] = nombre;
+                }
+
+                // Luego de cargar proteínas, cargar saborizantes
+                new Thread(() -> {
+                    List<Map<String, String>> lista = bd.getSaborizantes();
+                    if (lista != null) {
+                        saborizantes = new String[lista.size()];
+                        for (int j = 0; j < lista.size(); j++) {
+                            saborizantes[j] = lista.get(j).get("sabor");
+                        }
+
+                        new Thread(() -> {
+                            int idcurcuma = 1;
+
+                            double precio = bd.getPrecioCurcuma(idcurcuma);
+
+                            if (precio != -1) {
+                                curcuma = new String[]{("Con cúrcuma +$" + precio), "Sin cúrcuma"};
+                            } else {
+                                curcuma = new String[]{"Con cúrcuma", "Sin cúrcuma"};
+                            }
+
+                            // Ahora si se traduce al idioma seleccionado
+                            runOnUiThread(() -> {
+                                translateListItems(proteinas, translatedProteinas -> {
+                                    translateListItems(saborizantes, translatedSaborizantes -> {
+                                        translateListItems(curcuma, translatedCurcuma -> {
+                                            configureListView(listProteinas, translatedProteinas, selected -> selectedProteina = selected);
+                                            configureListView(listSaborizantes, translatedSaborizantes, selected -> selectedSaborizante = selected);
+                                            configureListView(listCurcuma, translatedCurcuma, selected -> selectedCurcuma = selected);
+                                        });
+                                    });
+                                });
+                            });
+
+                        }).start();
+
+                    } else {
+                        runOnUiThread(() ->
+                                Toast.makeText(crear_pedido_activity.this, "Error al cargar saborizantes", Toast.LENGTH_SHORT).show()
+                        );
+                    }
+                }).start();
+            }
+            @Override
+            public void onError(String mensaje) {
+                Toast.makeText(crear_pedido_activity.this, mensaje, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        new Thread(() -> {
+            List<Map<String, String>> lista = bd.getSaborizantes();
+            if (lista != null) {
+                saborizantes = new String[lista.size()];
+                for (int i = 0; i < lista.size(); i++) {
+                    saborizantes[i] = lista.get(i).get("sabor");
+                }
+            } else {
+                runOnUiThread(() ->
+                        Toast.makeText(crear_pedido_activity.this, "Error al cargar saborizantes", Toast.LENGTH_SHORT).show()
+                );
+            }
+        }).start();
 
 
     }
