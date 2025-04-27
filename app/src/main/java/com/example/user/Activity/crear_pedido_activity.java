@@ -1,6 +1,10 @@
 package com.example.user.Activity;
 
+import static com.example.user.Activity.account_activity.LANGUAGE_PREF;
+import static com.example.user.Activity.account_activity.SELECTED_LANGUAGE;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
@@ -59,6 +63,8 @@ public class crear_pedido_activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_crear_pedido);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -186,7 +192,6 @@ public class crear_pedido_activity extends AppCompatActivity {
 
                         new Thread(() -> {
                             int idcurcuma = 1;
-
                             double precio = bd.getPrecioCurcuma(idcurcuma);
 
                             if (precio != -1) {
@@ -195,17 +200,27 @@ public class crear_pedido_activity extends AppCompatActivity {
                                 curcuma = new String[]{"Con cúrcuma", "Sin cúrcuma"};
                             }
 
-                            // Ahora si se traduce al idioma seleccionado
+                            // Aquí obtenemos el idioma
+                            String languageCode = loadLanguagePreference();
+
+
                             runOnUiThread(() -> {
-                                translateListItems(proteinas, translatedProteinas -> {
-                                    translateListItems(saborizantes, translatedSaborizantes -> {
-                                        translateListItems(curcuma, translatedCurcuma -> {
-                                            configureListView(listProteinas, translatedProteinas, selected -> selectedProteina = selected);
-                                            configureListView(listSaborizantes, translatedSaborizantes, selected -> selectedSaborizante = selected);
-                                            configureListView(listCurcuma, translatedCurcuma, selected -> selectedCurcuma = selected);
+                                if (languageCode.equals("en")) {
+                                    translateListItems(proteinas, translatedProteinas -> {
+                                        translateListItems(saborizantes, translatedSaborizantes -> {
+                                            translateListItems(curcuma, translatedCurcuma -> {
+                                                configureListView(listProteinas, translatedProteinas, selected -> selectedProteina = selected);
+                                                configureListView(listSaborizantes, translatedSaborizantes, selected -> selectedSaborizante = selected);
+                                                configureListView(listCurcuma, translatedCurcuma, selected -> selectedCurcuma = selected);
+                                            });
                                         });
                                     });
-                                });
+                                } else {
+                                    // Si no es inglés, carga sin traducir
+                                    configureListView(listProteinas, proteinas, selected -> selectedProteina = selected);
+                                    configureListView(listSaborizantes, saborizantes, selected -> selectedSaborizante = selected);
+                                    configureListView(listCurcuma, curcuma, selected -> selectedCurcuma = selected);
+                                }
                             });
 
                         }).start();
@@ -217,28 +232,14 @@ public class crear_pedido_activity extends AppCompatActivity {
                     }
                 }).start();
             }
+
             @Override
             public void onError(String mensaje) {
                 Toast.makeText(crear_pedido_activity.this, mensaje, Toast.LENGTH_SHORT).show();
             }
         });
-
-        new Thread(() -> {
-            List<Map<String, String>> lista = bd.getSaborizantes();
-            if (lista != null) {
-                saborizantes = new String[lista.size()];
-                for (int i = 0; i < lista.size(); i++) {
-                    saborizantes[i] = lista.get(i).get("sabor");
-                }
-            } else {
-                runOnUiThread(() ->
-                        Toast.makeText(crear_pedido_activity.this, "Error al cargar saborizantes", Toast.LENGTH_SHORT).show()
-                );
-            }
-        }).start();
-
-
     }
+
 
     // Configurar el traductor ML Kit
     private void setupTranslator() {
@@ -301,5 +302,14 @@ public class crear_pedido_activity extends AppCompatActivity {
     // Interfaz para manejar los elementos traducidos
     interface OnItemsTranslatedListener {
         void onItemsTranslated(String[] translatedItems);
+    }
+
+    // Cargar el idioma guardado
+    private String loadLanguagePreference() {
+        SharedPreferences preferences = getSharedPreferences(LANGUAGE_PREF, MODE_PRIVATE);
+
+
+        return preferences.getString(SELECTED_LANGUAGE, "es"); // Default is Spanish
+
     }
 }
