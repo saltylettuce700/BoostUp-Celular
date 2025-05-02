@@ -90,10 +90,11 @@ public class account_activity extends AppCompatActivity {
         });
 
         findViewById(R.id.terminos_section).setOnClickListener(v -> {
-            //terminos y condiciones solo leer activity
-            startActivity(new Intent(this, registro_terminos_activity.class));
-            Toast.makeText(this, "TERMINOS Y COND", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, registro_terminos_activity.class);
+            intent.putExtra("desde_account", true); //
+            startActivity(intent);
         });
+
 
         // Botón "Restablecer"
         findViewById(R.id.ayuda_cliente_section).setOnClickListener(new View.OnClickListener() {
