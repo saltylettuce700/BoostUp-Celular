@@ -12,7 +12,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.user.Activity.account_activity;
 import com.example.user.Activity.historial_activity;
+import com.example.user.ConexionBD.BD;
 import com.example.user.R;
+import com.google.gson.JsonObject;
 
 public class ver_detalles_activity extends AppCompatActivity {
 
