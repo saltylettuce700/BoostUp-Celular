@@ -18,7 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.user.Adapter.PedidoAdapter;
 import POJO.Pedido;
+
+import com.example.user.ConexionBD.BD;
 import com.example.user.R;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,13 +52,44 @@ public class historial_activity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Simulación de datos
-        List<Pedido> pedidos = new ArrayList<>();
+        /*List<Pedido> pedidos = new ArrayList<>();
         pedidos.add(new Pedido("Bebida Usuario", "Chocolate", "Vegetal"));
         pedidos.add(new Pedido("Bebida Usuario", "Vainilla", "Animal"));
-        pedidos.add(new Pedido("Bebida Usuario", "Fresa", "Vegetal"));
+        pedidos.add(new Pedido("Bebida Usuario", "Fresa", "Vegetal"));*/
 
-        pedidoAdapter = new PedidoAdapter(this, pedidos, languageCode);
-        recyclerView.setAdapter(pedidoAdapter);
+        BD bd = new BD(this);
+        bd.getInfoPedidosGeneralUser(new BD.JsonArrayCallback() {
+            @Override
+            public void onSuccess(JsonArray array) {
+                List<Pedido> pedidos = new ArrayList<>();
+
+                for (JsonElement element : array) {
+                    JsonObject obj = element.getAsJsonObject();
+                    String id = obj.get("id_pedido").getAsString();
+                    String proteina = obj.get("nombre_proteina").getAsString();
+                    String tipo = obj.get("tipo_proteina").getAsString();
+                    String sabor = obj.get("sabor").getAsString();
+
+
+                    pedidos.add(new Pedido(proteina, sabor, tipo));
+                }
+
+                runOnUiThread(() -> {
+                    pedidoAdapter = new PedidoAdapter(historial_activity.this, pedidos, languageCode);
+                    recyclerView.setAdapter(pedidoAdapter);
+                });
+            }
+
+            @Override
+            public void onError(String mensaje) {
+                runOnUiThread(() -> {
+                    Toast.makeText(historial_activity.this, "Error al cargar:" + mensaje, Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+
+        //pedidoAdapter = new PedidoAdapter(this, pedidos, languageCode);
+        //recyclerView.setAdapter(pedidoAdapter);
 
         findViewById(R.id.btnBack).setOnClickListener(v -> {
             finish();
