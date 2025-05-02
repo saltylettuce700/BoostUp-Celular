@@ -53,8 +53,16 @@ public class account_activity extends AppCompatActivity {
             return insets;
         });
 
-        TextView TV_idioma = findViewById(R.id.TV_idioma);
+        TV_idioma = findViewById(R.id.TV_idioma);
         usernametxt = findViewById(R.id.textView4);
+
+        String lang = loadLanguagePreference();
+        if (lang.equals("en")) {
+            TV_idioma.setText("English");
+        } else {
+            TV_idioma.setText("Español");
+        }
+
 
 
         findViewById(R.id.idioma_section).setOnClickListener(new View.OnClickListener() {
@@ -64,6 +72,13 @@ public class account_activity extends AppCompatActivity {
             public void onClick(View v) {
                 showLanguageDialog();
             }
+
+        });
+
+        findViewById(R.id.btnBack).setOnClickListener(v -> {
+            finish();
+            startActivity(new Intent(this, home_activity.class));
+            Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
 
         });
 
@@ -210,6 +225,8 @@ public class account_activity extends AppCompatActivity {
                 changeLanguage("es");
                 saveLanguagePreference("es");
 
+                TV_idioma.setText("Español");
+
                 Toast.makeText(this, "Idioma cambiado a Español", Toast.LENGTH_SHORT).show();
 
             } else if (selectedId == R.id.rb_ingles) {
@@ -217,10 +234,13 @@ public class account_activity extends AppCompatActivity {
                 changeLanguage("en");
                 saveLanguagePreference("en");
 
+                TV_idioma.setText("English");
+
                 Toast.makeText(this, "Language changed to English", Toast.LENGTH_SHORT).show();
 
             }
             dialog.dismiss();
+            recreate();
         });
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -233,6 +253,8 @@ public class account_activity extends AppCompatActivity {
 
 
         dialog.show();
+
+
 
     }
 

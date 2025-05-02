@@ -59,19 +59,6 @@
             android:textColor="@color/black" />
     </RadioGroup>
 
-    <TextView
-        android:id="@+id/dialog_messagee"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="@string/dialog_message_restart"
-        android:textColor="@color/dark_gray"
-        android:textSize="16sp"
-        android:textStyle="italic" />
-
-
 
     <Button
         android:id="@+id/btn_guardarCambios"

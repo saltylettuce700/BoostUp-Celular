@@ -27,18 +27,22 @@
         app:layout_constraintVertical_bias="0.0">
 
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/back_act_icon" />
+        <!-- Botón de retroceso -->
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="8dp"
+
+            android:contentDescription="Regresar"
+            android:src="@drawable/back_icon" />
 
 
         <TextView
             android:id="@+id/textView11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="18dp"
+            android:paddingLeft="46dp"
             android:text="@string/product_history"
             android:textAlignment="textStart"
             android:textColor="@color/black"

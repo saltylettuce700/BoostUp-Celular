@@ -3,6 +3,7 @@ package com.example.user.Activity;
 import static com.example.user.Activity.account_activity.LANGUAGE_PREF;
 import static com.example.user.Activity.account_activity.SELECTED_LANGUAGE;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -53,6 +54,13 @@ public class historial_activity extends AppCompatActivity {
 
         pedidoAdapter = new PedidoAdapter(this, pedidos, languageCode);
         recyclerView.setAdapter(pedidoAdapter);
+
+        findViewById(R.id.btnBack).setOnClickListener(v -> {
+            finish();
+            startActivity(new Intent(this, account_activity.class));
+            Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
+
+        });
     }
 
     // Cargar el idioma guardado

@@ -93,6 +93,14 @@ public class datos_perfil_activity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.btnBack).setOnClickListener(v -> {
+            finish();
+            startActivity(new Intent(this, account_activity.class));
+            Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
+
+        });
+
+
         // Botón "Restablecer"
         findViewById(R.id.TV_reestablecer).setOnClickListener(new View.OnClickListener() {
             @Override

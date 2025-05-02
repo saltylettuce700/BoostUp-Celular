@@ -39,6 +39,13 @@ public class medidas_edit_activity extends AppCompatActivity {
             return insets;
         });
 
+        findViewById(R.id.btnBack).setOnClickListener(v -> {
+            finish();
+            startActivity(new Intent(this, datos_perfil_activity.class));
+            Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
+
+        });
+
         findViewById(R.id.btn_guardarmedidas).setOnClickListener(v -> {
             // Acción para Cerrar Sesión
             finish();
