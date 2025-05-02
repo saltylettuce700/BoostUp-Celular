@@ -71,7 +71,7 @@ public class historial_activity extends AppCompatActivity {
                     String sabor = obj.get("sabor").getAsString();
 
 
-                    pedidos.add(new Pedido(proteina, sabor, tipo));
+                    pedidos.add(new Pedido(id, proteina, sabor, tipo));
                 }
 
                 runOnUiThread(() -> {

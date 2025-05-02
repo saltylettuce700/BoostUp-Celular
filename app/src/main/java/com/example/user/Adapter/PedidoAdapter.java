@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import POJO.Pedido;
 
 import com.example.user.Activity.Registro.ver_detalles_activity;
+import com.example.user.Activity.ver_pedido_activity;
 import com.example.user.R;
 import com.google.mlkit.nl.translate.TranslateLanguage;
 import com.google.mlkit.nl.translate.Translation;
@@ -65,12 +66,10 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
         translateText(holder.tvProteina);
 
         holder.tvVerDetalles.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ver_detalles_activity.class);
-            intent.putExtra("nombreBebida", pedido.getNombreBebida());
-            intent.putExtra("sabor", pedido.getSabor());
+            Intent intent = new Intent(context, ver_pedido_activity.class);
+            intent.putExtra("id_pedido", pedido.getId()); // Solo pasas el ID
             intent.putExtra("proteina", pedido.getProteina());
-            // Puedes agregar más extras si los necesitas
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // importante si estás usando contexto de Adapter
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // necesario si usas context desde adapter
             context.startActivity(intent);
         });
 
