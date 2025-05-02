@@ -2,8 +2,10 @@ package com.example.user.Activity.Registro;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -12,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.user.Activity.account_activity;
 import com.example.user.Activity.home_activity;
 import com.example.user.R;
 
@@ -19,6 +22,7 @@ public class registro_terminos_activity extends AppCompatActivity {
 
     private CheckBox checkboxTerms;
     private Button buttonFinish;
+    private ImageView btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,27 @@ public class registro_terminos_activity extends AppCompatActivity {
 
         checkboxTerms = findViewById(R.id.checkbox_terms);
         buttonFinish = findViewById(R.id.button_finish);
+        btnBack = findViewById(R.id.btnBack);
+
+
+
+        boolean desdeAccount = getIntent().getBooleanExtra("desde_account", false);
+
+        if (desdeAccount) {
+            checkboxTerms.setVisibility(View.GONE);
+            buttonFinish.setVisibility(View.GONE);
+            btnBack.setVisibility(View.VISIBLE);
+
+            btnBack.setOnClickListener(v -> {
+                finish();
+                startActivity(new Intent(this, account_activity.class));
+                Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
+            });
+        } else {
+            btnBack.setVisibility(View.GONE);
+        }
+
+
 
 
         // Habilitar/deshabilitar el botón dependiendo del estado del checkbox

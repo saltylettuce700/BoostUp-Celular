@@ -59,6 +59,25 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
         holder.tvProteina.setText("Proteína: " + pedido.getProteina());
         // Puedes cargar imágenes en imgPedido si tienes URLs o recursos
 
+        // Cambiar imagen según el sabor
+        String sabor = pedido.getSabor().toLowerCase(); // Asegúrate de que sea en minúsculas para comparar
+
+        switch (sabor) {
+            case "chocolate":
+                holder.imgPedido.setImageResource(R.drawable.choco_milk);
+                break;
+            case "vainilla":
+                holder.imgPedido.setImageResource(R.drawable.vanilla_milk);
+                break;
+            case "fresa":
+                holder.imgPedido.setImageResource(R.drawable.strawberry_milk);
+                break;
+            default:
+                holder.imgPedido.setImageResource(R.drawable.vanilla_milk);
+                break;
+        }
+
+
         // Traducir los textos
         translateText(holder.tvBebidaUsername);
         translateText(holder.tvSabor);
