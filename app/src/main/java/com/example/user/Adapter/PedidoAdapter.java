@@ -1,5 +1,6 @@
 package com.example.user.Adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import POJO.Pedido;
+
+import com.example.user.Activity.Registro.ver_detalles_activity;
 import com.example.user.R;
 import com.google.mlkit.nl.translate.TranslateLanguage;
 import com.google.mlkit.nl.translate.Translation;
@@ -61,6 +64,16 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
         translateText(holder.tvSabor);
         translateText(holder.tvProteina);
 
+        holder.tvVerDetalles.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ver_detalles_activity.class);
+            intent.putExtra("nombreBebida", pedido.getNombreBebida());
+            intent.putExtra("sabor", pedido.getSabor());
+            intent.putExtra("proteina", pedido.getProteina());
+            // Puedes agregar más extras si los necesitas
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // importante si estás usando contexto de Adapter
+            context.startActivity(intent);
+        });
+
     }
 
     // Devuelve el número de elementos en la lista
@@ -82,7 +95,7 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
             tvSabor = itemView.findViewById(R.id.tvSabor);
             tvProteina = itemView.findViewById(R.id.tvProteina);
             tvVerDetalles = itemView.findViewById(R.id.tvVerDetalles);
-            imgPedido = itemView.findViewById(R.id.imgPedido);
+            imgPedido = itemView.findViewById(R.id.imgProducto);
         }
     }
 

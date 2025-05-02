@@ -142,6 +142,13 @@ public class crear_pedido_activity extends AppCompatActivity {
 
         });
 
+        findViewById(R.id.imageButton).setOnClickListener(v -> {
+            finish();
+            startActivity(new Intent(this, home_activity.class));
+            Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
+
+        });
+
 
     }
 

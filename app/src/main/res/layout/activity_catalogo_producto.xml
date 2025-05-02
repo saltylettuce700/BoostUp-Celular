@@ -41,6 +41,7 @@
                 android:text="@string/catalog_title"
                 android:textColor="@color/black"
                 android:textSize="20sp"
+                android:paddingLeft="38dp"
                 android:textStyle="bold" />
 
 

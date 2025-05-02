@@ -3,6 +3,7 @@ package com.example.user.Activity;
 import static com.example.user.Activity.account_activity.LANGUAGE_PREF;
 import static com.example.user.Activity.account_activity.SELECTED_LANGUAGE;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -117,6 +118,13 @@ public class catalogo_producto_activity extends AppCompatActivity {
                 });
             }
         }
+
+        findViewById(R.id.btnBack).setOnClickListener(v -> {
+            finish();
+            startActivity(new Intent(this, home_activity.class));
+            Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
+
+        });
     }
 
     private List<CatalogItem> obtenerProductosSimulados() {
