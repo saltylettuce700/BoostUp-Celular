@@ -1,10 +1,16 @@
 package com.example.user.Activity;
 
+import static com.example.user.Activity.account_activity.LANGUAGE_PREF;
+import static com.example.user.Activity.account_activity.SELECTED_LANGUAGE;
+
 import android.app.Dialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -19,15 +25,27 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.user.ConexionBD.BD;
 import com.example.user.R;
 import com.google.gson.JsonObject;
+import com.google.mlkit.nl.translate.TranslateLanguage;
+import com.google.mlkit.nl.translate.Translation;
+import com.google.mlkit.nl.translate.Translator;
+import com.google.mlkit.nl.translate.TranslatorOptions;
 
 public class ver_pedido_activity extends AppCompatActivity {
 
     TextView nombreBebida, precio, fechatxt, estado_pedido, proteinatxt, marca_proteina, gr_proteina, tipo_proteina;
     TextView sabortxt, marca_sabor, tipo_sabor, curcuma, curcuma_marca, curcuma_gr;
 
+    ImageButton btnBack;
+
+    private Translator translator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Cargar el idioma guardado y aplicarlo
+        String languageCode = loadLanguagePreference();
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ver_pedido);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -50,6 +68,11 @@ public class ver_pedido_activity extends AppCompatActivity {
         curcuma = findViewById(R.id.tvNombreCurcuma);
         curcuma_marca = findViewById(R.id.tvTipoCurcuma);
         curcuma_gr = findViewById(R.id.tvDescripcionCurcuma);
+
+
+        // Configura el traductor
+        setupTranslator();
+
 
         findViewById(R.id.btn_qr).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,6 +146,14 @@ public class ver_pedido_activity extends AppCompatActivity {
             });
 
 
+        findViewById(R.id.imageButton).setOnClickListener(v -> {
+            finish();
+            startActivity(new Intent(this, historial_activity.class));
+            Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
+
+        });
+
+
     }
 
     private void showQRDialog() {
@@ -149,5 +180,29 @@ public class ver_pedido_activity extends AppCompatActivity {
         dialog.show();
 
 
+    }
+
+    // Cargar el idioma guardado
+    private String loadLanguagePreference() {
+        SharedPreferences preferences = getSharedPreferences(LANGUAGE_PREF, MODE_PRIVATE);
+
+        Toast.makeText(this, "Idioma actual: " + preferences.getString(SELECTED_LANGUAGE, "es"), Toast.LENGTH_SHORT).show(); // Verifica el idioma
+
+        return preferences.getString(SELECTED_LANGUAGE, "es"); // Default is Spanish
+
+    }
+
+    // Configurar el traductor ML Kit
+    private void setupTranslator() {
+        TranslatorOptions options = new TranslatorOptions.Builder()
+                .setSourceLanguage(TranslateLanguage.SPANISH)
+                .setTargetLanguage(TranslateLanguage.ENGLISH)
+                .build();
+
+        translator = Translation.getClient(options);
+
+        translator.downloadModelIfNeeded()
+                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Modelo descargado", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(this, "Error al descargar el modelo: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 }
