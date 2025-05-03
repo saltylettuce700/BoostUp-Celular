@@ -557,6 +557,57 @@ public class BD {
         });
     }
 
+    public void getTopProteina(JsonArrayCallback callback){
+        String ruta = "top-proteinas/";
+
+        getRequest(ruta, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError("Error de conexión");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    try {
+                        JsonArray array = JsonParser.parseString(json).getAsJsonArray();
+                        callback.onSuccess(array);
+                    } catch (Exception e) {
+                        callback.onError("Error al procesar el top");
+                    }
+                } else {
+                    callback.onError("Error en la respuesta del servidor");
+                }
+            }
+        });
+    }
+
+    public void getTopSabores(JsonArrayCallback callback){
+        String ruta = "top-sabores/";
+
+        getRequest(ruta, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError("Error de conexión");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    try {
+                        JsonArray array = JsonParser.parseString(json).getAsJsonArray();
+                        callback.onSuccess(array);
+                    } catch (Exception e) {
+                        callback.onError("Error al procesar el top");
+                    }
+                } else {
+                    callback.onError("Error en la respuesta del servidor");
+                }
+            }
+        });
+    }
     /*---------------------------------------------------------------------------------------*/
     //POSTS:
 
