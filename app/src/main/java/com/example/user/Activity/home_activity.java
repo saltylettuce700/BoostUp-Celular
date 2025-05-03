@@ -24,8 +24,12 @@ import com.example.user.Activity.Registro.registro_terminos_activity;
 import com.example.user.Adapter.BebidaAdapter;
 import com.example.user.Adapter.CarouselAdapter;
 import com.example.user.Adapter.OfertaAdapter;
+import com.example.user.ConexionBD.BD;
 import com.example.user.PaddingItemDecoration;
 import com.example.user.R;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -99,8 +103,9 @@ public class home_activity extends AppCompatActivity {
 
         // Configurar el RecyclerView
         recyclerViewBebidas.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        bebidaAdapter = new BebidaAdapter(this, getBebidasDePrueba());
-        recyclerViewBebidas.setAdapter(bebidaAdapter);
+        /*bebidaAdapter = new BebidaAdapter(this, getBebidasDePrueba());
+        recyclerViewBebidas.setAdapter(bebidaAdapter);*/
+        cargarTopBebidas();
 
         recyclerViewOfertas.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         ofertaAdapter = new OfertaAdapter(this, getOfertasDePrueba());
@@ -163,14 +168,57 @@ public class home_activity extends AppCompatActivity {
         }
     }
 
-    private List<BebidaDestacada> getBebidasDePrueba() {
+    /*private List<BebidaDestacada> getBebidasDePrueba() {
         List<BebidaDestacada> bebidas = new ArrayList<>();
         bebidas.add(new BebidaDestacada("Bebida 1", "Chocolate", R.drawable.bebida_img));
         bebidas.add(new BebidaDestacada("Bebida 2", "Vainilla", R.drawable.bebida_img));
         bebidas.add(new BebidaDestacada("Bebida 3", "Fresa", R.drawable.bebida_img));
         bebidas.add(new BebidaDestacada("Bebida 4", "Café", R.drawable.bebida_img));
         return bebidas;
+    }*/
+
+    private void cargarTopBebidas() {
+        BD bd = new BD(this); // Asegúrate de tener acceso a esta clase
+        List<BebidaDestacada> bebidas = new ArrayList<>();
+
+        bd.getTopProteina(new BD.JsonArrayCallback() {
+            @Override
+            public void onSuccess(JsonArray array) {
+                for (JsonElement element : array) {
+                    String nombre = element.getAsJsonObject().get("nombre").getAsString();
+                    bebidas.add(new BebidaDestacada(nombre, "", R.drawable.bebida_img));
+                }
+
+                bd.getTopSabores(new BD.JsonArrayCallback() {
+                    @Override
+                    public void onSuccess(JsonArray array) {
+                        for (JsonElement element : array) {
+                            String sabor = element.getAsJsonObject().get("sabor").getAsString();
+                            bebidas.add(new BebidaDestacada(sabor, "", R.drawable.bebida_img));
+                        }
+
+                        runOnUiThread(() -> {
+                            bebidaAdapter = new BebidaAdapter(home_activity.this, bebidas);
+                            recyclerViewBebidas.setAdapter(bebidaAdapter);
+                        });
+                    }
+
+                    @Override
+                    public void onError(String mensaje) {
+                        runOnUiThread(() ->
+                                Toast.makeText(home_activity.this, "Error sabores: " + mensaje, Toast.LENGTH_SHORT).show());
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String mensaje) {
+                runOnUiThread(() ->
+                        Toast.makeText(home_activity.this, "Error sabores: " + mensaje, Toast.LENGTH_SHORT).show());
+            }
+        });
     }
+
 
     private List<Oferta> getOfertasDePrueba() {
         List<Oferta> ofertas = new ArrayList<>();
