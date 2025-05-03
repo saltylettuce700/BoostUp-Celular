@@ -123,8 +123,7 @@
                     android:inputType="textEmailAddress"
                     android:paddingLeft="16dp"
                     android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:text="Panchito" />
+                    android:paddingBottom="4dp"/>
 
                 <TextView
                     android:id="@+id/textView8"
@@ -145,7 +144,7 @@
                     android:paddingLeft="16dp"
                     android:paddingTop="4dp"
                     android:paddingBottom="4dp"
-                    android:text="Perez" />
+                    />
 
                 <TextView
                     android:id="@+id/textView9"
@@ -168,7 +167,7 @@
                     android:paddingLeft="16dp"
                     android:paddingTop="4dp"
                     android:paddingBottom="4dp"
-                    android:text="PanchitoPro" />
+                    />
 
                 <Space
                     android:layout_width="match_parent"
@@ -200,7 +199,6 @@
                             android:id="@+id/textView18"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="lorem@ipsum.com"
                             android:textColor="@color/dark_gray"
                             android:textSize="14sp" />
                     </LinearLayout>
@@ -237,6 +235,7 @@
                     android:layout_height="18dp" />
 
                 <Button
+                    android:id="@+id/btn_guardarCambios"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/btn_guardar"

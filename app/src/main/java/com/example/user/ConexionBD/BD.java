@@ -3,6 +3,7 @@ package com.example.user.ConexionBD;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.widget.Toast;
 
 import com.example.user.Activity.home_activity;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Handler;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -103,7 +105,36 @@ public class BD {
         client.newCall(request).enqueue(callback);
     }
 
-/*--------------------------------------------------------------------------------*/
+    private void putAuthRequest(String route, String jsonBody, Callback callback) {
+        Preferences preferences = new Preferences(context);
+        String token = preferences.obtenerToken();
+
+        if (token == null || token.isEmpty()) {
+            callback.onFailure(null, new IOException("Token no encontrado"));
+            return;
+        }
+
+        OkHttpClient client = new OkHttpClient();
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+        // Crear el cuerpo de la solicitud con el JSON
+        RequestBody body = RequestBody.create(JSON, jsonBody);
+
+        // Construir la solicitud PUT con el token de autenticación
+        Request request = new Request.Builder()
+                .url(BASE_URL + route)
+                .addHeader("accept", "application/json")
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer " + token)
+                .put(body) 
+                .build();
+
+        // Realizar la llamada a la API
+        client.newCall(request).enqueue(callback);
+    }
+
+
+    /*--------------------------------------------------------------------------------*/
     //GETS:
 
     //Get Todas las alergias existentes para mostrarlas como opciones
@@ -644,6 +675,24 @@ public class BD {
     }
 
 
+    /*---------------------------------------------------------------------------------------*/
+    //PUTS
+
+    public void ActualizarDatosUser(String nombre, String apellido, String username, Callback callback) {
+        String ruta = "usuario/updateMe/";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("username", username);
+            jsonObject.put("nombre", nombre);
+            jsonObject.put("apellido", apellido);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String jsonBody = jsonObject.toString();
+
+        putAuthRequest(ruta, jsonBody, callback);
+    }
 
 
 }
