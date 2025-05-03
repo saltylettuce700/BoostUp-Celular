@@ -694,5 +694,23 @@ public class BD {
         putAuthRequest(ruta, jsonBody, callback);
     }
 
+    public void ActualizarMedidasUser(int peso, int talla, int cintura, int cadera, int circ_brazo, Callback callback){
+        String ruta = "usuario/updateMedidas/";
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("peso_kg", peso);
+            jsonObject.put("talla_cm", talla);
+            jsonObject.put("cintura_cm", cintura);
+            jsonObject.put("cadera_cm", cadera);
+            jsonObject.put("circ_brazo_cm", circ_brazo);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        String jsonBody = jsonObject.toString();
+        putAuthRequest(ruta, jsonBody, callback);
+    }
+
 
 }
