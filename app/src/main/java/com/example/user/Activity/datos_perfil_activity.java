@@ -30,7 +30,12 @@ import com.example.user.ConexionBD.BD;
 import com.example.user.R;
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
 import java.util.Locale;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class datos_perfil_activity extends AppCompatActivity {
 
@@ -39,6 +44,7 @@ public class datos_perfil_activity extends AppCompatActivity {
 
     EditText ETnombre, ETapellido, ETusername;
     TextView txtcorreo;
+    Button btGuardarCambios;
 
     private boolean isExpanded = false;
 
@@ -69,6 +75,8 @@ public class datos_perfil_activity extends AppCompatActivity {
         ETusername = findViewById(R.id.ET_username);
         txtcorreo = findViewById(R.id.textView18);
 
+        btGuardarCambios = findViewById(R.id.btn_guardarCambios);
+
         // Manejar el clic en la sección "Cuenta"
         cuentaSection.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +96,45 @@ public class datos_perfil_activity extends AppCompatActivity {
 
                     //llenar los acmpos con la info del usuario
                     cargarDatosUsuario();
+
+                    btGuardarCambios.setOnClickListener(view -> {
+                        BD bd = new BD(datos_perfil_activity.this);
+
+                        String name = ETnombre.getText().toString();
+                        String ape = ETapellido.getText().toString();
+                        String user = ETusername.getText().toString();
+
+                        if (name.isEmpty()) {
+                            Toast.makeText(datos_perfil_activity.this, "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if (ape.isEmpty()) {
+                            Toast.makeText(datos_perfil_activity.this, "El apellido no puede estar vacío", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if (user.isEmpty()) {
+                            Toast.makeText(datos_perfil_activity.this, "El nombre de usuario no puede estar vacío", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        bd.ActualizarDatosUser(name, ape, user, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                runOnUiThread(()->{
+                                    Toast.makeText(datos_perfil_activity.this, "Error al actualizar: " + e, Toast.LENGTH_SHORT).show();
+                                });
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                runOnUiThread(() -> {
+                                    Toast.makeText(datos_perfil_activity.this,"Datos actualizados", Toast.LENGTH_LONG).show();
+                                });
+                            }
+                        });
+                    });
                 }
                 isExpanded = !isExpanded;
             }
