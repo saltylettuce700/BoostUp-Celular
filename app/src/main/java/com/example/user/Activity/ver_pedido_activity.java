@@ -35,6 +35,8 @@ public class ver_pedido_activity extends AppCompatActivity {
     TextView nombreBebida, precio, fechatxt, estado_pedido, proteinatxt, marca_proteina, gr_proteina, tipo_proteina;
     TextView sabortxt, marca_sabor, tipo_sabor, curcuma, curcuma_marca, curcuma_gr;
 
+    Button ver_qr;
+
     ImageButton btnBack;
 
     private Translator translator;
@@ -68,6 +70,8 @@ public class ver_pedido_activity extends AppCompatActivity {
         curcuma = findViewById(R.id.tvNombreCurcuma);
         curcuma_marca = findViewById(R.id.tvTipoCurcuma);
         curcuma_gr = findViewById(R.id.tvDescripcionCurcuma);
+
+        ver_qr = findViewById(R.id.btn_qr);
 
 
         // Configura el traductor
@@ -130,16 +134,19 @@ public class ver_pedido_activity extends AppCompatActivity {
                     sabortxt.setText(sabor);
                     marca_sabor.setText(marcaSaborizante);
                     tipo_sabor.setText("Saborizante: " + tipoSaborizante);
-                    curcuma.setText("Curcuma");
+                    curcuma.setText("Cúrcuma");
                     curcuma_marca.setText(marcaCurcuma);
                     curcuma_gr.setText(curcumaGrTexto);
 
+                    translateSelectedTextViews();
                 });
             }
 
             @Override
                public void onError(String mensaje) {
                 runOnUiThread(() -> {
+
+
                     Toast.makeText(ver_pedido_activity.this, mensaje, Toast.LENGTH_SHORT).show();
                 });
                 }
@@ -205,4 +212,23 @@ public class ver_pedido_activity extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> Toast.makeText(this, "Modelo descargado", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(this, "Error al descargar el modelo: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
+
+
+    private void translateSelectedTextViews() {
+        translateTextView(fechatxt);
+        translateTextView(estado_pedido);
+        translateTextView(tipo_proteina);
+        translateTextView(sabortxt);
+        translateTextView(tipo_sabor);
+        translateTextView(curcuma);
+        translateTextView(ver_qr);
+    }
+
+    private void translateTextView(TextView textView) {
+        String originalText = textView.getText().toString();
+        translator.translate(originalText)
+                .addOnSuccessListener(translatedText -> textView.setText(translatedText))
+                .addOnFailureListener(e -> Toast.makeText(this, "Error al traducir: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
 }
