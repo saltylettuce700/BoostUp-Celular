@@ -103,6 +103,24 @@ public class ver_pedido_activity extends AppCompatActivity {
                     int proteinaGr = obj.get("proteina_gr").getAsInt();
                     //String curcumaGr = obj.get("curcuma_gr").isJsonNull() ? "N/A" : obj.get("curcuma_gr").getAsString();
                     String sabor = obj.get("sabor").getAsString();
+
+                    ImageView imageBackground = findViewById(R.id.imageBackground);
+                    switch (sabor.toLowerCase()) {
+                        case "chocolate":
+                            imageBackground.setImageResource(R.drawable.choco_cafe);
+                            break;
+                        case "vainilla":
+                            imageBackground.setImageResource(R.drawable.vanilla_yellow);
+                            break;
+                        case "fresa":
+                            imageBackground.setImageResource(R.drawable.strawberry_pink);
+                            break;
+                        default:
+                            imageBackground.setImageResource(R.drawable.bebida_img); // Imagen por defecto
+                            break;
+                    }
+
+
                     String tipoSaborizante = obj.get("tipo_saborizante").getAsString();
                     String marcaProteina = obj.get("proteina_marca").getAsString();
                     //String marcaCurcuma = obj.get("curcuma_marca").isJsonNull() ? "N/A" : obj.get("curcuma_marca").getAsString();

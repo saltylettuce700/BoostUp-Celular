@@ -9,9 +9,9 @@
     <ImageView
         android:id="@+id/imageBackground"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="400dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/bebida_img" />
+        android:src="@drawable/vanilla_yellow" />
 
     <LinearLayout
         android:layout_width="wrap_content"

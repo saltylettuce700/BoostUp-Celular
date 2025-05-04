@@ -37,6 +37,7 @@ public class OfertaAdapter extends RecyclerView.Adapter<OfertaAdapter.OfertaView
         Oferta oferta = ofertas.get(position);
 
         holder.imagen.setImageResource(oferta.getImagenResIdOferta());
+        holder.textoPromo.setText(oferta.getTextoPromo());
     }
 
     @Override
@@ -47,10 +48,12 @@ public class OfertaAdapter extends RecyclerView.Adapter<OfertaAdapter.OfertaView
     public static class OfertaViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imagen;
+        TextView textoPromo;
 
         public OfertaViewHolder(@NonNull View itemView) {
             super(itemView);
             imagen = itemView.findViewById(R.id.mainImage);
+            textoPromo = itemView.findViewById(R.id.mainImageText);
         }
     }
 }
