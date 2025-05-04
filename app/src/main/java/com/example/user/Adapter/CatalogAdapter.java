@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,6 +79,7 @@ public class CatalogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             productHolder.productName.setText(item.getTitle());
             productHolder.productDescription.setText(item.getDescription());
             productHolder.productTypeProtein.setText(item.getTipoProteinaSaborizante());
+            productHolder.productImage.setImageResource(item.getImageResId());
 
             translateText(productHolder.productName);
             translateText(productHolder.productDescription);
@@ -101,14 +103,14 @@ public class CatalogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     static class ProductViewHolder extends RecyclerView.ViewHolder {
         TextView productName, productDescription, productTypeProtein;
-        //ImageView productImage;
+        ImageView productImage;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             productName = itemView.findViewById(R.id.tvNombreProducto);
             productDescription = itemView.findViewById(R.id.tvDescripcionProducto);
             productTypeProtein = itemView.findViewById(R.id.tvProteina);
-            //productImage = itemView.findViewById(R.id.imgProducto);
+            productImage = itemView.findViewById(R.id.imgProducto);
         }
     }
 
