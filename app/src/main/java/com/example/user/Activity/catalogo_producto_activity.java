@@ -256,7 +256,13 @@ public class catalogo_producto_activity extends AppCompatActivity {
             if (saborizantes != null) {
                 for (Map<String, String> saborizante : saborizantes) {
                     String idStr = saborizante.get("id");
-                    String sabor = saborizante.get("sabor");
+
+
+                    //String sabor = saborizante.get("sabor");
+
+                    String saborEs = saborizante.get("sabor");
+                    String saborEn = traducirSabor(saborEs); // crea esta función de traducción simple
+
                     String tipo = saborizante.get("tipo");
 
                     if (idStr != null && !idStr.isEmpty()) {
@@ -271,9 +277,9 @@ public class catalogo_producto_activity extends AppCompatActivity {
                                                 ? obj.get("marca").getAsString()
                                                 : "Desconocida";
 
-                                        int imageResId = obtenerImagenPorProducto("Saborizantes", sabor);
-                                        CatalogItem item = new CatalogItem(CatalogItem.TYPE_PRODUCT, marca, id, sabor, tipo, imageResId);
-                                        todasLasProteinas.add(item);
+                                        int imageResId = obtenerImagenPorProducto("Saborizantes", saborEn);
+                                        CatalogItem item = new CatalogItem(CatalogItem.TYPE_PRODUCT, marca, id, saborEn, tipo, imageResId);
+                                        todosLosSaborizantes.add(item);
 
 
 //                                        catalogItems.add(item);
@@ -372,7 +378,7 @@ public class catalogo_producto_activity extends AppCompatActivity {
     private String loadLanguagePreference() {
         SharedPreferences preferences = getSharedPreferences(LANGUAGE_PREF, MODE_PRIVATE);
 
-        Toast.makeText(this, "Idioma actual: " + preferences.getString(SELECTED_LANGUAGE, "es"), Toast.LENGTH_SHORT).show(); // Verifica el idioma
+        //Toast.makeText(this, "Idioma actual: " + preferences.getString(SELECTED_LANGUAGE, "es"), Toast.LENGTH_SHORT).show(); // Verifica el idioma
 
         return preferences.getString(SELECTED_LANGUAGE, "es"); // Default is Spanish
 
@@ -412,9 +418,11 @@ public class catalogo_producto_activity extends AppCompatActivity {
                 return 0;
 
             case "Saborizantes":
-                if (valorClave.contains("fresa")) return R.drawable.strawberry_milk;
+                if (valorClave.contains("fresa")||valorClave.contains("strawberry")) return R.drawable.strawberry_milk;
                 if (valorClave.contains("chocolate")) return R.drawable.choco_milk;
-                if (valorClave.contains("vainilla")) return R.drawable.vanilla_milk;
+                if (valorClave.contains("vainilla")|| valorClave.contains("vanilla")) return R.drawable.vanilla_milk;
+
+
                 return 0;
 
             case "Cúrcuma y Jengibre":
@@ -511,28 +519,22 @@ public class catalogo_producto_activity extends AppCompatActivity {
 
     private List<CatalogItem> filtrarSaborizantes(String query) {
         List<CatalogItem> saborizantesFiltrados = new ArrayList<>();
+        String texto = query.toLowerCase();
+        catalogItems.clear();
 
-        // Buscar en la lista de mapas (Map<String, String>)
-        for (Map<String, String> saborizante : saborizantes) {
-            String sabor = saborizante.get("sabor");
-            String tipo = saborizante.get("tipo");
 
-            if ((sabor != null && sabor.toLowerCase().contains(query)) ||
-                    (tipo != null && tipo.toLowerCase().contains(query))) {
-                CatalogItem item = new CatalogItem(CatalogItem.TYPE_PRODUCT, sabor, 0, null, tipo, 0);
-                saborizantesFiltrados.add(item);
-            }
-        }
-
-        // Buscar también en la lista de CatalogItem (si tienes una)
         for (CatalogItem item : todosLosSaborizantes) {
-            if (item.getTitle().toLowerCase().contains(query)) {
+            if (item.getTitle().toLowerCase().contains(texto) || // marca
+                    (item.getDescription() != null && item.getDescription().toLowerCase().contains(texto))) { // sabor
                 saborizantesFiltrados.add(item);
             }
         }
+
+        adapter.notifyDataSetChanged();
 
         return saborizantesFiltrados;
     }
+
 
 
 
@@ -546,6 +548,22 @@ public class catalogo_producto_activity extends AppCompatActivity {
         }
         return curcumaFiltrada;
     }
+
+
+    private String traducirSabor(String saborEs) {
+        // Esto debe adaptarse según los idiomas soportados
+        if (loadLanguagePreference().equals("en")) {
+            switch (saborEs.toLowerCase()) {
+                case "vainilla": return "Vanilla";
+                case "chocolate": return "Chocolate";
+                case "fresa": return "Strawberry";
+                default: return saborEs; // Si no se encuentra traducción
+            }
+        }
+        return saborEs;
+    }
+
+
 
 
 
