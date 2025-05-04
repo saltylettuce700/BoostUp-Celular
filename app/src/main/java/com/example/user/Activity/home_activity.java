@@ -186,7 +186,8 @@ public class home_activity extends AppCompatActivity {
             public void onSuccess(JsonArray array) {
                 for (JsonElement element : array) {
                     String nombre = element.getAsJsonObject().get("nombre").getAsString();
-                    bebidas.add(new BebidaDestacada(nombre, "", R.drawable.bebida_img));
+                    int imagen = obtenerImagenParaBebida(nombre);
+                    bebidas.add(new BebidaDestacada(nombre, "", imagen));
                 }
 
                 bd.getTopSabores(new BD.JsonArrayCallback() {
@@ -194,7 +195,8 @@ public class home_activity extends AppCompatActivity {
                     public void onSuccess(JsonArray array) {
                         for (JsonElement element : array) {
                             String sabor = element.getAsJsonObject().get("sabor").getAsString();
-                            bebidas.add(new BebidaDestacada(sabor, "", R.drawable.bebida_img));
+                            int imagen = obtenerImagenParaBebida(sabor);
+                            bebidas.add(new BebidaDestacada(sabor, "", imagen));
                         }
 
                         runOnUiThread(() -> {
@@ -254,4 +256,22 @@ public class home_activity extends AppCompatActivity {
         return preferences.getString(SELECTED_LANGUAGE, "es"); // Default is Spanish
 
     }
+
+    private int obtenerImagenParaBebida(String nombre) {
+        switch (nombre.trim().toLowerCase()) {
+            case "falcon protein":
+                return R.drawable.falcon;
+            case "pure and natural":
+                return R.drawable.pure_natural_img;
+            case "chocolate":
+                return R.drawable.chocolate_icon;
+            case "vainilla":
+                return R.drawable.vanilla_icon;
+            case "fresa":
+                return R.drawable.strawberry_icon;
+            default:
+                return R.drawable.bebida_img; // Imagen genérica si no hay coincidencia
+        }
+    }
+
 }
