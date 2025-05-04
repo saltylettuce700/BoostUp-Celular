@@ -176,7 +176,7 @@ public class catalogo_producto_activity extends AppCompatActivity {
                                     String marca = obj.get("marca").getAsString();
                                     //catalogItems.add(new CatalogItem(CatalogItem.TYPE_PRODUCT, nombre, id, marca, tipo));
                                     //adapter.notifyDataSetChanged();
-                                    CatalogItem item = new CatalogItem(CatalogItem.TYPE_PRODUCT, nombre, id, marca, tipo);
+                                    CatalogItem item = new CatalogItem(CatalogItem.TYPE_PRODUCT, nombre, id, marca, tipo, "proteina");
                                     agregarProductoDebajoDeCategoria(item, "Proteínas");
                                 });
                             }
@@ -227,7 +227,8 @@ public class catalogo_producto_activity extends AppCompatActivity {
                                                 marca,       // title
                                                 id,          // id
                                                 sabor,       // description
-                                                tipo         // tipoProteinaSaborizante
+                                                tipo,         // tipoProteinaSaborizante
+                                                "saborizante"
                                         );
 
 //                                        catalogItems.add(item);
@@ -268,7 +269,7 @@ public class catalogo_producto_activity extends AppCompatActivity {
                         String marca = obj.get("marca").getAsString();
 //                        catalogItems.add(new CatalogItem(CatalogItem.TYPE_PRODUCT, marca, id, null, null));
 //                        adapter.notifyDataSetChanged();
-                        CatalogItem item = new CatalogItem(CatalogItem.TYPE_PRODUCT, marca, id, null, null);
+                        CatalogItem item = new CatalogItem(CatalogItem.TYPE_PRODUCT, marca, id, null, null, "curcuma");
                         agregarProductoDebajoDeCategoria(item, "Cúrcuma y Jengibre");
                     }
                 });
@@ -286,11 +287,11 @@ public class catalogo_producto_activity extends AppCompatActivity {
     private void obtenerProductos() {
         catalogItems.clear(); // Vacía la lista antes de llenarla
         // Proteínas
-        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Proteínas", 0, null, null));
+        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Proteínas", 0, null, null, null));
         // Saborizantes
-        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Saborizantes", 0, null, null));
+        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Saborizantes", 0, null, null, null));
         // Cúrcuma y Jengibre
-        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Cúrcuma y Jengibre", 0, null, null));
+        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Cúrcuma y Jengibre", 0, null, null, null));
         adapter.notifyDataSetChanged();
         obtenerProteinas();
         obtenerCatalogoSaborizantes();

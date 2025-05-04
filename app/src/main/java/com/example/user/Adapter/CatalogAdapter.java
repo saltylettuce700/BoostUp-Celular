@@ -5,6 +5,7 @@ import static com.example.user.Activity.account_activity.LANGUAGE_PREF;
 import static com.example.user.Activity.account_activity.SELECTED_LANGUAGE;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import POJO.CatalogItem;
+
+import com.example.user.Activity.Registro.ver_detalles_activity;
 import com.example.user.R;
 import com.google.mlkit.nl.translate.TranslateLanguage;
 import com.google.mlkit.nl.translate.Translation;
@@ -82,7 +85,16 @@ public class CatalogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             translateText(productHolder.productName);
             translateText(productHolder.productDescription);
             translateText(productHolder.productTypeProtein);
+
+            productHolder.tvVerDetalles.setOnClickListener(view -> {
+                Intent intent = new Intent(context, ver_detalles_activity.class);
+                intent.putExtra("id", item.getId());
+                intent.putExtra("tipoProducto", item.getTipoProducto());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            });
         }
+
     }
 
     @Override
@@ -100,7 +112,7 @@ public class CatalogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     static class ProductViewHolder extends RecyclerView.ViewHolder {
-        TextView productName, productDescription, productTypeProtein;
+        TextView productName, productDescription, productTypeProtein, tvVerDetalles;
         //ImageView productImage;
 
         public ProductViewHolder(@NonNull View itemView) {
@@ -108,6 +120,7 @@ public class CatalogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             productName = itemView.findViewById(R.id.tvNombreProducto);
             productDescription = itemView.findViewById(R.id.tvDescripcionProducto);
             productTypeProtein = itemView.findViewById(R.id.tvProteina);
+            tvVerDetalles = itemView.findViewById(R.id.tvVerDetalles);
             //productImage = itemView.findViewById(R.id.imgProducto);
         }
     }
