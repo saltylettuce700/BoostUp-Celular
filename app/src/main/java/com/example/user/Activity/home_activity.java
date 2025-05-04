@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -29,6 +30,10 @@ import com.example.user.PaddingItemDecoration;
 import com.example.user.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.mlkit.nl.translate.TranslateLanguage;
+import com.google.mlkit.nl.translate.Translation;
+import com.google.mlkit.nl.translate.Translator;
+import com.google.mlkit.nl.translate.TranslatorOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +55,8 @@ public class home_activity extends AppCompatActivity {
     private BebidaAdapter bebidaAdapter;
 
     private OfertaAdapter ofertaAdapter;
+
+    private Translator translator;
 
 
     @Override
@@ -75,11 +82,14 @@ public class home_activity extends AppCompatActivity {
         recyclerViewBebidas = findViewById(R.id.recyclerViewBebidas);
         recyclerViewOfertas = findViewById(R.id.recyclerViewOferta);
 
+        // Configura el traductor
+        setupTranslator();
+
         // Lista de imágenes de prueba
         List<Integer> imageList = new ArrayList<>();
-        imageList.add(R.drawable.woman);
-        imageList.add(R.drawable.logo);
-        imageList.add(R.drawable.bebida_img);
+        imageList.add(R.drawable.anuncio);
+        imageList.add(R.drawable.anuncio2);
+        imageList.add(R.drawable.anuncio3);
 
         // Configurar el adaptador
         carouselAdapter = new CarouselAdapter(this, imageList);
@@ -108,8 +118,11 @@ public class home_activity extends AppCompatActivity {
         cargarTopBebidas();
 
         recyclerViewOfertas.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        ofertaAdapter = new OfertaAdapter(this, getOfertasDePrueba());
-        recyclerViewOfertas.setAdapter(ofertaAdapter);
+        getOfertasDePruebaConTraduccion(ofertas -> {
+            ofertaAdapter = new OfertaAdapter(this, ofertas);
+            recyclerViewOfertas.setAdapter(ofertaAdapter);
+        });
+
 
         // Agregar ItemDecoration para el padding
         int paddingStart = (int) getResources().getDimension(R.dimen.padding_start); // 20dp
@@ -178,31 +191,63 @@ public class home_activity extends AppCompatActivity {
     }*/
 
     private void cargarTopBebidas() {
-        BD bd = new BD(this); // Asegúrate de tener acceso a esta clase
+        BD bd = new BD(this);
         List<BebidaDestacada> bebidas = new ArrayList<>();
 
         bd.getTopProteina(new BD.JsonArrayCallback() {
             @Override
-            public void onSuccess(JsonArray array) {
-                for (JsonElement element : array) {
+            public void onSuccess(JsonArray proteinasArray) {
+                // Añadir proteínas directamente (sin traducción)
+                for (JsonElement element : proteinasArray) {
                     String nombre = element.getAsJsonObject().get("nombre").getAsString();
                     int imagen = obtenerImagenParaBebida(nombre);
                     bebidas.add(new BebidaDestacada(nombre, "", imagen));
                 }
 
+                int totalProteinas = proteinasArray.size();
+
                 bd.getTopSabores(new BD.JsonArrayCallback() {
                     @Override
-                    public void onSuccess(JsonArray array) {
-                        for (JsonElement element : array) {
-                            String sabor = element.getAsJsonObject().get("sabor").getAsString();
-                            int imagen = obtenerImagenParaBebida(sabor);
-                            bebidas.add(new BebidaDestacada(sabor, "", imagen));
+                    public void onSuccess(JsonArray saboresArray) {
+                        int totalSabores = saboresArray.size();
+
+                        if (totalSabores == 0) {
+                            runOnUiThread(() -> {
+                                bebidaAdapter = new BebidaAdapter(home_activity.this, bebidas);
+                                recyclerViewBebidas.setAdapter(bebidaAdapter);
+                            });
+                            return;
                         }
 
-                        runOnUiThread(() -> {
-                            bebidaAdapter = new BebidaAdapter(home_activity.this, bebidas);
-                            recyclerViewBebidas.setAdapter(bebidaAdapter);
-                        });
+                        // Traducir cada sabor
+                        for (JsonElement element : saboresArray) {
+                            String saborOriginal = element.getAsJsonObject().get("sabor").getAsString();
+                            int imagen = obtenerImagenParaBebida(saborOriginal);
+
+                            translator.translate(saborOriginal)
+                                    .addOnSuccessListener(saborTraducido -> {
+                                        bebidas.add(new BebidaDestacada(saborTraducido, "", imagen));
+
+                                        // Solo actualizar cuando todas las bebidas estén listas
+                                        if (bebidas.size() == totalProteinas + totalSabores) {
+                                            runOnUiThread(() -> {
+                                                bebidaAdapter = new BebidaAdapter(home_activity.this, bebidas);
+                                                recyclerViewBebidas.setAdapter(bebidaAdapter);
+                                            });
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Si falla, usar el texto original
+                                        bebidas.add(new BebidaDestacada(saborOriginal, "", imagen));
+
+                                        if (bebidas.size() == totalProteinas + totalSabores) {
+                                            runOnUiThread(() -> {
+                                                bebidaAdapter = new BebidaAdapter(home_activity.this, bebidas);
+                                                recyclerViewBebidas.setAdapter(bebidaAdapter);
+                                            });
+                                        }
+                                    });
+                        }
                     }
 
                     @Override
@@ -216,20 +261,59 @@ public class home_activity extends AppCompatActivity {
             @Override
             public void onError(String mensaje) {
                 runOnUiThread(() ->
-                        Toast.makeText(home_activity.this, "Error sabores: " + mensaje, Toast.LENGTH_SHORT).show());
+                        Toast.makeText(home_activity.this, "Error proteínas: " + mensaje, Toast.LENGTH_SHORT).show());
             }
         });
     }
 
 
-    private List<Oferta> getOfertasDePrueba() {
+
+    private void getOfertasDePruebaConTraduccion(OfertaCallback callback) {
         List<Oferta> ofertas = new ArrayList<>();
-        ofertas.add(new Oferta(R.drawable.bebida_img));
-        ofertas.add(new Oferta(R.drawable.bebida_img));
-        ofertas.add(new Oferta(R.drawable.bebida_img));
-        ofertas.add(new Oferta(R.drawable.bebida_img));
-        return ofertas;
+
+        String idioma = loadLanguagePreference(); // "es" o "en"
+
+        String[] textos = new String[]{
+                "Conóce nuestras máquinas en tu gym SmartFit más cercano",
+                "🎉 ¡Tu primera bebida es gratis!",
+                "💳 10% OFF pagando con tarjeta X o Stripe"
+        };
+
+        int[] imagenes = new int[]{
+                R.drawable.promocionsmart,
+                R.drawable.bebida_img,
+                R.drawable.bebida_img
+        };
+
+        // Si el idioma es español, no traducimos
+        if (idioma.equals("es")) {
+            for (int i = 0; i < textos.length; i++) {
+                ofertas.add(new Oferta(imagenes[i], textos[i]));
+            }
+            callback.onComplete(ofertas);
+        } else {
+            // Traducimos al inglés
+            List<String> textosTraducidos = new ArrayList<>();
+
+            for (int i = 0; i < textos.length; i++) {
+                int finalI = i;
+                translator.translate(textos[i])
+                        .addOnSuccessListener(traducido -> {
+                            ofertas.add(new Oferta(imagenes[finalI], traducido));
+                            if (ofertas.size() == textos.length) {
+                                callback.onComplete(ofertas);
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            ofertas.add(new Oferta(imagenes[finalI], textos[finalI])); // usar original si falla
+                            if (ofertas.size() == textos.length) {
+                                callback.onComplete(ofertas);
+                            }
+                        });
+            }
+        }
     }
+
 
 
     private void changeLanguage(String languageCode) {
@@ -270,8 +354,33 @@ public class home_activity extends AppCompatActivity {
             case "fresa":
                 return R.drawable.strawberry_icon;
             default:
-                return R.drawable.bebida_img; // Imagen genérica si no hay coincidencia
+                return R.drawable.bebida_img;
         }
     }
+
+
+
+    // Configurar el traductor ML Kit
+    private void setupTranslator() {
+        TranslatorOptions options = new TranslatorOptions.Builder()
+                .setSourceLanguage(TranslateLanguage.SPANISH)
+                .setTargetLanguage(TranslateLanguage.ENGLISH)
+                .build();
+
+        translator = Translation.getClient(options);
+
+        translator.downloadModelIfNeeded()
+                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Modelo descargado", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(this, "Error al descargar el modelo: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    interface OfertaCallback {
+        void onComplete(List<Oferta> ofertas);
+    }
+
+
+
+
+
 
 }
