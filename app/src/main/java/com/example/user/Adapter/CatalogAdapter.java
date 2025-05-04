@@ -77,11 +77,11 @@ public class CatalogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ProductViewHolder productHolder = (ProductViewHolder) holder;
             productHolder.productName.setText(item.getTitle());
             productHolder.productDescription.setText(item.getDescription());
-
+            productHolder.productTypeProtein.setText(item.getTipoProteinaSaborizante());
 
             translateText(productHolder.productName);
             translateText(productHolder.productDescription);
-
+            translateText(productHolder.productTypeProtein);
         }
     }
 
@@ -100,14 +100,14 @@ public class CatalogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     static class ProductViewHolder extends RecyclerView.ViewHolder {
-        TextView productName, productDescription;
+        TextView productName, productDescription, productTypeProtein;
         //ImageView productImage;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             productName = itemView.findViewById(R.id.tvNombreProducto);
             productDescription = itemView.findViewById(R.id.tvDescripcionProducto);
-
+            productTypeProtein = itemView.findViewById(R.id.tvProteina);
             //productImage = itemView.findViewById(R.id.imgProducto);
         }
     }

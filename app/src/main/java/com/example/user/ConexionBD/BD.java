@@ -639,6 +639,110 @@ public class BD {
             }
         });
     }
+
+    public void getDatosCurcuma(JsonArrayCallback callback){
+        String ruta = "curcuma/opciones/";
+
+        getRequest(ruta, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError("Error de conexión");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    try {
+                        JsonArray array = JsonParser.parseString(json).getAsJsonArray();
+                        callback.onSuccess(array);
+                    } catch (Exception e) {
+                        callback.onError("Error al obetener los datos");
+                    }
+                } else {
+                    callback.onError("Error en la respuesta del servidor");
+                }
+            }
+        });
+    }
+
+    public void getDetallesProteina(int id, JsonCallback callback){
+        String ruta = "proteina/"+id+"/detalles/";
+
+        getRequest(ruta, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError("Error de conexión");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    try {
+                        JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
+                        callback.onSuccess(obj);
+                    } catch (Exception e) {
+                        callback.onError("Error al procesar datos");
+                    }
+                } else {
+                    callback.onError("Error en la respuesta del servidor");
+                }
+            }
+        });
+    }
+
+    public void getDetallesSaborizante(int id, JsonCallback callback){
+        String ruta = "saborizante/"+id+"/detalles";
+
+        getRequest(ruta, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError("Error de conexión");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    try {
+                        JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
+                        callback.onSuccess(obj);
+                    } catch (Exception e) {
+                        callback.onError("Error al procesar datos");
+                    }
+                } else {
+                    callback.onError("Error en la respuesta del servidor");
+                }
+            }
+        });
+    }
+
+    public void getDetallesCurcuma(int id, JsonCallback callback){
+        String ruta= "curcuma/"+id+"/detalles/";
+
+        getRequest(ruta, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError("Error de conexión");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    try {
+                        JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
+                        callback.onSuccess(obj);
+                    } catch (Exception e) {
+                        callback.onError("Error al procesar datos");
+                    }
+                } else {
+                    callback.onError("Error en la respuesta del servidor");
+                }
+            }
+        });
+    }
     /*---------------------------------------------------------------------------------------*/
     //POSTS:
 

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -23,11 +24,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.user.Adapter.CatalogAdapter;
 import POJO.CatalogItem;
+
+import com.example.user.ConexionBD.BD;
 import com.example.user.R;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class catalogo_producto_activity extends AppCompatActivity {
 
@@ -59,13 +66,14 @@ public class catalogo_producto_activity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewCatalog);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // SIMUALCION
-        catalogItems = obtenerProductosSimulados();
+
+        catalogItems = new ArrayList<>();
+
 
         // Configura el adaptador
         adapter = new CatalogAdapter(this, catalogItems, languageCode);
         recyclerView.setAdapter(adapter);
-
+        obtenerProductos();
         horizontalScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -127,7 +135,7 @@ public class catalogo_producto_activity extends AppCompatActivity {
         });
     }
 
-    private List<CatalogItem> obtenerProductosSimulados() {
+    /*private List<CatalogItem> obtenerProductosSimulados() {
         List<CatalogItem> items = new ArrayList<>();
 
         // Categoría: Proteínas
@@ -146,7 +154,149 @@ public class catalogo_producto_activity extends AppCompatActivity {
         items.add(new CatalogItem(CatalogItem.TYPE_PRODUCT, "Jengibre genérico", "Descripción breve"));
 
         return items;
+    }*/
+
+    private void obtenerProteinas() {
+        BD bd = new BD(catalogo_producto_activity.this);
+
+        bd.getOpcionesProteinas(new BD.JsonArrayCallback() {
+            @Override
+            public void onSuccess(JsonArray array) {
+                runOnUiThread(() -> {
+                    for (JsonElement elemento : array) {
+                        JsonObject obj = elemento.getAsJsonObject();
+                        int id = obj.get("id_proteina").getAsInt();
+                        String nombre = obj.get("nombre").getAsString();
+                        String tipo = obj.get("tipo_proteina").getAsString();
+
+                        bd.getDetallesProteina(id, new BD.JsonCallback() {
+                            @Override
+                            public void onSuccess(JsonObject obj) {
+                                runOnUiThread(() -> {
+                                    String marca = obj.get("marca").getAsString();
+                                    //catalogItems.add(new CatalogItem(CatalogItem.TYPE_PRODUCT, nombre, id, marca, tipo));
+                                    //adapter.notifyDataSetChanged();
+                                    CatalogItem item = new CatalogItem(CatalogItem.TYPE_PRODUCT, nombre, id, marca, tipo);
+                                    agregarProductoDebajoDeCategoria(item, "Proteínas");
+                                });
+                            }
+
+                            @Override
+                            public void onError(String mensaje) {
+                                runOnUiThread(() -> {
+                                    Toast.makeText(catalogo_producto_activity.this, mensaje, Toast.LENGTH_SHORT).show();
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String mensaje) {
+                runOnUiThread(() -> {
+                    Toast.makeText(catalogo_producto_activity.this, mensaje, Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
     }
+
+    private void obtenerCatalogoSaborizantes() {
+        BD bd = new BD(catalogo_producto_activity.this);
+        new Thread(() -> {
+            List<Map<String, String>> saborizantes = bd.getSaborizantes();
+            if (saborizantes != null) {
+                for (Map<String, String> saborizante : saborizantes) {
+                    String idStr = saborizante.get("id");
+                    String sabor = saborizante.get("sabor");
+                    String tipo = saborizante.get("tipo");
+
+                    if (idStr != null && !idStr.isEmpty()) {
+                        try {
+                            int id = Integer.parseInt(idStr);
+
+                            bd.getDetallesSaborizante(id, new BD.JsonCallback() {
+                                @Override
+                                public void onSuccess(JsonObject obj) {
+                                    runOnUiThread(() -> {
+                                        String marca = obj.has("marca") && !obj.get("marca").isJsonNull()
+                                                ? obj.get("marca").getAsString()
+                                                : "Desconocida";
+                                        CatalogItem item = new CatalogItem(
+                                                CatalogItem.TYPE_PRODUCT,
+                                                marca,       // title
+                                                id,          // id
+                                                sabor,       // description
+                                                tipo         // tipoProteinaSaborizante
+                                        );
+
+//                                        catalogItems.add(item);
+//                                        adapter.notifyDataSetChanged();
+                                        agregarProductoDebajoDeCategoria(item, "Saborizantes");
+                                    });
+                                }
+
+                                @Override
+                                public void onError(String mensaje) {
+                                    runOnUiThread(() ->
+                                            Toast.makeText(catalogo_producto_activity.this, mensaje, Toast.LENGTH_SHORT).show()
+                                    );
+                                }
+                            });
+                        } catch (NumberFormatException e) {
+                            Log.e("catalogo_producto", "ID inválido: " + idStr, e);
+                        }
+                    }
+                }
+            } else {
+                runOnUiThread(() ->
+                        Toast.makeText(catalogo_producto_activity.this, "No se pudieron obtener los saborizantes.", Toast.LENGTH_SHORT).show()
+                );
+            }
+        }).start();
+    }
+
+    private void obeterCurcumas(){
+        BD bd = new BD(catalogo_producto_activity.this);
+        bd.getDatosCurcuma(new BD.JsonArrayCallback() {
+            @Override
+            public void onSuccess(JsonArray array) {
+                runOnUiThread(() -> {
+                    for (JsonElement element : array) {
+                        JsonObject obj = element.getAsJsonObject();
+                        int id = obj.get("id_curcuma").getAsInt();
+                        String marca = obj.get("marca").getAsString();
+//                        catalogItems.add(new CatalogItem(CatalogItem.TYPE_PRODUCT, marca, id, null, null));
+//                        adapter.notifyDataSetChanged();
+                        CatalogItem item = new CatalogItem(CatalogItem.TYPE_PRODUCT, marca, id, null, null);
+                        agregarProductoDebajoDeCategoria(item, "Cúrcuma y Jengibre");
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String mensaje) {
+                runOnUiThread(() -> {
+                    Toast.makeText(catalogo_producto_activity.this, mensaje, Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+
+    private void obtenerProductos() {
+        catalogItems.clear(); // Vacía la lista antes de llenarla
+        // Proteínas
+        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Proteínas", 0, null, null));
+        // Saborizantes
+        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Saborizantes", 0, null, null));
+        // Cúrcuma y Jengibre
+        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Cúrcuma y Jengibre", 0, null, null));
+        adapter.notifyDataSetChanged();
+        obtenerProteinas();
+        obtenerCatalogoSaborizantes();
+        obeterCurcumas();
+    }
+
 
     private void changeLanguage(String languageCode) {
         // Cambiar el idioma
@@ -172,4 +322,26 @@ public class catalogo_producto_activity extends AppCompatActivity {
         return preferences.getString(SELECTED_LANGUAGE, "es"); // Default is Spanish
 
     }
+
+    private void agregarProductoDebajoDeCategoria(CatalogItem producto, String nombreCategoria) {
+        int index = -1;
+        // Buscar la categoría
+        for (int i = 0; i < catalogItems.size(); i++) {
+            CatalogItem item = catalogItems.get(i);
+            if (item.getType() == CatalogItem.TYPE_CATEGORY && item.getTitle().equals(nombreCategoria)) {
+                index = i;
+            }
+        }
+
+        if (index != -1) {
+            // Encontrar el primer producto que no sea de esta categoría
+            int insertPos = index + 1;
+            while (insertPos < catalogItems.size() && catalogItems.get(insertPos).getType() == CatalogItem.TYPE_PRODUCT) {
+                insertPos++;
+            }
+            catalogItems.add(insertPos, producto);
+            adapter.notifyItemInserted(insertPos);
+        }
+    }
+
 }
