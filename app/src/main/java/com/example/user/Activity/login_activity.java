@@ -9,7 +9,10 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +50,11 @@ public class login_activity extends AppCompatActivity {
             return insets;
         });
 
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+        ImageButton btnNext = findViewById(R.id.btn_next);
+
+
+
         findViewById(R.id.btn_next).setOnClickListener(v -> {
 
             // Acción para Inventario
@@ -61,7 +69,22 @@ public class login_activity extends AppCompatActivity {
             } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
                 Toast.makeText(this, "El formato del correo no es válido", Toast.LENGTH_SHORT).show();
             } else {
-                bd.iniciaSesion(correo, pass);
+                // Oculta el botón y muestra la barra de progreso
+                btnNext.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+
+                bd.iniciaSesion(correo, pass, new BD.LoginCallback() {
+                    @Override
+                    public void onLoginSuccess() {
+                        // Nada más que hacer, ya te lleva a home_activity
+                    }
+
+                    @Override
+                    public void onLoginFailed() {
+                        progressBar.setVisibility(View.GONE);
+                        btnNext.setVisibility(View.VISIBLE);
+                    }
+                });
             }
         });
 
