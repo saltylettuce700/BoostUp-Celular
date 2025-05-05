@@ -235,8 +235,13 @@ public class BD {
         return -1;  // Devuelve -1 si algo falla
     }
 
+    public interface LoginCallback {
+        void onLoginSuccess();
+        void onLoginFailed();
+    }
+
     //Token e inicio de sesion
-    public void iniciaSesion(String email, String pass){
+    public void iniciaSesion(String email, String pass, LoginCallback callback){
 
 
         getAuthToken(email, pass, new AuthCallback() {
@@ -253,6 +258,7 @@ public class BD {
                 runOnUiThread(() -> {
                     // Mostrar mensaje
                     Toast.makeText(context, "Sesión iniciada", Toast.LENGTH_SHORT).show();
+                    callback.onLoginSuccess();
                 });
 
             }
@@ -262,6 +268,7 @@ public class BD {
                 runOnUiThread(() -> {
                     // Mostrar el mensaje de error
                     Toast.makeText(context, "Usuario o Contraseña erroneos", Toast.LENGTH_SHORT).show();
+                    callback.onLoginFailed();
                 });
             }
         });
