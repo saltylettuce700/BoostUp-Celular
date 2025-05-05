@@ -70,7 +70,7 @@ public class login_activity extends AppCompatActivity {
                 Toast.makeText(this, "El formato del correo no es válido", Toast.LENGTH_SHORT).show();
             } else {
                 // Oculta el botón y muestra la barra de progreso
-                btnNext.setVisibility(View.INVISIBLE);
+                btnNext.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
 
                 bd.iniciaSesion(correo, pass, new BD.LoginCallback() {
