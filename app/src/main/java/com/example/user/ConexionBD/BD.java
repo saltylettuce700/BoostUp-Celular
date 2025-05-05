@@ -133,6 +133,26 @@ public class BD {
         client.newCall(request).enqueue(callback);
     }
 
+    private void PostRequest(String route, JSONObject json, Callback callback) {
+        OkHttpClient client = new OkHttpClient();
+
+        final String JSONStr = json.toString();
+
+        final RequestBody requestBody = RequestBody.create(
+                MediaType.get("application/json; charset=utf-8"),
+                JSONStr
+                );
+
+        Request request = new Request.Builder()
+                .url(BASE_URL + route)
+                .addHeader("accept", "application/json")
+                .addHeader("Content-Type", "application/json")
+                .post(requestBody)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
 
     /*--------------------------------------------------------------------------------*/
     //GETS:
@@ -247,7 +267,7 @@ public class BD {
                 preferencias.guardarCredenciales(token, email, pass);
 
                 Intent intent = new Intent(context, home_activity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 context.startActivity(intent);
 
                 runOnUiThread(() -> {
@@ -749,7 +769,7 @@ public class BD {
     //Post Crear Cuenta de Usuario
 
     public boolean registrarUsuario(String email, String password, String username, String nombre, String apellido,
-                                    String sexo, String fec_nacimiento, float peso_kg, int talla_cm, int cintura_cm,
+                                    String sexo, String fec_nacimiento, int peso_kg, int talla_cm, int cintura_cm,
                                     int cadera_cm, int circ_brazo_cm) {
 
         String url = BASE_URL + "usuario/registrar/";
@@ -776,6 +796,33 @@ public class BD {
         }
 
         return false; // Si algo salió mal
+    }
+
+
+    public void registrarAlergiaUsuario(int id_alergia){
+        String ruta = "usuario/alergenos";
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("tipo_alergeno", id_alergia);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        PostRequest(ruta, json, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                runOnUiThread(()->{
+                    Toast.makeText(context, "Alergia agregada", Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+
     }
 
 
