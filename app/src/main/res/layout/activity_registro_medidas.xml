@@ -108,7 +108,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/ET_name"
+                android:id="@+id/ET_peso"
                 android:layout_width="302dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/et_holder_gray_rectangle"
@@ -145,7 +145,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/ET_lastname"
+                android:id="@+id/ET_talla"
                 android:layout_width="302dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/et_holder_gray_rectangle"
@@ -183,7 +183,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/ET_newusername"
+                android:id="@+id/ET_cintura"
                 android:layout_width="302dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/et_holder_gray_rectangle"
