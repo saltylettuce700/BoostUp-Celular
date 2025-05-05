@@ -20,6 +20,8 @@ import com.example.user.ConexionBD.BD;
 import com.example.user.R;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class registro_terminos_activity extends AppCompatActivity {
 
@@ -40,14 +42,14 @@ public class registro_terminos_activity extends AppCompatActivity {
 
         Intent intent1 = getIntent();
         String setemail = intent1.getStringExtra("email");
-        String setpass =intent1.getStringExtra("pass");
+        String setpass = intent1.getStringExtra("pass");
         String setNombre = intent1.getStringExtra("nombre");
         String setApellido = intent1.getStringExtra("apellido");
         String setBirthday = intent1.getStringExtra("birthday");
         String setusername = intent1.getStringExtra("username");
         String setsexo = intent1.getStringExtra("sexo");
-        int setpeso = intent1.getIntExtra("peso",0);
-        int settalla = intent1.getIntExtra("talla",0);
+        int setpeso = intent1.getIntExtra("peso", 0);
+        int settalla = intent1.getIntExtra("talla", 0);
         int setcintura = intent1.getIntExtra("cintura", 0);
         int setcadera = intent1.getIntExtra("cadera", 0);
         int setbrazo = intent1.getIntExtra("brazo", 0);
@@ -56,7 +58,6 @@ public class registro_terminos_activity extends AppCompatActivity {
         checkboxTerms = findViewById(R.id.checkbox_terms);
         buttonFinish = findViewById(R.id.button_finish);
         btnBack = findViewById(R.id.btnBack);
-
 
 
         boolean desdeAccount = getIntent().getBooleanExtra("desde_account", false);
@@ -76,8 +77,6 @@ public class registro_terminos_activity extends AppCompatActivity {
         }
 
 
-
-
         // Habilitar/deshabilitar el botón dependiendo del estado del checkbox
         checkboxTerms.setOnCheckedChangeListener((buttonView, isChecked) -> {
             buttonFinish.setEnabled(isChecked);
@@ -91,27 +90,66 @@ public class registro_terminos_activity extends AppCompatActivity {
                 boolean exito = bd.registrarUsuario(setemail, setpass, setusername, setNombre, setApellido, setsexo, setBirthday, setpeso, settalla, setcintura, setcadera, setbrazo);
 
                 if (exito) {
-                    bd.iniciaSesion(setemail, setpass);
+                    bd.autenticarYGuardarToken(setemail, setpass, new BD.LoginCallback() {
+                        @Override
+                        public void onLoginSuccess() {
+                            if (setalergiasSeleccionadas != null && !setalergiasSeleccionadas.isEmpty()) {
+                                int total = setalergiasSeleccionadas.size();
+                                AtomicInteger contador = new AtomicInteger(
+                                        0);
+                                AtomicBoolean fallo = new AtomicBoolean(false);
 
-                    if (setalergiasSeleccionadas != null) {
-                        for (int idAlergia : setalergiasSeleccionadas) {
-                            bd.registrarAlergiaUsuario(idAlergia);
+                                for (int idAlergia : setalergiasSeleccionadas) {
+                                    bd.registrarAlergiaUsuario(idAlergia, new BD.AlergiaCallback() {
+                                        @Override
+                                        public void onSuccess() {
+                                            if (contador.incrementAndGet() == total && !fallo.get()) {
+                                                runOnUiThread(() -> {
+                                                    Toast.makeText(registro_terminos_activity.this, "Registro exitoso", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(registro_terminos_activity.this, home_activity.class);
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intent);
+                                                    finish();
+                                                });
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure() {
+                                            fallo.set(true);
+                                            runOnUiThread(() -> {
+                                                Toast.makeText(registro_terminos_activity.this, "Error al registrar alergias", Toast.LENGTH_SHORT).show();
+                                            });
+                                        }
+                                    });
+                                }
+                            } else {
+                                // No hay alergias, avanzar directamente
+                                runOnUiThread(() -> {
+                                    Toast.makeText(registro_terminos_activity.this, "Registro exitoso", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(registro_terminos_activity.this, home_activity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                });
+                            }
                         }
-                    }
 
-                    // Volver al hilo principal para la UI
-                    runOnUiThread(() -> {
-                        Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(this, home_activity.class);
-                        startActivity(intent);
-                        finish();
+                        @Override
+                        public void onLoginFailed() {
+                            runOnUiThread(() -> {
+                                Toast.makeText(registro_terminos_activity.this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show();
+                            });
+                        }
                     });
                 } else {
                     runOnUiThread(() -> {
-                        Toast.makeText(this, "Error al registrar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(registro_terminos_activity.this, "Error al registrar", Toast.LENGTH_SHORT).show();
                     });
                 }
-            }).start(); // <- importante: inicia el hilo
+            }).start();
         });
+
+
     }
 }

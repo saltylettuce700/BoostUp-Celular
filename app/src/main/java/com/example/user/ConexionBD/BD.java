@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.user.Activity.home_activity;
@@ -68,6 +69,12 @@ public class BD {
         void onSuccess(double precio);
         void onError(String mensaje);
     }
+
+    public interface AlergiaCallback {
+        void onSuccess();
+        void onFailure();
+    }
+
 
     private void getRequest(String route, Callback callback) {
 
@@ -147,6 +154,54 @@ public class BD {
                 .url(BASE_URL + route)
                 .addHeader("accept", "application/json")
                 .addHeader("Content-Type", "application/json")
+                .post(requestBody)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+    public void autenticarYGuardarToken(String email, String pass, LoginCallback callback){
+        getAuthToken(email, pass, new AuthCallback() {
+            @Override
+            public void onSuccess(String token) {
+                Preferences preferencias = new Preferences(context);
+                preferencias.guardarCredenciales(token, email, pass);
+
+                runOnUiThread(() -> {
+                    Toast.makeText(context, "Sesión iniciada", Toast.LENGTH_SHORT).show();
+                    callback.onLoginSuccess();  // no lanza actividad
+                });
+            }
+
+            @Override
+            public void onFailure(String error) {
+                runOnUiThread(() -> {
+                    Toast.makeText(context, "Usuario o Contraseña erroneos", Toast.LENGTH_SHORT).show();
+                    callback.onLoginFailed();
+                });
+            }
+        });
+    }
+
+    private void PostAuthRequest(String route, JSONObject json, Callback callback) {
+        Preferences preferences = new Preferences(context);
+        String token = preferences.obtenerToken();
+
+        if (token == null || token.isEmpty()) {
+            callback.onFailure(null, new IOException("Token no encontrado"));
+            return;
+        }
+
+        OkHttpClient client = new OkHttpClient();
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+        RequestBody requestBody = RequestBody.create(JSON, json.toString());
+
+        Request request = new Request.Builder()
+                .url(BASE_URL + route)
+                .addHeader("accept", "application/json")
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer " + token)
                 .post(requestBody)
                 .build();
 
@@ -576,10 +631,16 @@ public class BD {
                 if (response.isSuccessful()) {
                     String json = response.body().string();
                     try {
+                        // Si la respuesta está vacía o es un array vacío, igual se retorna un array válido
                         JsonArray array = JsonParser.parseString(json).getAsJsonArray();
-                        callback.onSuccess(array);
+                        if (array == null) {
+                            callback.onSuccess(new JsonArray());  // pasa array vacío
+                        } else {
+                            callback.onSuccess(array);
+                        }
                     } catch (Exception e) {
-                        callback.onError("Error al procesar datos");
+                        // En caso de error en el parseo, pasar array vacío en lugar de error
+                        callback.onSuccess(new JsonArray());
                     }
                 } else {
                     callback.onError("Error en la respuesta del servidor");
@@ -806,31 +867,34 @@ public class BD {
     }
 
 
-    public void registrarAlergiaUsuario(int id_alergia){
-        String ruta = "usuario/alergenos";
+    public void registrarAlergiaUsuario(int id_alergia, AlergiaCallback callback) {
+        String ruta = "usuario/alergenos/";
 
         JSONObject json = new JSONObject();
         try {
             json.put("tipo_alergeno", id_alergia);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            callback.onFailure();
+            return;
         }
 
-        PostRequest(ruta, json, new Callback() {
+        PostAuthRequest(ruta, json, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+                callback.onFailure();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                runOnUiThread(()->{
-                    Toast.makeText(context, "Alergia agregada", Toast.LENGTH_SHORT).show();
-                });
+                if (response.isSuccessful()) {
+                    callback.onSuccess();
+                } else {
+                    callback.onFailure();
+                }
             }
         });
-
     }
+
 
 
     /*---------------------------------------------------------------------------------------*/

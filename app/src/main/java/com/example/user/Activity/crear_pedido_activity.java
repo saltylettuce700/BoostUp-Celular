@@ -175,9 +175,10 @@ public class crear_pedido_activity extends AppCompatActivity {
 
             @Override
             public void onError(String mensaje) {
-                runOnUiThread(() ->
-                        Toast.makeText(crear_pedido_activity.this, "Error al obtener alergias", Toast.LENGTH_SHORT).show()
-                );
+                runOnUiThread(() ->{
+                    llenarCadenas();
+                    Toast.makeText(crear_pedido_activity.this, "Error al obtener alergias", Toast.LENGTH_SHORT).show();
+                });
             }
         });
     }
