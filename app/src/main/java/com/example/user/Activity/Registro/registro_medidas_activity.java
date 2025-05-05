@@ -139,7 +139,7 @@ public class registro_medidas_activity extends AppCompatActivity {
                 return;
             }
 
-            if (brazo < 15 || brazo > 50) {
+            if (brazo < 15 || brazo > 60) {
                 Toast.makeText(this, "La circunferencia del brazo debe estar entre 15 y 50 cm", Toast.LENGTH_SHORT).show();
                 return;
             }
