@@ -7,10 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +46,15 @@ public class catalogo_producto_activity extends AppCompatActivity {
     private CatalogAdapter adapter;
     private List<CatalogItem> catalogItems;
 
+
+    private List<CatalogItem> todasLasProteinas  = new ArrayList<>();
+
+    // Declarar las listas
+    private List<Map<String, String>> saborizantes = new ArrayList<>();
+    private List<CatalogItem> todasLasCurcumas = new ArrayList<>();
+    private List<CatalogItem> todosLosSaborizantes  = new ArrayList<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,11 +82,27 @@ public class catalogo_producto_activity extends AppCompatActivity {
 
         catalogItems = new ArrayList<>();
 
+        // Llamar a la configuración de la barra de búsqueda
+        setupSearchBar();
+
+
+
 
         // Configura el adaptador
         adapter = new CatalogAdapter(this, catalogItems, languageCode);
         recyclerView.setAdapter(adapter);
-        obtenerProductos();
+        //obtenerProductos();
+
+        TextView btnProteinas = findViewById(R.id.btn_proteinas);
+        TextView btnSaborizantes = findViewById(R.id.btn_saborizante);
+        TextView btnCurcumas = findViewById(R.id.btn_curcuma);
+        // Opcionales: estos se pueden usar si implementas filtros por origen
+        TextView btnAnimal = findViewById(R.id.btn_animal);
+        TextView btnVegetal = findViewById(R.id.btn_vegetal);
+
+
+
+
         horizontalScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -93,39 +122,49 @@ public class catalogo_producto_activity extends AppCompatActivity {
             }
         });
 
+        btnProteinas.setTag("Proteínas");
+        btnSaborizantes.setTag("Saborizantes");
+        btnCurcumas.setTag("Cúrcuma y Jengibre");
+        btnAnimal.setTag("animal");
+        btnVegetal.setTag("vegetal");
+
         // Variable para almacenar el botón seleccionado (si lo hay)
-        final TextView[] selectedButton = {null};
+        TextView[] selectedButton = {null};
 
-        for (int i = 0; i < linearLayoutFilter.getChildCount(); i++) {
-            View child = linearLayoutFilter.getChildAt(i);
-            if (child instanceof TextView) {
-                TextView button = (TextView) child;
+        TextView[] allButtons = {btnProteinas, btnSaborizantes, btnCurcumas, btnAnimal, btnVegetal};
 
-
-                button.setOnClickListener(v -> {
-                    if (button.isSelected()) {
-                        // Situación 1: El botón ya está activo, lo desactiva
-                        button.setSelected(false);
-                        button.setBackgroundResource(R.drawable.et_holder_gray_rectangle); // Fondo desactivado
-                        button.setTextColor(getResources().getColor(R.color.black));
-                        selectedButton[0] = null; // Ningún botón está seleccionado
-                    } else {
-                        // Situación 2: Activar el botón clickeaado y desactivar el anterior
-                        if (selectedButton[0] != null) {
-                            // Desactiva el botón anteriormente seleccionado
-                            selectedButton[0].setSelected(false);
-                            selectedButton[0].setBackgroundResource(R.drawable.et_holder_gray_rectangle);
-                            selectedButton[0].setTextColor(getResources().getColor(R.color.black));
-                        }
-
-                        // Activa el botón actual
-                        button.setSelected(true);
-                        button.setBackgroundResource(R.drawable.et_holder_selected_rectangle); // Fondo activado
-                        selectedButton[0] = button; // Actualiza el botón seleccionado
+        for (TextView button : allButtons) {
+            button.setOnClickListener(v -> {
+                if (button.isSelected()) {
+                    button.setSelected(false);
+                    button.setBackgroundResource(R.drawable.et_holder_gray_rectangle);
+                    button.setTextColor(getResources().getColor(R.color.black));
+                    selectedButton[0] = null;
+                    obtenerProductos(); // Muestra todos
+                } else {
+                    if (selectedButton[0] != null) {
+                        selectedButton[0].setSelected(false);
+                        selectedButton[0].setBackgroundResource(R.drawable.et_holder_gray_rectangle);
+                        selectedButton[0].setTextColor(getResources().getColor(R.color.black));
                     }
-                });
-            }
+
+                    button.setSelected(true);
+                    button.setBackgroundResource(R.drawable.et_holder_selected_rectangle);
+                    button.setTextColor(getResources().getColor(R.color.white));
+                    selectedButton[0] = button;
+
+
+                    // Usa el tag en lugar del texto
+                    String categoriaTag = (String) button.getTag();
+                    filtrarProductosPorCategoria(categoriaTag);
+                }
+            });
         }
+
+        // Mostrar todos los productos al inicio
+        obtenerProductos();
+
+
 
         findViewById(R.id.btnBack).setOnClickListener(v -> {
             finish();
@@ -133,28 +172,13 @@ public class catalogo_producto_activity extends AppCompatActivity {
             Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
 
         });
+
+
     }
 
-    /*private List<CatalogItem> obtenerProductosSimulados() {
-        List<CatalogItem> items = new ArrayList<>();
+    
 
-        // Categoría: Proteínas
-        items.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Proteínas", null));
-        items.add(new CatalogItem(CatalogItem.TYPE_PRODUCT, "Proteína genérica vegetal", "Descripción breve"));
-        items.add(new CatalogItem(CatalogItem.TYPE_PRODUCT, "Proteína genérica animal", "Descripción breve"));
 
-        // Categoría: Saborizantes
-        items.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Saborizantes", null));
-        items.add(new CatalogItem(CatalogItem.TYPE_PRODUCT, "Saborizante genérico", "Descripción breve"));
-        items.add(new CatalogItem(CatalogItem.TYPE_PRODUCT, "Saborizante especial", "Descripción breve"));
-
-        // Categoría: Cúrcuma y Jengibre
-        items.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Cúrcuma y Jengibre", null));
-        items.add(new CatalogItem(CatalogItem.TYPE_PRODUCT, "Cúrcuma genérica", "Descripción breve"));
-        items.add(new CatalogItem(CatalogItem.TYPE_PRODUCT, "Jengibre genérico", "Descripción breve"));
-
-        return items;
-    }*/
 
     private void obtenerProteinas() {
         BD bd = new BD(catalogo_producto_activity.this);
@@ -176,7 +200,16 @@ public class catalogo_producto_activity extends AppCompatActivity {
                                     String marca = obj.get("marca").getAsString();
                                     //catalogItems.add(new CatalogItem(CatalogItem.TYPE_PRODUCT, nombre, id, marca, tipo));
                                     //adapter.notifyDataSetChanged();
-                                    CatalogItem item = new CatalogItem(CatalogItem.TYPE_PRODUCT, nombre, id, marca, tipo, "proteina");
+
+                                    int imageResId = obtenerImagenPorProducto("Proteínas", nombre);
+                                    CatalogItem item = new CatalogItem(CatalogItem.TYPE_PRODUCT, nombre, id, marca, tipo, "proteina" ,imageResId);
+
+                                    todasLasProteinas.add(item); // Guardar en la lista completa
+
+
+
+                                    
+
                                     agregarProductoDebajoDeCategoria(item, "Proteínas");
                                 });
                             }
@@ -208,7 +241,13 @@ public class catalogo_producto_activity extends AppCompatActivity {
             if (saborizantes != null) {
                 for (Map<String, String> saborizante : saborizantes) {
                     String idStr = saborizante.get("id");
-                    String sabor = saborizante.get("sabor");
+
+
+                    //String sabor = saborizante.get("sabor");
+
+                    String saborEs = saborizante.get("sabor");
+                    String saborEn = traducirSabor(saborEs); // crea esta función de traducción simple
+
                     String tipo = saborizante.get("tipo");
 
                     if (idStr != null && !idStr.isEmpty()) {
@@ -222,14 +261,15 @@ public class catalogo_producto_activity extends AppCompatActivity {
                                         String marca = obj.has("marca") && !obj.get("marca").isJsonNull()
                                                 ? obj.get("marca").getAsString()
                                                 : "Desconocida";
-                                        CatalogItem item = new CatalogItem(
-                                                CatalogItem.TYPE_PRODUCT,
-                                                marca,       // title
-                                                id,          // id
-                                                sabor,       // description
-                                                tipo,         // tipoProteinaSaborizante
-                                                "saborizante"
-                                        );
+
+
+                                        int imageResId = obtenerImagenPorProducto("Saborizantes", saborEn);
+                                        CatalogItem item = new CatalogItem(CatalogItem.TYPE_PRODUCT, marca, id, saborEn, tipo, "saborizante", imageResId);
+                                        todosLosSaborizantes.add(item);
+
+
+                                        
+
 
 //                                        catalogItems.add(item);
 //                                        adapter.notifyDataSetChanged();
@@ -269,7 +309,16 @@ public class catalogo_producto_activity extends AppCompatActivity {
                         String marca = obj.get("marca").getAsString();
 //                        catalogItems.add(new CatalogItem(CatalogItem.TYPE_PRODUCT, marca, id, null, null));
 //                        adapter.notifyDataSetChanged();
-                        CatalogItem item = new CatalogItem(CatalogItem.TYPE_PRODUCT, marca, id, null, null, "curcuma");
+
+
+                        int imageResId = obtenerImagenPorProducto("Cúrcuma y Jengibre", marca);
+                        CatalogItem item = new CatalogItem(CatalogItem.TYPE_PRODUCT, marca, id, null, null, "curcuma", imageResId);
+
+                        todasLasCurcumas.add(item);
+
+
+                        
+
                         agregarProductoDebajoDeCategoria(item, "Cúrcuma y Jengibre");
                     }
                 });
@@ -286,12 +335,19 @@ public class catalogo_producto_activity extends AppCompatActivity {
 
     private void obtenerProductos() {
         catalogItems.clear(); // Vacía la lista antes de llenarla
+        todasLasProteinas.clear();
+        todosLosSaborizantes.clear();
+        todasLasCurcumas.clear();
+
         // Proteínas
-        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Proteínas", 0, null, null, null));
+
+        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Proteínas", 0, null, null, null, 0));
         // Saborizantes
-        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Saborizantes", 0, null, null, null));
+        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Saborizantes", 0, null, null, null, 0));
         // Cúrcuma y Jengibre
-        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Cúrcuma y Jengibre", 0, null, null, null));
+        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Cúrcuma y Jengibre", 0, null, null, null, 0));
+
+      
         adapter.notifyDataSetChanged();
         obtenerProteinas();
         obtenerCatalogoSaborizantes();
@@ -318,7 +374,7 @@ public class catalogo_producto_activity extends AppCompatActivity {
     private String loadLanguagePreference() {
         SharedPreferences preferences = getSharedPreferences(LANGUAGE_PREF, MODE_PRIVATE);
 
-        Toast.makeText(this, "Idioma actual: " + preferences.getString(SELECTED_LANGUAGE, "es"), Toast.LENGTH_SHORT).show(); // Verifica el idioma
+        //Toast.makeText(this, "Idioma actual: " + preferences.getString(SELECTED_LANGUAGE, "es"), Toast.LENGTH_SHORT).show(); // Verifica el idioma
 
         return preferences.getString(SELECTED_LANGUAGE, "es"); // Default is Spanish
 
@@ -344,5 +400,172 @@ public class catalogo_producto_activity extends AppCompatActivity {
             adapter.notifyItemInserted(insertPos);
         }
     }
+
+
+    private int obtenerImagenPorProducto(String categoria, String valorClave) {
+        if (valorClave == null) return 0;
+
+        valorClave = valorClave.toLowerCase();
+
+        switch (categoria) {
+            case "Proteínas":
+                if (valorClave.contains("pure and natural")) return R.drawable.pure_natural_img;
+                if (valorClave.contains("falcon")) return R.drawable.falcon;
+                return 0;
+
+            case "Saborizantes":
+                if (valorClave.contains("fresa")||valorClave.contains("strawberry")) return R.drawable.strawberry_milk;
+                if (valorClave.contains("chocolate")) return R.drawable.choco_milk;
+                if (valorClave.contains("vainilla")|| valorClave.contains("vanilla")) return R.drawable.vanilla_milk;
+
+
+                return 0;
+
+            case "Cúrcuma y Jengibre":
+                if (valorClave.contains("nature heart")) return R.drawable.nature_heart_turmeric;
+                return 0;
+        }
+
+        return 0;
+    }
+
+    private void filtrarProductosPorCategoria(String categoria) {
+        catalogItems.clear();
+        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, categoria, 0, null, null, null ,0));
+        adapter.notifyDataSetChanged();
+
+        switch (categoria) {
+            case "Proteínas":
+                obtenerProteinas();
+                break;
+            case "Saborizantes":
+                obtenerCatalogoSaborizantes();
+                break;
+            case "Cúrcuma y Jengibre":
+                obeterCurcumas();
+                break;
+
+            case "animal":
+            case "vegetal":
+                filtrarProteinasPorTipo(categoria); // Tipo de proteína
+                return;
+        }
+    }
+
+
+    private void filtrarProteinasPorTipo(String tipoFiltrado) {
+        catalogItems.clear();
+        catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Proteínas", 0, null, null, null, 0));
+
+        for (CatalogItem item : todasLasProteinas) {
+            if (item.getTipoProteinaSaborizante() != null && item.getTipoProteinaSaborizante().equalsIgnoreCase(tipoFiltrado)) {
+                catalogItems.add(item);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+    }
+
+    private void setupSearchBar() {
+        EditText searchBar = findViewById(R.id.search_bar);
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                String query = charSequence.toString().toLowerCase();
+                filtrarProductos(query);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+    }
+
+    private void filtrarProductos(String query) {
+        List<CatalogItem> filteredItems = new ArrayList<>();
+
+        // Filtrar Proteínas
+        filteredItems.addAll(filtrarProteinas(query));
+
+        // Filtrar Saborizantes
+        filteredItems.addAll(filtrarSaborizantes(query));
+
+        // Filtrar Curcuma
+        filteredItems.addAll(filtrarCurcuma(query));
+
+        // Mostrar los productos filtrados en el RecyclerView
+        catalogItems.clear();
+        catalogItems.addAll(filteredItems);
+        adapter.notifyDataSetChanged();
+    }
+
+    private List<CatalogItem> filtrarProteinas(String query) {
+        List<CatalogItem> proteinasFiltradas = new ArrayList<>();
+        for (CatalogItem item : todasLasProteinas) {
+            if (item.getTitle().toLowerCase().contains(query) ||
+                    (item.getTipoProteinaSaborizante() != null && item.getTipoProteinaSaborizante().toLowerCase().contains(query))) {
+                proteinasFiltradas.add(item);
+            }
+        }
+        return proteinasFiltradas;
+    }
+
+    private List<CatalogItem> filtrarSaborizantes(String query) {
+        List<CatalogItem> saborizantesFiltrados = new ArrayList<>();
+        String texto = query.toLowerCase();
+        catalogItems.clear();
+
+
+        for (CatalogItem item : todosLosSaborizantes) {
+            if (item.getTitle().toLowerCase().contains(texto) || // marca
+                    (item.getDescription() != null && item.getDescription().toLowerCase().contains(texto))) { // sabor
+                saborizantesFiltrados.add(item);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+
+        return saborizantesFiltrados;
+    }
+
+
+
+
+
+    private List<CatalogItem> filtrarCurcuma(String query) {
+        List<CatalogItem> curcumaFiltrada = new ArrayList<>();
+        for (CatalogItem item : todasLasCurcumas) {
+            if (item.getTitle().toLowerCase().contains(query)) {
+                curcumaFiltrada.add(item);
+            }
+        }
+        return curcumaFiltrada;
+    }
+
+
+    private String traducirSabor(String saborEs) {
+        // Esto debe adaptarse según los idiomas soportados
+        if (loadLanguagePreference().equals("en")) {
+            switch (saborEs.toLowerCase()) {
+                case "vainilla": return "Vanilla";
+                case "chocolate": return "Chocolate";
+                case "fresa": return "Strawberry";
+                default: return saborEs; // Si no se encuentra traducción
+            }
+        }
+        return saborEs;
+    }
+
+
+
+
+
+
+
+
+
 
 }
