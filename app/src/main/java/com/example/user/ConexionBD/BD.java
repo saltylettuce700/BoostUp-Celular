@@ -1,5 +1,7 @@
 package com.example.user.ConexionBD;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.user.Activity.home_activity;
+import com.example.user.Activity.login_activity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -935,4 +938,32 @@ public class BD {
     }
 
 
+    /*---------------------------------------------------------------------------------------*/
+    //DELETES
+
+    public void eliminarCuenta(Callback callback) {
+        String ruta = "usuario/deleteMe/";
+
+        Preferences preferences = new Preferences(context);
+        String token = preferences.obtenerToken();
+
+        if (token == null || token.isEmpty()) {
+            runOnUiThread(() -> {
+                Toast.makeText(context, "Token no encontrado. Inicia sesión nuevamente.", Toast.LENGTH_LONG).show();
+            });
+            return;
+        }
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(BASE_URL + ruta)
+                .addHeader("accept", "application/json")
+                .addHeader("Authorization", "Bearer " + token)
+                .delete()
+                .build();
+
+        client.newCall(request).enqueue(callback);
+
+    }
 }

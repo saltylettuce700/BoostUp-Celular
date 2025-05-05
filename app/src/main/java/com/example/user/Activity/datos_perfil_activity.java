@@ -1,5 +1,6 @@
 package com.example.user.Activity;
 
+import static androidx.core.content.ContextCompat.startActivity;
 import static com.example.user.Activity.account_activity.LANGUAGE_PREF;
 import static com.example.user.Activity.account_activity.SELECTED_LANGUAGE;
 
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -27,6 +29,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.user.Activity.Registro.registro_terminos_activity;
 import com.example.user.ConexionBD.BD;
+import com.example.user.ConexionBD.Preferences;
 import com.example.user.R;
 import com.google.gson.JsonObject;
 
@@ -253,7 +256,42 @@ public class datos_perfil_activity extends AppCompatActivity {
             public void onClick(View v) {
                 // Acción de continuar
                 dialog.dismiss();
-                Toast.makeText(datos_perfil_activity.this, "Borraste cuenta", Toast.LENGTH_SHORT).show();
+                BD bd = new BD(datos_perfil_activity.this);
+
+                bd.eliminarCuenta(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        runOnUiThread(() ->
+                                Toast.makeText(datos_perfil_activity.this, "Error al conectar con el servidor", Toast.LENGTH_LONG).show()
+                        );
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            runOnUiThread(() -> {
+                                // Eliminar token y redirigir
+                                Preferences preferences = new Preferences(datos_perfil_activity.this);
+                                preferences.borrarCredenciales();
+
+                                Toast.makeText(datos_perfil_activity.this, "Cuenta eliminada correctamente", Toast.LENGTH_SHORT).show();
+
+                                Intent intent = new Intent(datos_perfil_activity.this, login_activity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            });
+                        } else {
+                            String errorBody = response.body() != null ? response.body().string() : "sin cuerpo";
+                            Log.e("ELIMINAR_CUENTA", "Código: " + response.code() + " - Cuerpo: " + errorBody);
+                            runOnUiThread(() ->
+                                    Toast.makeText(datos_perfil_activity.this, "No se pudo eliminar la cuenta. Intenta de nuevo.", Toast.LENGTH_LONG).show()
+                            );
+                        }
+                    }
+                });
+
+
+                //Toast.makeText(datos_perfil_activity.this, "Borraste cuenta", Toast.LENGTH_SHORT).show();
 
             }
         });
