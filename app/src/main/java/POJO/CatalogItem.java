@@ -10,17 +10,25 @@ public class CatalogItem {
     private String title; // Nombre del producto o encabezado de la categoría
     private String description; // Solo para productos
     private String tipoProteinaSaborizante;
+
     private int imageResId;
+    private String tipoProducto;
     // Solo para productos
 
 
-    public CatalogItem(int type, String title, int id, String description, String tipoProteinaSaborizante,  int imageResId) {
+
+    public CatalogItem(int type, String title, int id, String description, String tipoProteinaSaborizante, String tipoProducto, int imageResId) {
+
         this.type = type;
         this.id = id;
         this.title = title;
         this.description = description;
         this.tipoProteinaSaborizante = tipoProteinaSaborizante;
+      
         this.imageResId = imageResId;
+        this.tipoProducto = tipoProducto;
+        //this.imageUrl = imageUrl;
+
     }
 
     public int getType() {
@@ -32,6 +40,10 @@ public class CatalogItem {
     }
 
     public int getId() {return id;}
+
+    public String getTipoProducto() {
+        return tipoProducto;
+    }
 
     public String getDescription() {
         return description;
