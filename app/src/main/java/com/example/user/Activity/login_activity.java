@@ -7,8 +7,10 @@ import static com.example.user.Activity.account_activity.SELECTED_LANGUAGE;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -72,7 +74,13 @@ public class login_activity extends AppCompatActivity {
         email = findViewById(R.id.ET_correo);
         password = findViewById(R.id.ET_password);
 
+        TextView tv = findViewById(R.id.TV_lostPass);
+        tv.setPaintFlags(tv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
+        tv.setOnClickListener(v -> {
+            // Aquí abres una actividad, fragmento, diálogo, etc.
+            Toast.makeText(this, "Ir a recuperación de contraseña", Toast.LENGTH_SHORT).show();
+        });
 
     }
 

@@ -24,6 +24,7 @@
     <string name="password_label">Password</string>
     <string name="register_prompt">Dont have an account?</string>
     <string name="register_text">Sign Up</string>
+    <string name="lostPass"><u>Forgot my password</u></string>
 
     <!-- Button and icon texts -->
     <string name="login_button_text">Log In</string>

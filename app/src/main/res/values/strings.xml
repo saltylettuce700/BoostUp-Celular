@@ -31,6 +31,7 @@
     <string name="password_label">Contraseña</string>
     <string name="register_prompt">¿No tienes cuenta?</string>
     <string name="register_text">Regístrate</string>
+    <string name="lostPass"><u>Olvidé mi contraseña</u></string>
 
     <!-- Texto de los botones e iconos -->
     <string name="login_button_text">Iniciar Sesión</string>
