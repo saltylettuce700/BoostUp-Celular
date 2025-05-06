@@ -431,6 +431,7 @@ public class catalogo_producto_activity extends AppCompatActivity {
 
     private void filtrarProductosPorCategoria(String categoria) {
         catalogItems.clear();
+
         catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, categoria, 0, null, null, null ,0));
         adapter.notifyDataSetChanged();
 
@@ -455,6 +456,7 @@ public class catalogo_producto_activity extends AppCompatActivity {
 
     private void filtrarProteinasPorTipo(String tipoFiltrado) {
         catalogItems.clear();
+
         catalogItems.add(new CatalogItem(CatalogItem.TYPE_CATEGORY, "Proteínas", 0, null, null, null, 0));
 
         for (CatalogItem item : todasLasProteinas) {
@@ -504,6 +506,8 @@ public class catalogo_producto_activity extends AppCompatActivity {
 
     private List<CatalogItem> filtrarProteinas(String query) {
         List<CatalogItem> proteinasFiltradas = new ArrayList<>();
+        catalogItems.clear();
+        proteinasFiltradas.clear();
         for (CatalogItem item : todasLasProteinas) {
             if (item.getTitle().toLowerCase().contains(query) ||
                     (item.getTipoProteinaSaborizante() != null && item.getTipoProteinaSaborizante().toLowerCase().contains(query))) {
@@ -537,6 +541,7 @@ public class catalogo_producto_activity extends AppCompatActivity {
 
     private List<CatalogItem> filtrarCurcuma(String query) {
         List<CatalogItem> curcumaFiltrada = new ArrayList<>();
+        catalogItems.clear();
         for (CatalogItem item : todasLasCurcumas) {
             if (item.getTitle().toLowerCase().contains(query)) {
                 curcumaFiltrada.add(item);

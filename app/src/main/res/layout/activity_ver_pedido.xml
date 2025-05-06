@@ -156,12 +156,21 @@
 
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/imgProteina"
+                    <LinearLayout
                         android:layout_width="90dp"
                         android:layout_height="90dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/btn_holder_gray" />
+                        android:background="@drawable/btn_holder_gray"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imgProducto"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center" />
+
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -213,12 +222,21 @@
 
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/imgSaborizante"
+                    <LinearLayout
                         android:layout_width="90dp"
                         android:layout_height="90dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/btn_holder_gray" />
+                        android:background="@drawable/btn_holder_gray"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imgProducto2"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -271,12 +289,21 @@
 
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/imgCurcuma"
+                    <LinearLayout
                         android:layout_width="90dp"
                         android:layout_height="90dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/btn_holder_gray" />
+                        android:background="@drawable/btn_holder_gray"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imgProducto3"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

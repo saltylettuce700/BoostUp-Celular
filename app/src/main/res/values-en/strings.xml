@@ -57,6 +57,16 @@
     <string name="btn_call">Call</string>
     <string name="btn_cancel">Cancel</string>
 
+    <!--CUSTOM DIALOG RESTABLECER ACTIVITY-->
+
+    <string name="dialog_titlepass">Reset password</string>
+    <string name="dialog_message1">New password</string>
+    <string name="dialog_message2">Confirm password</string>
+    <string name="btn_respass">Reset</string>
+    <string name="btn_cancelpass">Cancel</string>
+
+    <string name="mensaje_pass_notequal">Password does not match</string>
+
 
     <!--DATOS PERFIL ACTIVITY-->
 

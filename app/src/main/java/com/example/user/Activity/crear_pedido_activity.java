@@ -61,6 +61,11 @@ public class crear_pedido_activity extends AppCompatActivity {
     private Translator translator;
     private List<Integer> alergiasUsuario = new ArrayList<>();
 
+    private TextView txtPrecioTotal;
+    private double precioBase = 70.00;
+    private double precioCurcuma = 10.0;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +85,9 @@ public class crear_pedido_activity extends AppCompatActivity {
         Button btn_pagar = findViewById(R.id.btn_pagar);
         ImageView qr = findViewById(R.id.generated_qr);
         txtBebidasUsername = findViewById(R.id.tvProductName);
+
+        txtPrecioTotal = findViewById(R.id.tvProductPrice);
+
 
         // Configura el traductor
         setupTranslator();
@@ -105,6 +113,8 @@ public class crear_pedido_activity extends AppCompatActivity {
 //                });
 //            });
 //        });
+
+
 
 
         btn_pagar.setOnClickListener(v -> {
@@ -378,11 +388,12 @@ public class crear_pedido_activity extends AppCompatActivity {
 
                 new Thread(() -> {
                     int idcurcuma = 1;
-                    double precio = bd.getPrecioCurcuma(idcurcuma);
-                    if (precio != -1) {
-                        curcuma = new String[]{("Con cúrcuma +$" + precio), "Sin cúrcuma"};
+                    precioCurcuma = bd.getPrecioCurcuma(idcurcuma);
+                    if (precioCurcuma != -1) {
+                        curcuma = new String[]{("Con cúrcuma +$" + precioCurcuma), "No agregar cúrcuma"};
                     } else {
-                        curcuma = new String[]{"Con cúrcuma", "Sin cúrcuma"};
+                        precioCurcuma = 0.0;
+                        curcuma = new String[]{"Con cúrcuma", "No agregar cúrcuma"};
                     }
 
                     String languageCode = loadLanguagePreference();
@@ -478,7 +489,24 @@ public class crear_pedido_activity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, items);
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        listView.setOnItemClickListener((parent, view, position, id) -> listener.onItemSelected(items[position]));
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedItem = adapter.getItem(position);
+            listener.onItemSelected(selectedItem);
+
+
+
+            if (listView == listCurcuma) {
+                if (selectedItem.contains("Con cúrcuma")||selectedItem.contains("With turmeric")|| selectedItem.contains("With turmeric +$")) {
+                    actualizarPrecio(precioBase + precioCurcuma);
+                } else {
+                    actualizarPrecio(precioBase);
+                }
+            }
+        });
+    }
+
+    private void actualizarPrecio(double nuevoPrecio) {
+        txtPrecioTotal.setText(String.format("$%.2f", nuevoPrecio));
     }
 
     // Interfaz para manejar selección
