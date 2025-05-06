@@ -82,12 +82,7 @@ public class account_activity extends AppCompatActivity {
 
         });
 
-        findViewById(R.id.progreso_section).setOnClickListener(v -> {
-            // Acción para progreso
-            //startActivity(new Intent(this, ReportarFalloActivity.class));
-            Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
 
-        });
 
         findViewById(R.id.terminos_section).setOnClickListener(v -> {
             Intent intent = new Intent(this, registro_terminos_activity.class);
