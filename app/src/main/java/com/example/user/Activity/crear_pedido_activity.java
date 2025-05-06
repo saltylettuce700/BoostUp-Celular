@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -37,6 +40,8 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import com.google.mlkit.nl.translate.Translator;
+import com.stripe.android.paymentsheet.PaymentSheet;
+import com.stripe.android.paymentsheet.PaymentSheetResult;
 
 
 import org.json.JSONException;
@@ -44,6 +49,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,6 +62,11 @@ public class crear_pedido_activity extends AppCompatActivity {
     String[] saborizantes;
     String[] curcuma;
 
+    //Stripe
+    private String paymentIntentClientSecret;
+    private PaymentSheet paymentSheet;
+
+
     TextView txtBebidasUsername;
 
     private Translator translator;
@@ -64,6 +75,10 @@ public class crear_pedido_activity extends AppCompatActivity {
     private TextView txtPrecioTotal;
     private double precioBase = 70.00;
     private double precioCurcuma = 10.0;
+
+    private Map<String, Integer> proteinaNombreToId = new HashMap<>();
+    private Map<String, Integer> saborizanteNombreToId = new HashMap<>();
+    private boolean tieneCurcuma = false;
 
 
     @Override
@@ -88,6 +103,8 @@ public class crear_pedido_activity extends AppCompatActivity {
 
         txtPrecioTotal = findViewById(R.id.tvProductPrice);
 
+        //Stripe
+        paymentSheet = new PaymentSheet(this, this::onPaymentSheetResult);
 
         // Configura el traductor
         setupTranslator();
@@ -129,7 +146,9 @@ public class crear_pedido_activity extends AppCompatActivity {
                         "Saborizante: " + selectedSaborizante + "\n" +
                         "Cúrcuma: " + selectedCurcuma, Toast.LENGTH_LONG).show();
 
+
                 try {
+                    crearPedido();
                     BitMatrix bitMatrix = multiFormatWriter.encode(orderString, BarcodeFormat.QR_CODE,300,300);
                     BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                     Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
@@ -142,9 +161,9 @@ public class crear_pedido_activity extends AppCompatActivity {
 
                 }
 
-                Intent intent = new Intent(crear_pedido_activity.this, ver_pedidoAfterPago.class);
-                intent.putExtra("pedidoDetalles", orderString);
-                startActivity(intent);
+//                Intent intent = new Intent(crear_pedido_activity.this, ver_pedidoAfterPago.class);
+//                intent.putExtra("pedidoDetalles", orderString);
+//                startActivity(intent);
 
             } else {
                 Toast.makeText(this, "Selecciona todas las opciones", Toast.LENGTH_SHORT).show();
@@ -317,6 +336,8 @@ public class crear_pedido_activity extends AppCompatActivity {
                     String nombre = obj.get("nombre").getAsString();
                     listaProteinas.add(nombre);
                     idsProteina.add(idProteina);
+                    proteinaNombreToId.put(nombre, idProteina);
+
                 }
 
                 proteinas = new String[listaProteinas.size()];
@@ -383,8 +404,16 @@ public class crear_pedido_activity extends AppCompatActivity {
             if (lista != null) {
                 saborizantes = new String[lista.size()];
                 for (int j = 0; j < lista.size(); j++) {
-                    saborizantes[j] = lista.get(j).get("sabor");
+                    String nombreSabor = lista.get(j).get("sabor");
+                    String id = lista.get(j).get("id");
+
+                    int id_sabor = Integer.parseInt(id);
+                    saborizanteNombreToId.put(nombreSabor, id_sabor);
+                    saborizantes[j] = nombreSabor;
+
                 }
+
+
 
                 new Thread(() -> {
                     int idcurcuma = 1;
@@ -407,7 +436,11 @@ public class crear_pedido_activity extends AppCompatActivity {
                                         translateListItems(curcuma, translatedCurcuma -> {
                                             configureListView(listProteinas, translatedProteinas, selected -> selectedProteina = selected);
                                             configureListView(listSaborizantes, translatedSaborizantes, selected -> selectedSaborizante = selected);
-                                            configureListView(listCurcuma, translatedCurcuma, selected -> selectedCurcuma = selected);
+                                            configureListView(listCurcuma, translatedCurcuma, selected -> {
+                                                selectedCurcuma = selected;
+                                                int index = Arrays.asList(translatedCurcuma).indexOf(selected);
+                                                tieneCurcuma = (index == 0); // Sigue siendo la primera opción
+                                            });
                                         });
                                     });
                                 });
@@ -416,7 +449,11 @@ public class crear_pedido_activity extends AppCompatActivity {
                             colorearProteinas(proteinas, proteinasAmarillo);
                             configureListView(listProteinas, proteinas, selected -> selectedProteina = selected);
                             configureListView(listSaborizantes, saborizantes, selected -> selectedSaborizante = selected);
-                            configureListView(listCurcuma, curcuma, selected -> selectedCurcuma = selected);
+                            configureListView(listCurcuma, curcuma, selected -> {
+                                selectedCurcuma = selected;
+                                int index = Arrays.asList(curcuma).indexOf(selected);
+                                tieneCurcuma = (index == 0); // La opción "Con cúrcuma" siempre es la primera
+                            });
                         }
                     });
                 }).start();
@@ -526,5 +563,61 @@ public class crear_pedido_activity extends AppCompatActivity {
 
         return preferences.getString(SELECTED_LANGUAGE, "es"); // Default is Spanish
 
+    }
+
+
+    /*-----------------Stripe------------------*/
+    private void showToast(String message) {
+        runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_LONG).show());
+    }
+
+    private void showAlert(String title, @Nullable String message) {
+        runOnUiThread(() -> {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setPositiveButton("Ok", null)
+                    .create();
+            dialog.show();
+        });
+    }
+
+    private void onPaymentSheetResult(final PaymentSheetResult paymentSheetResult) {
+        if (paymentSheetResult instanceof PaymentSheetResult.Completed) {
+            showToast("Payment complete!");
+        } else if (paymentSheetResult instanceof PaymentSheetResult.Canceled) {
+            Log.i("CheckoutActivity", "Payment canceled!");
+        } else if (paymentSheetResult instanceof PaymentSheetResult.Failed) {
+            Throwable error = ((PaymentSheetResult.Failed) paymentSheetResult).getError();
+            showAlert("Payment failed", error != null ? error.getLocalizedMessage() : "Unknown error");
+        }
+    }
+
+    private void crearPedido() {
+
+        int idProteina = proteinaNombreToId.getOrDefault(selectedProteina, -1);
+        int idSaborizante = saborizanteNombreToId.getOrDefault(selectedSaborizante, -1);
+        int idCurcuma = tieneCurcuma ? 1 : -1;
+
+        BD bd = new BD(this);
+
+        bd.crearPedido(idProteina, idCurcuma, idSaborizante, new BD.PedidoCallback() {
+            @Override
+            public void onSuccess(String clientSecret, String id_pedido) {
+                runOnUiThread(() -> {
+                    Toast.makeText(crear_pedido_activity.this, "Pedido creado con exito", Toast.LENGTH_SHORT).show();
+                    PaymentSheet.Configuration configuration = new PaymentSheet.Configuration.Builder("BoostUp Inc.").build();
+                    paymentIntentClientSecret = clientSecret;
+                    paymentSheet.presentWithPaymentIntent(paymentIntentClientSecret, configuration);
+                    String QR = id_pedido;
+                    Toast.makeText(crear_pedido_activity.this, QR, Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
     }
 }
