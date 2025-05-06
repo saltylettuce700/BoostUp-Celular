@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -32,7 +33,8 @@
         android:text="@string/dialog_message1"
         android:textAlignment="textStart"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        tools:ignore="RtlCompat" />
 
     <EditText
         android:id="@+id/ET_pass1"
@@ -57,7 +59,8 @@
         android:text="@string/dialog_message2"
         android:textAlignment="textStart"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        tools:ignore="RtlCompat" />
 
     <EditText
         android:id="@+id/ET_pass2"
