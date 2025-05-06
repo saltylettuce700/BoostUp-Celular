@@ -225,36 +225,6 @@
         </LinearLayout>
 
         <!-- Opción Inventario -->
-        <LinearLayout
-            android:id="@+id/progreso_section"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/white_btn_holder"
-            android:clickable="true"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/analytics_icon" />
-
-            <TextView
-                android:id="@+id/progress_suggestions"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:text="@string/progress_suggestions"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/forward_small" />
-        </LinearLayout>
 
         <!-- Sección de Gestión de Fallos -->
         <TextView
