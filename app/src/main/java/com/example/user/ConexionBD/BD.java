@@ -78,6 +78,11 @@ public class BD {
         void onFailure();
     }
 
+    public interface PedidoCallback {
+        void onSuccess(String clientSecret, String id_pedido);
+        void onFailure();
+    }
+
 
     private void getRequest(String route, Callback callback) {
 
@@ -965,5 +970,48 @@ public class BD {
 
         client.newCall(request).enqueue(callback);
 
+    }
+
+    /*--------------Stripe--------------------*/
+
+    public void crearPedido(int proteina, int curcuma, int saborizante, PedidoCallback callback){
+        String ruta = "usuario/pedir/";
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("proteina", proteina);
+            json.put("curcuma", curcuma);
+            json.put("saborizante", saborizante);
+        } catch (JSONException e) {
+            callback.onFailure();
+            return;
+        }
+        PostAuthRequest(ruta, json, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseBody = response.body().string();
+                    try {
+                        JSONObject jsonResponse = new JSONObject(responseBody);
+                        String clientSecret = jsonResponse.optString("clientSecret", null);
+                        String id_pedido = jsonResponse.optString("id_pedido", null);
+                        if (clientSecret != null) {
+                            callback.onSuccess(clientSecret, id_pedido);
+                        } else {
+                            callback.onFailure();
+                        }
+                    } catch (JSONException e) {
+                        callback.onFailure();
+                    }
+                } else {
+                    callback.onFailure();
+                }
+            }
+        });
     }
 }
