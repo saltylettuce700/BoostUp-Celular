@@ -46,7 +46,7 @@ public class datos_perfil_activity extends AppCompatActivity {
     private ImageView arrowIcon;
 
     EditText ETnombre, ETapellido, ETusername;
-    TextView txtcorreo;
+    TextView txtcorreo, TV_reestablecer;
     Button btGuardarCambios;
 
     private boolean isExpanded = false;
@@ -77,6 +77,8 @@ public class datos_perfil_activity extends AppCompatActivity {
         ETapellido = findViewById(R.id.ET_apellido);
         ETusername = findViewById(R.id.ET_username);
         txtcorreo = findViewById(R.id.textView18);
+
+        TV_reestablecer = findViewById(R.id.TV_reestablecer);
 
         btGuardarCambios = findViewById(R.id.btn_guardarCambios);
 
@@ -207,19 +209,31 @@ public class datos_perfil_activity extends AppCompatActivity {
         Dialog dialog = new Dialog(this, R.style.BlurBackgroundDialog);
 
         // Inflar el diseño personalizado
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog_reset_password, null);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog_restablecer, null);
         dialog.setContentView(dialogView);
 
         // Configurar botones
-        Button btnContinue = dialogView.findViewById(R.id.btn_continue);
+        Button btnRespass = dialogView.findViewById(R.id.btn_respass);
         Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
 
-        btnContinue.setOnClickListener(new View.OnClickListener() {
+        EditText pass1 = dialogView.findViewById(R.id.ET_pass1);
+        EditText pass2 = dialogView.findViewById(R.id.ET_pass2);
+
+        btnRespass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Acción de continuar
-                dialog.dismiss();
-                Toast.makeText(datos_perfil_activity.this, "Se enviará un correo para restablecer tu contraseña", Toast.LENGTH_SHORT).show();
+
+                if (pass1.toString().equals(pass2.toString())){
+
+                    // Acción de continuar
+                    dialog.dismiss();
+                    Toast.makeText(datos_perfil_activity.this, "Contrasena restablecida", Toast.LENGTH_SHORT).show();
+                }else {
+
+                    Toast.makeText(datos_perfil_activity.this, "No coincide", Toast.LENGTH_SHORT).show();
+                    pass2.setText("");
+                }
+
 
             }
         });

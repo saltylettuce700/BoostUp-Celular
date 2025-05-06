@@ -65,6 +65,16 @@
     <string name="btn_call">Llamar</string>
     <string name="btn_cancel">Cancelar</string>
 
+    <!--CUSTOM DIALOG RESTABLECER ACTIVITY-->
+
+    <string name="dialog_titlepass">Restablecer contraseña</string>
+    <string name="dialog_message1">Nueva contraseña</string>
+    <string name="dialog_message2">Confirmar contraseña</string>
+    <string name="btn_respass">Restablecer</string>
+    <string name="btn_cancelpass">Cancelar</string>
+
+    <string name="mensaje_pass_notequal">La contraseña no coincide</string>
+
     <!--DATOS PERFIL ACTIVITY-->
 
     <string name="profile_dataACT">Datos de Perfil</string>

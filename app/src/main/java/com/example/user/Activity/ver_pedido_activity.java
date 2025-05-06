@@ -35,6 +35,8 @@ public class ver_pedido_activity extends AppCompatActivity {
     TextView nombreBebida, precio, fechatxt, estado_pedido, proteinatxt, marca_proteina, gr_proteina, tipo_proteina;
     TextView sabortxt, marca_sabor, tipo_sabor, curcuma, curcuma_marca, curcuma_gr;
 
+    ImageView img1, img2, img3;
+
     Button ver_qr;
 
     ImageButton btnBack;
@@ -70,6 +72,10 @@ public class ver_pedido_activity extends AppCompatActivity {
         curcuma = findViewById(R.id.tvNombreCurcuma);
         curcuma_marca = findViewById(R.id.tvTipoCurcuma);
         curcuma_gr = findViewById(R.id.tvDescripcionCurcuma);
+
+        img1 = findViewById(R.id.imgProducto);
+        img2 = findViewById(R.id.imgProducto2);
+        img3 = findViewById(R.id.imgProducto3);
 
         ver_qr = findViewById(R.id.btn_qr);
 
@@ -155,6 +161,14 @@ public class ver_pedido_activity extends AppCompatActivity {
                     curcuma.setText("Cúrcuma");
                     curcuma_marca.setText(marcaCurcuma);
                     curcuma_gr.setText(curcumaGrTexto);
+
+                    int resID1 = obtenerImagenPorProducto("Proteínas", proteina);
+                    int resID2 = obtenerImagenPorProducto("Saborizantes",sabor);
+                    int resID3 = obtenerImagenPorProducto("Cúrcuma y Jengibre",marcaCurcuma);
+
+                    img1.setImageResource(resID1);
+                    img2.setImageResource(resID2);
+                    img3.setImageResource(resID3);
 
                     translateSelectedTextViews();
                 });
@@ -247,6 +261,33 @@ public class ver_pedido_activity extends AppCompatActivity {
         translator.translate(originalText)
                 .addOnSuccessListener(translatedText -> textView.setText(translatedText))
                 .addOnFailureListener(e -> Toast.makeText(this, "Error al traducir: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    private int obtenerImagenPorProducto(String categoria, String valorClave) {
+        if (valorClave == null) return 0;
+
+        valorClave = valorClave.toLowerCase();
+
+        switch (categoria) {
+            case "Proteínas":
+                if (valorClave.contains("pure and natural")) return R.drawable.pure_natural_img;
+                if (valorClave.contains("falcon")) return R.drawable.falcon;
+                return 0;
+
+            case "Saborizantes":
+                if (valorClave.contains("fresa")||valorClave.contains("strawberry")) return R.drawable.strawberry_milk;
+                if (valorClave.contains("chocolate")) return R.drawable.choco_milk;
+                if (valorClave.contains("vainilla")|| valorClave.contains("vanilla")) return R.drawable.vanilla_milk;
+
+
+                return 0;
+
+            case "Cúrcuma y Jengibre":
+                if (valorClave.contains("nature heart")) return R.drawable.nature_heart_turmeric;
+                return 0;
+        }
+
+        return 0;
     }
 
 }
