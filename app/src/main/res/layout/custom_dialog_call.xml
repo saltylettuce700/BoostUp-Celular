@@ -50,7 +50,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:visibility="gone"
-        android:text="523331179846"
+        android:text="3331179846"
         android:textColor="@color/black"
         android:textSize="16sp" />
 

@@ -83,6 +83,11 @@ public class BD {
         void onFailure();
     }
 
+    public interface BooleanCallback {
+        void onSuccess(boolean existe);
+        void onFailure();
+    }
+
 
     private void getRequest(String route, Callback callback) {
 
@@ -184,7 +189,7 @@ public class BD {
             @Override
             public void onFailure(String error) {
                 runOnUiThread(() -> {
-                    Toast.makeText(context, "Usuario o Contraseña erroneos", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Usuario o Contraseña erroneos", Toast.LENGTH_SHORT).show();
                     callback.onLoginFailed();
                 });
             }
@@ -350,7 +355,7 @@ public class BD {
             public void onFailure(String error) {
                 runOnUiThread(() -> {
                     // Mostrar el mensaje de error
-                    Toast.makeText(context, "Usuario o Contraseña erroneos", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Usuario o Contraseña erroneos", Toast.LENGTH_SHORT).show();
                     callback.onLoginFailed();
                 });
             }
@@ -903,6 +908,39 @@ public class BD {
         });
     }
 
+    public void comprobarEmailExiste (String email, BooleanCallback callback){
+        String ruta = "usuario/existe/";
+        JSONObject json = new JSONObject();
+        try {
+            json.put("email", email);
+        } catch (JSONException e) {
+            callback.onFailure();
+            return;
+        }
+
+        PostRequest(ruta, json, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseBody = response.body().string();
+                    try {
+                        JSONObject jsonResponse = new JSONObject(responseBody); // <- parsear a JSON
+                        boolean existe = jsonResponse.optBoolean("exists", false); // <- obtener el booleano
+                        callback.onSuccess(existe);
+                    } catch (JSONException e) {
+                        callback.onFailure();
+                    }
+                } else {
+                    callback.onFailure();
+                }
+            }
+        });
+    }
 
 
     /*---------------------------------------------------------------------------------------*/

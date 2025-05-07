@@ -11,6 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.user.ConexionBD.BD;
 import com.example.user.R;
 
 import java.util.ArrayList;
@@ -64,30 +65,58 @@ public class registro_mail_activity extends AppCompatActivity {
                 Toast.makeText(this, "Campos vacíos, favor de llenarlos", Toast.LENGTH_SHORT).show();
             } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 Toast.makeText(this, "El formato del correo no es válido", Toast.LENGTH_SHORT).show();
-            }else if (validarPassword(password)){
-                if (confirmarPassword(password, confpass)){
-                    Intent intent = new Intent(this, registro_name_activity.class);
-                    intent.putExtra("email", email);
-                    intent.putExtra("pass", password);
-                    intent.putExtra("nombre", setNombre);
-                    intent.putExtra("apellido", setApellido);
-                    intent.putExtra("birthday", setBirthday);
-                    intent.putExtra("username", setusername);
-                    intent.putExtra("sexo", setsexo);
-                    intent.putExtra("peso", setpeso);
-                    intent.putExtra("talla", settalla);
-                    intent.putExtra("cintura", setcintura);
-                    intent.putExtra("cadera", setcadera);
-                    intent.putExtra("brazo", setbrazo);
-                    intent.putIntegerArrayListExtra("alergiasSeleccionadas", (ArrayList<Integer>) setalergiasSeleccionadas);
+            }else{
+                BD bd = new BD(this);
 
-                    startActivity(intent);
-                }
+                bd.comprobarEmailExiste(email, new BD.BooleanCallback() {
+                    @Override
+                    public void onSuccess(boolean existe) {
+                        runOnUiThread(()->{
+                            if (existe){
+                                Toast.makeText(registro_mail_activity.this, "Correo ya registrado", Toast.LENGTH_SHORT).show();
+                            }else{
+                                if (validarPassword(password)){
+                                    if (confirmarPassword(password, confpass)){
+                                        Intent intent = new Intent(registro_mail_activity.this, registro_name_activity.class);
+                                        intent.putExtra("email", email);
+                                        intent.putExtra("pass", password);
+                                        intent.putExtra("nombre", setNombre);
+                                        intent.putExtra("apellido", setApellido);
+                                        intent.putExtra("birthday", setBirthday);
+                                        intent.putExtra("username", setusername);
+                                        intent.putExtra("sexo", setsexo);
+                                        intent.putExtra("peso", setpeso);
+                                        intent.putExtra("talla", settalla);
+                                        intent.putExtra("cintura", setcintura);
+                                        intent.putExtra("cadera", setcadera);
+                                        intent.putExtra("brazo", setbrazo);
+                                        intent.putIntegerArrayListExtra("alergiasSeleccionadas", (ArrayList<Integer>) setalergiasSeleccionadas);
+
+                                        startActivity(intent);
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        runOnUiThread(() ->
+                                Toast.makeText(registro_mail_activity.this, "Error de conexión", Toast.LENGTH_SHORT).show()
+                        );
+                    }
+                });
+
+
             }
 
            /* startActivity(new Intent(this, registro_name_activity.class));
             Toast.makeText(this, "Siguiente nombre", Toast.LENGTH_SHORT).show();*/
         });
+    }
+
+    public void irRegistroNameActivity(){
+
     }
 
     public boolean validarPassword(String pass){

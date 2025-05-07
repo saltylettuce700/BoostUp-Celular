@@ -155,7 +155,7 @@ public class registro_name_activity extends AppCompatActivity {
                 // Establecer el rango de fechas permitidas
                 Calendar minDate = Calendar.getInstance();
                 Calendar maxDate = Calendar.getInstance();
-                maxDate.set(actual.get(Calendar.YEAR) - 16, actual.get(Calendar.MONTH), actual.get(Calendar.DAY_OF_MONTH));// 1 de enero de 1970
+                maxDate.set(actual.get(Calendar.YEAR) - 18, actual.get(Calendar.MONTH), actual.get(Calendar.DAY_OF_MONTH));// 1 de enero de 1970
                 //minDate.set(1970, Calendar.JANUARY, 1); // 1 de enero de 1970
                 minDate.set(actual.get(Calendar.YEAR) - 99, actual.get(Calendar.MONTH), actual.get(Calendar.DAY_OF_MONTH));
 
