@@ -222,19 +222,55 @@ public class datos_perfil_activity extends AppCompatActivity {
         btnRespass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String nuevaPass = pass1.getText().toString();
+                String confirmarPass = pass2.getText().toString();
 
-                if (pass1.toString().equals(pass2.toString())){
-
-                    // Acción de continuar
-                    dialog.dismiss();
-                    Toast.makeText(datos_perfil_activity.this, "Contrasena restablecida", Toast.LENGTH_SHORT).show();
-                }else {
-
-                    Toast.makeText(datos_perfil_activity.this, "No coincide", Toast.LENGTH_SHORT).show();
+                // Verifica que sean iguales
+                if (!nuevaPass.equals(confirmarPass)) {
+                    Toast.makeText(datos_perfil_activity.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
                     pass2.setText("");
+                    return;
                 }
 
+                if (nuevaPass.length() < 8) {
+                    Toast.makeText(datos_perfil_activity.this, "La contraseña debe tener al menos 8 caracteres", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
+                if (!nuevaPass.matches(".*[A-Z].*")) {
+                    Toast.makeText(datos_perfil_activity.this, "La contraseña debe contener al menos una letra mayúscula", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!nuevaPass.matches(".*\\d.*")) {
+                    Toast.makeText(datos_perfil_activity.this, "La contraseña debe contener al menos un número", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Si pasa todas las validaciones, actualiza la contraseña
+                BD bd = new BD(datos_perfil_activity.this);
+                bd.ActualizarPass(nuevaPass, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(datos_perfil_activity.this, "Fallo: " + e, Toast.LENGTH_SHORT).show();
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        runOnUiThread(() -> {
+                            if (response.isSuccessful()) {
+                                Preferences preferences = new Preferences(datos_perfil_activity.this);
+                                preferences.guardarPassword(nuevaPass);
+                                Toast.makeText(datos_perfil_activity.this, "Contraseña actualizada correctamente", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(datos_perfil_activity.this, "Algo salió mal", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+                dialog.dismiss();
             }
         });
 
