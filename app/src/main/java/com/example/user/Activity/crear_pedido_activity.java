@@ -25,6 +25,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.user.Activity.Registro.ver_detalles_activity;
 import com.example.user.ConexionBD.BD;
 import com.example.user.R;
 import com.google.gson.JsonArray;
@@ -79,6 +80,8 @@ public class crear_pedido_activity extends AppCompatActivity {
     private Map<String, Integer> proteinaNombreToId = new HashMap<>();
     private Map<String, Integer> saborizanteNombreToId = new HashMap<>();
     private boolean tieneCurcuma = false;
+
+    private String idPedidoActual;
 
 
     @Override
@@ -528,6 +531,11 @@ public class crear_pedido_activity extends AppCompatActivity {
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setOnItemClickListener((parent, view, position, id) -> {
             String selectedItem = adapter.getItem(position);
+
+            if (selectedItem != null && selectedItem.startsWith("⚠️ ")) {
+                selectedItem = selectedItem.substring(3);
+            }
+
             listener.onItemSelected(selectedItem);
 
 
@@ -585,6 +593,12 @@ public class crear_pedido_activity extends AppCompatActivity {
     private void onPaymentSheetResult(final PaymentSheetResult paymentSheetResult) {
         if (paymentSheetResult instanceof PaymentSheetResult.Completed) {
             showToast("Payment complete!");
+            Intent intent = new Intent(this, ver_pedido_activity.class);
+            intent.putExtra("id_pedido", idPedidoActual);
+            intent.putExtra("proteina", selectedProteina);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            finish();
+            startActivity(intent);
         } else if (paymentSheetResult instanceof PaymentSheetResult.Canceled) {
             Log.i("CheckoutActivity", "Payment canceled!");
         } else if (paymentSheetResult instanceof PaymentSheetResult.Failed) {
@@ -609,8 +623,8 @@ public class crear_pedido_activity extends AppCompatActivity {
                     PaymentSheet.Configuration configuration = new PaymentSheet.Configuration.Builder("BoostUp Inc.").build();
                     paymentIntentClientSecret = clientSecret;
                     paymentSheet.presentWithPaymentIntent(paymentIntentClientSecret, configuration);
-                    String QR = id_pedido;
-                    Toast.makeText(crear_pedido_activity.this, QR, Toast.LENGTH_SHORT).show();
+                    idPedidoActual = id_pedido;
+                    Toast.makeText(crear_pedido_activity.this, idPedidoActual, Toast.LENGTH_SHORT).show();
                 });
             }
 
