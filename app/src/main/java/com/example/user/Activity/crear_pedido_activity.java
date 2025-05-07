@@ -225,6 +225,7 @@ public class crear_pedido_activity extends AppCompatActivity {
                 runOnUiThread(() ->{
                     String username = obj.get("username").getAsString();
                     txtBebidasUsername.setText("Bebidas "+ username);
+                    translateSelectedTextViews();
                 });
             }
 
@@ -432,23 +433,22 @@ public class crear_pedido_activity extends AppCompatActivity {
 
                     runOnUiThread(() -> {
                         if (languageCode.equals("en")) {
-                            translateListItems(proteinas, translatedProteinas -> {
-                                translateListItems(proteinasAmarillo.toArray(new String[0]), translatedAmarillos -> {
-                                    colorearProteinas(translatedProteinas, Arrays.asList(translatedAmarillos));
-                                    translateListItems(saborizantes, translatedSaborizantes -> {
-                                        translateListItems(curcuma, translatedCurcuma -> {
-                                            configureListView(listProteinas, translatedProteinas, selected -> selectedProteina = selected);
-                                            configureListView(listSaborizantes, translatedSaborizantes, selected -> selectedSaborizante = selected);
-                                            configureListView(listCurcuma, translatedCurcuma, selected -> {
-                                                selectedCurcuma = selected;
-                                                int index = Arrays.asList(translatedCurcuma).indexOf(selected);
-                                                tieneCurcuma = (index == 0); // Sigue siendo la primera opción
-                                            });
-                                        });
+                            // ❗️NO traducimos los nombres de las proteínas, solo coloreamos
+                            colorearProteinas(proteinas, proteinasAmarillo);
+
+                            translateListItems(saborizantes, translatedSaborizantes -> {
+                                translateListItems(curcuma, translatedCurcuma -> {
+                                    configureListView(listProteinas, proteinas, selected -> selectedProteina = selected);
+                                    configureListView(listSaborizantes, translatedSaborizantes, selected -> selectedSaborizante = selected);
+                                    configureListView(listCurcuma, translatedCurcuma, selected -> {
+                                        selectedCurcuma = selected;
+                                        int index = Arrays.asList(translatedCurcuma).indexOf(selected);
+                                        tieneCurcuma = (index == 0); // Sigue siendo la primera opción
                                     });
                                 });
                             });
-                        } else {
+                        }
+                        else {
                             colorearProteinas(proteinas, proteinasAmarillo);
                             configureListView(listProteinas, proteinas, selected -> selectedProteina = selected);
                             configureListView(listSaborizantes, saborizantes, selected -> selectedSaborizante = selected);
@@ -523,6 +523,18 @@ public class crear_pedido_activity extends AppCompatActivity {
             e.printStackTrace();
             return "{}"; // Devuelve un JSON vacío en caso de error
         }
+    }
+
+    private void translateSelectedTextViews() {
+        translateTextView(txtBebidasUsername);
+
+    }
+
+    private void translateTextView(TextView textView) {
+        String originalText = textView.getText().toString();
+        translator.translate(originalText)
+                .addOnSuccessListener(translatedText -> textView.setText(translatedText))
+                .addOnFailureListener(e -> Toast.makeText(this, "Error al traducir: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     private void configureListView(ListView listView, String[] items, OnItemSelectedListener listener) {
