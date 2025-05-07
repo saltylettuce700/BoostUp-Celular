@@ -64,9 +64,11 @@ public class login_activity extends AppCompatActivity {
             String correo = email.getText().toString();
             String pass = password.getText().toString();
 
-            if (correo.isEmpty() || pass.isEmpty()) {
-                Toast.makeText(this, "Campos vacíos, favor de llenarlos", Toast.LENGTH_SHORT).show();
-            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+            if (correo.isEmpty()) {
+                Toast.makeText(this, "Email Vacio favor de llenarlo", Toast.LENGTH_SHORT).show();
+            }else if(pass.isEmpty()){
+                Toast.makeText(this, "Contraseña vacia favor de llenarlo", Toast.LENGTH_SHORT).show();
+            }else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
                 Toast.makeText(this, "El formato del correo no es válido", Toast.LENGTH_SHORT).show();
             } else {
                 // Oculta el botón y muestra la barra de progreso
@@ -81,8 +83,30 @@ public class login_activity extends AppCompatActivity {
 
                     @Override
                     public void onLoginFailed() {
-                        progressBar.setVisibility(View.GONE);
-                        btnNext.setVisibility(View.VISIBLE);
+                        runOnUiThread(()->{
+                            progressBar.setVisibility(View.GONE);
+                            btnNext.setVisibility(View.VISIBLE);
+
+                            bd.comprobarEmailExiste(correo, new BD.BooleanCallback() {
+                                @Override
+                                public void onSuccess(boolean existe) {
+                                    runOnUiThread(()->{
+                                        if (existe){
+                                            Toast.makeText(login_activity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                                        }else{
+                                            Toast.makeText(login_activity.this, "Usuario incorrecto", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onFailure() {
+                                    runOnUiThread(() ->
+                                            Toast.makeText(login_activity.this, "Algo fallo", Toast.LENGTH_SHORT).show()
+                                    );
+                                }
+                            });
+                        });
                     }
                 });
             }
