@@ -6,6 +6,7 @@ import static com.example.user.Activity.account_activity.SELECTED_LANGUAGE;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,11 @@ import com.google.mlkit.nl.translate.TranslateLanguage;
 import com.google.mlkit.nl.translate.Translation;
 import com.google.mlkit.nl.translate.Translator;
 import com.google.mlkit.nl.translate.TranslatorOptions;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 public class ver_pedido_activity extends AppCompatActivity {
 
@@ -37,11 +43,15 @@ public class ver_pedido_activity extends AppCompatActivity {
 
     ImageView img1, img2, img3;
 
+    String idpedidoqr;
+
     Button ver_qr;
 
     ImageButton btnBack;
 
     private Translator translator;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +93,11 @@ public class ver_pedido_activity extends AppCompatActivity {
         // Configura el traductor
         setupTranslator();
 
+        String idPedido = getIntent().getStringExtra("id_pedido");
+        String tipoProteina = getIntent().getStringExtra("proteina");
+
+        idpedidoqr = idPedido;
+
 
         findViewById(R.id.btn_qr).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,8 +106,7 @@ public class ver_pedido_activity extends AppCompatActivity {
             }
         });
 
-        String idPedido = getIntent().getStringExtra("id_pedido");
-        String tipoProteina = getIntent().getStringExtra("proteina");
+
 
         BD bd = new BD(this);
 
@@ -196,6 +210,7 @@ public class ver_pedido_activity extends AppCompatActivity {
     }
 
     private void showQRDialog() {
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
         Dialog dialog = new Dialog(this, R.style.BlurBackgroundDialog);
 
@@ -205,6 +220,22 @@ public class ver_pedido_activity extends AppCompatActivity {
 
         // Configurar botones
         ImageView btn_close = dialogView.findViewById(R.id.btn_close);
+        ImageView qr = dialogView.findViewById(R.id.generated_qr);
+
+
+        try {
+
+            BitMatrix bitMatrix = multiFormatWriter.encode(idpedidoqr, BarcodeFormat.QR_CODE,600,600);
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+
+            qr.setImageBitmap(bitmap);
+
+        }catch (WriterException e) {
+
+            throw new RuntimeException(e);
+
+        }
 
 
         btn_close.setOnClickListener(new View.OnClickListener() {

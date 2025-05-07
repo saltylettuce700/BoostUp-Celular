@@ -156,7 +156,7 @@ public class crear_pedido_activity extends AppCompatActivity {
                     BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                     Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
 
-                    qr.setImageBitmap(bitmap);
+                    //qr.setImageBitmap(bitmap);
 
                 }catch (WriterException e) {
 
