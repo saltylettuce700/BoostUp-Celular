@@ -30,7 +30,12 @@ import com.example.user.Activity.Registro.registro_mail_activity;
 import com.example.user.ConexionBD.BD;
 import com.example.user.R;
 
+import java.io.IOException;
 import java.util.Locale;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class login_activity extends AppCompatActivity {
 
@@ -165,10 +170,42 @@ public class login_activity extends AppCompatActivity {
                 } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     Toast.makeText(login_activity.this, "Correo inválido", Toast.LENGTH_SHORT).show();
                 } else {
-                    // logica para enviar el correo de recuperación
-                    dialog.dismiss();
-                    Toast.makeText(login_activity.this, "Se ha enviado una contraseña temporal a tu correo", Toast.LENGTH_SHORT).show();
+                    bd.comprobarEmailExiste(email, new BD.BooleanCallback() {
+                        @Override
+                        public void onSuccess(boolean existe) {
+                            runOnUiThread(()->{
+                                if (existe){
+                                    runOnUiThread(()->{
+                                        bd.olvideMiContraseña(email, new Callback() {
+                                            @Override
+                                            public void onFailure(Call call, IOException e) {
+                                                runOnUiThread(() ->
+                                                        Toast.makeText(login_activity.this, "Algo falló", Toast.LENGTH_SHORT).show()
+                                                );
+                                            }
+
+                                            @Override
+                                            public void onResponse(Call call, Response response) throws IOException {
+                                                //Nada ya lo hace solito
+                                            }
+                                        });
+                                    });
+                                }else{
+                                    Toast.makeText(login_activity.this, "Correo no registrado", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            runOnUiThread(() ->
+                                    Toast.makeText(login_activity.this, "Algo falló", Toast.LENGTH_SHORT).show()
+                            );
+                        }
+                    });
                 }
+
+                dialog.dismiss();
             }
         });
 
