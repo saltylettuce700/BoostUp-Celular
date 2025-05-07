@@ -980,6 +980,32 @@ public class BD {
         putAuthRequest(ruta, jsonBody, callback);
     }
 
+    public  void ActualizarPass(String pass, Callback callback){
+        String ruta = "usuario/updatePassword/";
+        JSONObject json = new JSONObject();
+        try {
+            json.put("password", pass);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String jsonBody = json.toString();
+        putAuthRequest(ruta, jsonBody, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(()->{
+                    Toast.makeText(context, "Fallo: "+e, Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                runOnUiThread(()->{
+                    Toast.makeText(context, "Contraseña modificada", Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
 
     /*---------------------------------------------------------------------------------------*/
     //DELETES
