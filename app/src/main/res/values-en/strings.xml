@@ -67,6 +67,15 @@
 
     <string name="mensaje_pass_notequal">Password does not match</string>
 
+    <!--CUSTOM DIALOG RESTABLECER LOGINM ACTIVITY-->
+
+    <string name="dialog_titlelogin">Forgot your password?</string>
+    <string name="dialog_message1login">Enter the email address associated with your account</string>
+    <string name="dialog_message2login">We will send you an email with a temporary password so you can access your account</string>
+    <string name="reset_passwordlogin">Send temporary password</string>
+    <string name="btn_backlogin">Back</string>
+
+
 
     <!--DATOS PERFIL ACTIVITY-->
 
