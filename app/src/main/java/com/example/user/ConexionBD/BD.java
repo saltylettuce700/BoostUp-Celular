@@ -942,6 +942,37 @@ public class BD {
         });
     }
 
+    public void olvideMiContraseña(String email, Callback callback){
+        String ruta = "usuario/forgotPassword/";
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("email", email);
+        } catch (JSONException e) {
+            runOnUiThread(()->{
+                Toast.makeText(context, "Error al procesar el email", Toast.LENGTH_SHORT).show();
+                return;
+            });
+        }
+
+        PostRequest(ruta, jsonObject, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onFailure(call, e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    runOnUiThread(()->{
+                        Toast.makeText(context, "Enviando Correo", Toast.LENGTH_SHORT).show();
+                    });
+
+                }
+            }
+        });
+    }
+
 
     /*---------------------------------------------------------------------------------------*/
     //PUTS
