@@ -4,12 +4,16 @@ package com.example.user.Activity;
 import static com.example.user.Activity.account_activity.LANGUAGE_PREF;
 import static com.example.user.Activity.account_activity.SELECTED_LANGUAGE;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -105,7 +109,56 @@ public class login_activity extends AppCompatActivity {
             Toast.makeText(this, "Ir a recuperación de contraseña", Toast.LENGTH_SHORT).show();
         });
 
+        // Botón "Restablecer"
+        findViewById(R.id.TV_lostPass).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showResetPasswordDialog();
+            }
+        });
+
     }
+
+    private void showResetPasswordDialog() {
+        Dialog dialog = new Dialog(this, R.style.BlurBackgroundDialog);
+
+        // Inflar diseño personalizado
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog_reset_password, null);
+        dialog.setContentView(dialogView);
+
+
+        Button btnRespass = dialogView.findViewById(R.id.btn_continue);
+        Button btnCancel = dialogView.findViewById(R.id.btn_back);
+        EditText mailEditText = dialogView.findViewById(R.id.mail);
+
+        btnRespass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = mailEditText.getText().toString().trim();
+
+                if (email.isEmpty()) {
+                    Toast.makeText(login_activity.this, "Por favor ingresa tu correo", Toast.LENGTH_SHORT).show();
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    Toast.makeText(login_activity.this, "Correo inválido", Toast.LENGTH_SHORT).show();
+                } else {
+                    // logica para enviar el correo de recuperación
+                    dialog.dismiss();
+                    Toast.makeText(login_activity.this, "Se ha enviado una contraseña temporal a tu correo", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(login_activity.this, "Operación cancelada", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
 
     private void changeLanguage(String languageCode) {
         // Cambiar el idioma

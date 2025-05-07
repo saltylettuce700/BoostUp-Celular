@@ -75,6 +75,15 @@
 
     <string name="mensaje_pass_notequal">La contraseña no coincide</string>
 
+    <!--CUSTOM DIALOG RESTABLECER LOGIN ACTIVITY-->
+
+    <string name="dialog_titlelogin">¿Olvidaste tu contraseña?</string>
+    <string name="dialog_message1login">Ingresa el correo electrónico asociado a tu cuenta</string>
+    <string name="dialog_message2login">Te enviaremos un correo con una contraseña temporal para que puedas acceder a tu cuenta</string>
+    <string name="reset_passwordlogin">Enviar contraseña temporal</string>
+    <string name="btn_backlogin">Volver</string>
+
+
     <!--DATOS PERFIL ACTIVITY-->
 
     <string name="profile_dataACT">Datos de Perfil</string>
