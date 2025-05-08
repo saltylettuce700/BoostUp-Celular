@@ -79,7 +79,7 @@ public class BD {
     }
 
     public interface PedidoCallback {
-        void onSuccess(String clientSecret, String id_pedido);
+        void onSuccess(String clientSecret, String id_pedido, String ephemeralKey, String customerId);
         void onFailure();
     }
 
@@ -1095,16 +1095,43 @@ public class BD {
                         JSONObject jsonResponse = new JSONObject(responseBody);
                         String clientSecret = jsonResponse.optString("clientSecret", null);
                         String id_pedido = jsonResponse.optString("id_pedido", null);
-                        if (clientSecret != null) {
-                            callback.onSuccess(clientSecret, id_pedido);
-                        } else {
-                            callback.onFailure();
-                        }
+                        String ephemeralKey = jsonResponse.optString("ephemeral_key", null);
+                        String customerId = jsonResponse.optString("customer_id", null);
+
+                        callback.onSuccess(clientSecret, id_pedido, ephemeralKey, customerId);
+
                     } catch (JSONException e) {
                         callback.onFailure();
                     }
                 } else {
                     callback.onFailure();
+                }
+            }
+        });
+    }
+
+    public void getMetodosDePago(JsonCallback callback){
+        String ruta = "usuario/paymentMethods/";
+
+        authGetRequest(ruta, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError("Error de conexión");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    try {
+                        JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
+                        callback.onSuccess(obj);
+                    } catch (Exception e) {
+                        callback.onError("Error al procesar datos");
+                    }
+                } else {
+                    callback.onError("Error en la respuesta del servidor");
                 }
             }
         });

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -26,7 +27,11 @@ import com.example.user.Activity.Registro.registro_terminos_activity;
 import com.example.user.ConexionBD.BD;
 import com.example.user.ConexionBD.Preferences;
 import com.example.user.R;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.stripe.android.paymentsheet.PaymentSheet;
+import com.stripe.android.paymentsheet.PaymentSheetResult;
 
 import java.util.Locale;
 
@@ -35,6 +40,7 @@ public class account_activity extends AppCompatActivity {
     public static final String LANGUAGE_PREF = "language_pref";
     public static final String SELECTED_LANGUAGE = "selected_language";
 
+    private PaymentSheet paymentSheet;
 
     TextView TV_idioma, usernametxt;
 
@@ -55,6 +61,9 @@ public class account_activity extends AppCompatActivity {
 
         TV_idioma = findViewById(R.id.TV_idioma);
         usernametxt = findViewById(R.id.textView4);
+
+        //Stripe
+        paymentSheet = new PaymentSheet(this, this::onPaymentSheetResult);
 
         String lang = loadLanguagePreference();
         if (lang.equals("en")) {
@@ -127,6 +136,7 @@ public class account_activity extends AppCompatActivity {
         findViewById(R.id.pago_section).setOnClickListener(v -> {
             // Acción para Cerrar Sesión
             //startActivity(new Intent(this, registro_terminos_activity.class));
+            obtenerMetodosDePago();
             Toast.makeText(this, "ABRIR METODOS DE PAGO", Toast.LENGTH_SHORT).show();
         });
 
@@ -298,4 +308,48 @@ public class account_activity extends AppCompatActivity {
         System.exit(0); // Cerrar la aplicación completamente
     }
 
+    private void obtenerMetodosDePago() {
+        BD bd = new BD(this);
+
+        bd.getMetodosDePago(new BD.JsonCallback() {
+            @Override
+            public void onSuccess(JsonObject obj) {
+                runOnUiThread(()-> {
+                    String customerId = obj.get("customer_id").getAsString();
+                    String ephemeralKey = obj.get("ephemeral_key").getAsString();
+                    String client_secret = obj.get("client_secret").getAsString();
+                    Log.i("customerId", customerId);
+                    Log.i("ephemeralKey", ephemeralKey);
+                    Log.i("client_secret", client_secret);
+
+                    PaymentSheet.CustomerConfiguration customerConfig = new PaymentSheet.CustomerConfiguration(customerId, ephemeralKey);
+
+                    PaymentSheet.Configuration configuration = new PaymentSheet.Configuration(
+                            "BoostUp Inc.",
+                            customerConfig
+                    );
+
+                    paymentSheet.presentWithSetupIntent(client_secret, configuration);
+                });
+            }
+
+            @Override
+            public void onError(String mensaje) {
+                Log.e("PaymentMethods", mensaje);
+                runOnUiThread(() ->{
+                    Toast.makeText(account_activity.this, "Error al obtener metodos de pago", Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+
+    private void onPaymentSheetResult(final PaymentSheetResult paymentSheetResult) {
+        if (paymentSheetResult instanceof PaymentSheetResult.Completed) {
+            Log.i("CheckoutActivity", "Payment methods shown!");
+        } else if (paymentSheetResult instanceof PaymentSheetResult.Canceled) {
+            Log.e("CheckoutActivity", "Payment methods canceled");
+        } else if (paymentSheetResult instanceof PaymentSheetResult.Failed) {
+            Log.e("CheckoutActivity", "Payment methods Failed");
+        }
+    }
 }
