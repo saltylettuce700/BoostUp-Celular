@@ -629,10 +629,14 @@ public class crear_pedido_activity extends AppCompatActivity {
 
         bd.crearPedido(idProteina, idCurcuma, idSaborizante, new BD.PedidoCallback() {
             @Override
-            public void onSuccess(String clientSecret, String id_pedido) {
+            public void onSuccess(String clientSecret, String id_pedido, String ephemeralKey, String customerId) {
                 runOnUiThread(() -> {
                     Toast.makeText(crear_pedido_activity.this, "Pedido creado con exito", Toast.LENGTH_SHORT).show();
-                    PaymentSheet.Configuration configuration = new PaymentSheet.Configuration.Builder("BoostUp Inc.").build();
+
+                    PaymentSheet.CustomerConfiguration customerConfig = new PaymentSheet.CustomerConfiguration(customerId, ephemeralKey);
+
+                    PaymentSheet.Configuration configuration = new PaymentSheet.Configuration("BoostUp Inc.", customerConfig);
+
                     paymentIntentClientSecret = clientSecret;
                     paymentSheet.presentWithPaymentIntent(paymentIntentClientSecret, configuration);
                     idPedidoActual = id_pedido;
