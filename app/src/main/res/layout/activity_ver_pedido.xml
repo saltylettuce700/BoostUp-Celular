@@ -315,7 +315,8 @@
                     android:layout_marginTop="28dp"
                     android:backgroundTint="#8BC34A"
                     android:elevation="4dp"
-                    android:text="Ver QR del pedido" />
+                    android:text="Ver QR del pedido"
+                    android:visibility="visible"/>
 
                 <Space
                     android:layout_width="match_parent"
