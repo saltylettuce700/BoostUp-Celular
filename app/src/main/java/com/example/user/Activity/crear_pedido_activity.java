@@ -112,27 +112,9 @@ public class crear_pedido_activity extends AppCompatActivity {
         // Configura el traductor
         setupTranslator();
 
-        // Datos de prueba
-        //String[] proteinas = {"Proteína Genérica Vegetal", "Proteína Genérica Animal", "Proteína Premium"};
-        //String[] saborizantes = {"Vainilla", "Chocolate", "Fresa"};
-        //String[] curcuma = {"Con cúrcuma de la chida", "Con cúrcuma de la chafa"};
-
         llenarUsername();
 
         obtenerAlergiasUsuario();
-        //llenarCadenas();
-
-        // Traducir los elementos antes de configurar los ListView
-//        translateListItems(proteinas, translatedProteinas -> {
-//            translateListItems(saborizantes, translatedSaborizantes -> {
-//                translateListItems(curcuma, translatedCurcuma -> {
-//                    // Configurar los ListView con los elementos traducidos
-//                    configureListView(listProteinas, translatedProteinas, selected -> selectedProteina = selected);
-//                    configureListView(listSaborizantes, translatedSaborizantes, selected -> selectedSaborizante = selected);
-//                    configureListView(listCurcuma, translatedCurcuma, selected -> selectedCurcuma = selected);
-//                });
-//            });
-//        });
 
 
 
@@ -225,7 +207,10 @@ public class crear_pedido_activity extends AppCompatActivity {
                 runOnUiThread(() ->{
                     String username = obj.get("username").getAsString();
                     txtBebidasUsername.setText("Bebidas "+ username);
-                    translateSelectedTextViews();
+                    if(loadLanguagePreference().equals("en")){
+                        translateSelectedTextViews();
+                    }
+
                 });
             }
 
@@ -238,91 +223,7 @@ public class crear_pedido_activity extends AppCompatActivity {
         });
     }
 
-//    private void llenarCadenas() {
-//
-//        BD bd = new BD(this);
-//
-//        bd.getOpcionesProteinas(new BD.JsonArrayCallback() {
-//            @Override
-//            public void onSuccess(JsonArray array) {
-//                proteinas = new String[array.size()];
-//                List<String> listaProteinasWarning = new ArrayList<>();
-//                List<Integer> idsProteina = new ArrayList<>();
-//                List<String> listaProteinas = new ArrayList<>();
-//
-//                //int i = 0;
-//                for (JsonElement elemento : array) {
-//                    JsonObject obj = elemento.getAsJsonObject();
-//                    int idProteina = obj.get("id_proteina").getAsInt();
-//                    String nombre = obj.get("nombre").getAsString();
-//                    //proteinas[i++] = nombre;
-//                    listaProteinas.add(nombre);
-//                    idsProteina.add(idProteina);
-//                }
-//
-//                proteinas = new String[listaProteinas.size()];
-//
-//                int totalProteinas = listaProteinas.size();
-//                int[] completadas = {0};
-//
-//                // Luego de cargar proteínas, cargar saborizantes
-//                new Thread(() -> {
-//                    List<Map<String, String>> lista = bd.getSaborizantes();
-//                    if (lista != null) {
-//                        saborizantes = new String[lista.size()];
-//                        for (int j = 0; j < lista.size(); j++) {
-//                            saborizantes[j] = lista.get(j).get("sabor");
-//                        }
-//
-//                        new Thread(() -> {
-//                            int idcurcuma = 1;
-//                            double precio = bd.getPrecioCurcuma(idcurcuma);
-//
-//                            if (precio != -1) {
-//                                curcuma = new String[]{("Con cúrcuma +$" + precio), "Sin cúrcuma"};
-//                            } else {
-//                                curcuma = new String[]{"Con cúrcuma", "Sin cúrcuma"};
-//                            }
-//
-//                            // Aquí obtenemos el idioma
-//                            String languageCode = loadLanguagePreference();
-//
-//
-//                            runOnUiThread(() -> {
-//                                if (languageCode.equals("en")) {
-//                                    translateListItems(proteinas, translatedProteinas -> {
-//                                        translateListItems(saborizantes, translatedSaborizantes -> {
-//                                            translateListItems(curcuma, translatedCurcuma -> {
-//                                                configureListView(listProteinas, translatedProteinas, selected -> selectedProteina = selected);
-//                                                configureListView(listSaborizantes, translatedSaborizantes, selected -> selectedSaborizante = selected);
-//                                                configureListView(listCurcuma, translatedCurcuma, selected -> selectedCurcuma = selected);
-//                                            });
-//                                        });
-//                                    });
-//                                } else {
-//                                    // Si no es inglés, carga sin traducir
-//                                    configureListView(listProteinas, proteinas, selected -> selectedProteina = selected);
-//                                    configureListView(listSaborizantes, saborizantes, selected -> selectedSaborizante = selected);
-//                                    configureListView(listCurcuma, curcuma, selected -> selectedCurcuma = selected);
-//                                }
-//                            });
-//
-//                        }).start();
-//
-//                    } else {
-//                        runOnUiThread(() ->
-//                                Toast.makeText(crear_pedido_activity.this, "Error al cargar saborizantes", Toast.LENGTH_SHORT).show()
-//                        );
-//                    }
-//                }).start();
-//            }
-//
-//            @Override
-//            public void onError(String mensaje) {
-//                Toast.makeText(crear_pedido_activity.this, mensaje, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+
 
     private void llenarCadenas() {
         BD bd = new BD(this);
@@ -548,7 +449,7 @@ public class crear_pedido_activity extends AppCompatActivity {
                 selectedItem = selectedItem.substring(3);
             }
 
-            listener.onItemSelected(selectedItem);
+            //listener.onItemSelected(selectedItem);
 
 
 
@@ -559,6 +460,20 @@ public class crear_pedido_activity extends AppCompatActivity {
                     actualizarPrecio(precioBase);
                 }
             }
+
+            if (listView == listSaborizantes) {
+                if (loadLanguagePreference().equals("en")) {
+                    switch (selectedItem.toLowerCase()){
+                        case "vanilla":
+                            selectedItem = "Vainilla";
+                            break;
+                        case "strawberry":
+                            selectedItem = "Fresa";
+                            break;
+                    }
+                }
+            }
+            listener.onItemSelected(selectedItem);
         });
     }
 
