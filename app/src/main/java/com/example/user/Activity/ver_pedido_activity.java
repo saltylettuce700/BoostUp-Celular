@@ -1,5 +1,6 @@
 package com.example.user.Activity;
 
+import static androidx.constraintlayout.widget.ConstraintSet.GONE;
 import static com.example.user.Activity.account_activity.LANGUAGE_PREF;
 import static com.example.user.Activity.account_activity.SELECTED_LANGUAGE;
 
@@ -140,6 +141,12 @@ public class ver_pedido_activity extends AppCompatActivity {
                             break;
                     }
 
+                    if (estado.equals("canjeado")){
+                        ver_qr.setVisibility(View.GONE);
+                    }else{
+                        ver_qr.setVisibility(View.VISIBLE);
+                    }
+
 
                     String tipoSaborizante = obj.get("tipo_saborizante").getAsString();
                     String marcaProteina = obj.get("proteina_marca").getAsString();
@@ -184,7 +191,10 @@ public class ver_pedido_activity extends AppCompatActivity {
                     img2.setImageResource(resID2);
                     img3.setImageResource(resID3);
 
-                    translateSelectedTextViews();
+                    if(loadLanguagePreference().equals("en")){
+                        translateSelectedTextViews();
+                    }
+
                 });
             }
 
