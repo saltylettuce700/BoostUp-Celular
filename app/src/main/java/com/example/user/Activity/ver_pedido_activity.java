@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -152,19 +153,18 @@ public class ver_pedido_activity extends AppCompatActivity {
                     String marcaProteina = obj.get("proteina_marca").getAsString();
                     //String marcaCurcuma = obj.get("curcuma_marca").isJsonNull() ? "N/A" : obj.get("curcuma_marca").getAsString();
                     String marcaSaborizante = obj.get("saborizante_marca").getAsString();
-                    int curcumaGr = 0;
-                    String curcumaGrTexto;
-                    String marcaCurcuma;
 
-                    if (!obj.get("curcuma_gr").isJsonNull()) {
+                    int curcumaGr = 0;
+                    String curcumaGrTexto = "N/A";
+                    String marcaCurcuma = "N/A";
+
+                    try {
                         curcumaGr = obj.get("curcuma_gr").getAsInt();
                         curcumaGrTexto = curcumaGr + " gr";
                         marcaCurcuma = obj.get("curcuma_marca").getAsString();
-                    } else {
-                        curcumaGrTexto = "N/A";
-                        marcaCurcuma = "N/A";
+                    } catch (Exception e) {
+                        Log.e("Curcuma", e.getMessage());
                     }
-
 
                     nombreBebida.setText(proteina);
                     precio.setText("$"+monto);
