@@ -87,7 +87,6 @@ public class account_activity extends AppCompatActivity {
         findViewById(R.id.btnBack).setOnClickListener(v -> {
             finish();
             startActivity(new Intent(this, home_activity.class));
-            Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
 
         });
 
@@ -117,27 +116,23 @@ public class account_activity extends AppCompatActivity {
             Intent intent = new Intent(this, login_activity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
         });
 
         //Botones de arriba
 
         findViewById(R.id.perfil_section).setOnClickListener(v -> {
             startActivity(new Intent(this, datos_perfil_activity.class));
-            Toast.makeText(this, "IR A PERFIL", Toast.LENGTH_SHORT).show();
         });
 
         findViewById(R.id.historial_section).setOnClickListener(v -> {
             // Acción para Cerrar Sesión
             startActivity(new Intent(this, historial_activity.class));
-            Toast.makeText(this, "HISTORIAL", Toast.LENGTH_SHORT).show();
         });
 
         findViewById(R.id.pago_section).setOnClickListener(v -> {
             // Acción para Cerrar Sesión
             //startActivity(new Intent(this, registro_terminos_activity.class));
             obtenerMetodosDePago();
-            Toast.makeText(this, "ABRIR METODOS DE PAGO", Toast.LENGTH_SHORT).show();
         });
 
         mostrarUsername();
@@ -181,7 +176,6 @@ public class account_activity extends AppCompatActivity {
             public void onClick(View v) {
                 // Acción de continuar
                 dialog.dismiss();
-                Toast.makeText(account_activity.this, "llamando", Toast.LENGTH_SHORT).show();
 
                 Intent llamar = new Intent((Intent.ACTION_CALL));
 
@@ -199,7 +193,6 @@ public class account_activity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(account_activity.this, "Cancelar llamar", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -252,7 +245,6 @@ public class account_activity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(account_activity.this, "Cancelar", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -337,7 +329,7 @@ public class account_activity extends AppCompatActivity {
             public void onError(String mensaje) {
                 Log.e("PaymentMethods", mensaje);
                 runOnUiThread(() ->{
-                    Toast.makeText(account_activity.this, "Error al obtener metodos de pago", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(account_activity.this, "Error al obtener métodos de pago", Toast.LENGTH_SHORT).show();
                 });
             }
         });

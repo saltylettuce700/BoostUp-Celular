@@ -137,7 +137,7 @@ public class registro_mail_activity extends AppCompatActivity {
 
     public boolean confirmarPassword(String pass, String confPass){
         if (!pass.equals(confPass)){
-            Toast.makeText(this, "Confirmacion de contraseña incorrecta", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Confirmación de contraseña incorrecta", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;

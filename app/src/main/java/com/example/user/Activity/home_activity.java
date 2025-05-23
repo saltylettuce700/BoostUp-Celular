@@ -141,14 +141,12 @@ public class home_activity extends AppCompatActivity {
         findViewById(R.id.btn_comprar).setOnClickListener(v -> {
             // Acción para siguiente nombre
             startActivity(new Intent(this, crear_pedido_activity.class));
-            Toast.makeText(this, "Siguiente", Toast.LENGTH_SHORT).show();
 
         });
 
         findViewById(R.id.btn_catalogo).setOnClickListener(v -> {
             // Acción para siguiente nombre
             startActivity(new Intent(this, catalogo_producto_activity.class));
-            Toast.makeText(this, "Siguiente", Toast.LENGTH_SHORT).show();
 
         });
 
@@ -253,7 +251,7 @@ public class home_activity extends AppCompatActivity {
                     @Override
                     public void onError(String mensaje) {
                         runOnUiThread(() ->
-                                Toast.makeText(home_activity.this, "Error sabores: " + mensaje, Toast.LENGTH_SHORT).show());
+                                Toast.makeText(home_activity.this, "Error sabores: " + mensaje, Toast.LENGTH_SHORT));
                     }
                 });
             }
@@ -261,7 +259,7 @@ public class home_activity extends AppCompatActivity {
             @Override
             public void onError(String mensaje) {
                 runOnUiThread(() ->
-                        Toast.makeText(home_activity.this, "Error proteínas: " + mensaje, Toast.LENGTH_SHORT).show());
+                        Toast.makeText(home_activity.this, "Error proteínas: " + mensaje, Toast.LENGTH_SHORT));
             }
         });
     }
@@ -335,7 +333,7 @@ public class home_activity extends AppCompatActivity {
     private String loadLanguagePreference() {
         SharedPreferences preferences = getSharedPreferences(LANGUAGE_PREF, MODE_PRIVATE);
 
-        Toast.makeText(this, "Idioma actual: " + preferences.getString(SELECTED_LANGUAGE, "es"), Toast.LENGTH_SHORT).show(); // Verifica el idioma
+        //Toast.makeText(this, "Idioma actual: " + preferences.getString(SELECTED_LANGUAGE, "es"), Toast.LENGTH_SHORT).show(); // Verifica el idioma
 
         return preferences.getString(SELECTED_LANGUAGE, "es"); // Default is Spanish
 
@@ -370,8 +368,8 @@ public class home_activity extends AppCompatActivity {
         translator = Translation.getClient(options);
 
         translator.downloadModelIfNeeded()
-                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Modelo descargado", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(this, "Error al descargar el modelo: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+
+                .addOnFailureListener(e -> Toast.makeText(this, "Error al descargar el modelo: " + e.getMessage(), Toast.LENGTH_SHORT));
     }
 
     interface OfertaCallback {

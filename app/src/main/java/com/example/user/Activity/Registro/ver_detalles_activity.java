@@ -225,7 +225,6 @@ public class ver_detalles_activity extends AppCompatActivity {
         findViewById(R.id.imageButton).setOnClickListener(v -> {
             finish();
             startActivity(new Intent(this, catalogo_producto_activity.class));
-            Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
 
         });
     }
@@ -234,7 +233,6 @@ public class ver_detalles_activity extends AppCompatActivity {
     private String loadLanguagePreference() {
         SharedPreferences preferences = getSharedPreferences(LANGUAGE_PREF, MODE_PRIVATE);
 
-        Toast.makeText(this, "Idioma actual: " + preferences.getString(SELECTED_LANGUAGE, "es"), Toast.LENGTH_SHORT).show(); // Verifica el idioma
 
         return preferences.getString(SELECTED_LANGUAGE, "es"); // Default is Spanish
 
@@ -250,8 +248,8 @@ public class ver_detalles_activity extends AppCompatActivity {
         translator = Translation.getClient(options);
 
         translator.downloadModelIfNeeded()
-                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Modelo descargado", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(this, "Error al descargar el modelo: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Modelo descargado", Toast.LENGTH_SHORT))
+                .addOnFailureListener(e -> Toast.makeText(this, "Error al descargar el modelo: " + e.getMessage(), Toast.LENGTH_SHORT));
     }
 
 
@@ -272,7 +270,7 @@ public class ver_detalles_activity extends AppCompatActivity {
         String originalText = textView.getText().toString();
         translator.translate(originalText)
                 .addOnSuccessListener(translatedText -> textView.setText(translatedText))
-                .addOnFailureListener(e -> Toast.makeText(this, "Error al traducir: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> Toast.makeText(this, "Error al traducir: " + e.getMessage(), Toast.LENGTH_SHORT));
     }
 
     private int obtenerImagenPorProducto(String categoria, String valorClave) {

@@ -74,9 +74,9 @@ public class login_activity extends AppCompatActivity {
             String pass = password.getText().toString();
 
             if (correo.isEmpty()) {
-                Toast.makeText(this, "Email Vacio favor de llenarlo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Email vacío favor de llenarlo", Toast.LENGTH_SHORT).show();
             }else if(pass.isEmpty()){
-                Toast.makeText(this, "Contraseña vacia favor de llenarlo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Contraseña vacía favor de llenarlo", Toast.LENGTH_SHORT).show();
             }else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
                 Toast.makeText(this, "El formato del correo no es válido", Toast.LENGTH_SHORT).show();
             } else {
@@ -111,7 +111,7 @@ public class login_activity extends AppCompatActivity {
                                 @Override
                                 public void onFailure() {
                                     runOnUiThread(() ->
-                                            Toast.makeText(login_activity.this, "Algo fallo", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(login_activity.this, "Algo falló", Toast.LENGTH_SHORT)
                                     );
                                 }
                             });
@@ -124,7 +124,6 @@ public class login_activity extends AppCompatActivity {
         findViewById(R.id.TV_registarte).setOnClickListener(v -> {
             // Acción para Inventario
             startActivity(new Intent(this, registro_mail_activity.class));
-            Toast.makeText(this, "Registrate", Toast.LENGTH_SHORT).show();
         });
 
         email = findViewById(R.id.ET_correo);
@@ -135,7 +134,6 @@ public class login_activity extends AppCompatActivity {
 
         tv.setOnClickListener(v -> {
             // Aquí abres una actividad, fragmento, diálogo, etc.
-            Toast.makeText(this, "Ir a recuperación de contraseña", Toast.LENGTH_SHORT).show();
         });
 
         // Botón "Restablecer"
@@ -212,7 +210,6 @@ public class login_activity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(login_activity.this, "Operación cancelada", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });

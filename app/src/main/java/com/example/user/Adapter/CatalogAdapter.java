@@ -147,7 +147,6 @@ public class CatalogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         translator = Translation.getClient(options);
 
         translator.downloadModelIfNeeded()
-                .addOnSuccessListener(aVoid -> Toast.makeText(context, "Modelo descargado", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(context, "Error al descargar el modelo: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 

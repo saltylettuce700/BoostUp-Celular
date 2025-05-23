@@ -77,7 +77,6 @@ public class ver_pedidoAfterPago extends AppCompatActivity {
         btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ver_pedidoAfterPago.this, "Cerrar qr", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });

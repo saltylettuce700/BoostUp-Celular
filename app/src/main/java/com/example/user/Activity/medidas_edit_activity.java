@@ -46,7 +46,6 @@ public class medidas_edit_activity extends AppCompatActivity {
         findViewById(R.id.btnBack).setOnClickListener(v -> {
             finish();
             startActivity(new Intent(this, datos_perfil_activity.class));
-            Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
 
         });
 
