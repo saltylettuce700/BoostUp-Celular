@@ -123,7 +123,6 @@ public class crear_pedido_activity extends AppCompatActivity {
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
             String orderString = formatOrder();
 
-            Toast.makeText(this, "ver_pedidoAfterPago", Toast.LENGTH_SHORT).show();
 
             if (selectedProteina != null && selectedSaborizante != null && selectedCurcuma != null) {
                 Toast.makeText(this, "Pedido: \n" +
@@ -162,7 +161,6 @@ public class crear_pedido_activity extends AppCompatActivity {
         findViewById(R.id.imageButton).setOnClickListener(v -> {
             finish();
             startActivity(new Intent(this, home_activity.class));
-            Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
 
         });
 
@@ -390,8 +388,7 @@ public class crear_pedido_activity extends AppCompatActivity {
         translator = Translation.getClient(options);
 
         translator.downloadModelIfNeeded()
-                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Modelo descargado", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(this, "Error al descargar el modelo: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> Toast.makeText(this, "Error al descargar el modelo: " + e.getMessage(), Toast.LENGTH_SHORT));
     }
 
     // Traducir los elementos de la lista
@@ -546,7 +543,6 @@ public class crear_pedido_activity extends AppCompatActivity {
             @Override
             public void onSuccess(String clientSecret, String id_pedido, String ephemeralKey, String customerId) {
                 runOnUiThread(() -> {
-                    Toast.makeText(crear_pedido_activity.this, "Pedido creado con exito", Toast.LENGTH_SHORT).show();
 
                     PaymentSheet.CustomerConfiguration customerConfig = new PaymentSheet.CustomerConfiguration(customerId, ephemeralKey);
 
@@ -555,7 +551,7 @@ public class crear_pedido_activity extends AppCompatActivity {
                     paymentIntentClientSecret = clientSecret;
                     paymentSheet.presentWithPaymentIntent(paymentIntentClientSecret, configuration);
                     idPedidoActual = id_pedido;
-                    Toast.makeText(crear_pedido_activity.this, idPedidoActual, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(crear_pedido_activity.this, idPedidoActual, Toast.LENGTH_SHORT).show();
                 });
             }
 

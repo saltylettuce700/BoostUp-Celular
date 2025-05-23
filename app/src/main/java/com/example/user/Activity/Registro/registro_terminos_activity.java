@@ -70,7 +70,6 @@ public class registro_terminos_activity extends AppCompatActivity {
             btnBack.setOnClickListener(v -> {
                 finish();
                 startActivity(new Intent(this, account_activity.class));
-                Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
             });
         } else {
             btnBack.setVisibility(View.GONE);

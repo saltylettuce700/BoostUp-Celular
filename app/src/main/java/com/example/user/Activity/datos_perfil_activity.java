@@ -128,7 +128,7 @@ public class datos_perfil_activity extends AppCompatActivity {
                             @Override
                             public void onFailure(Call call, IOException e) {
                                 runOnUiThread(()->{
-                                    Toast.makeText(datos_perfil_activity.this, "Error al actualizar: " + e, Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(datos_perfil_activity.this, "Error al actualizar: " + e, Toast.LENGTH_SHORT).show();
                                 });
                             }
 
@@ -148,7 +148,7 @@ public class datos_perfil_activity extends AppCompatActivity {
         findViewById(R.id.btnBack).setOnClickListener(v -> {
             finish();
             startActivity(new Intent(this, account_activity.class));
-            Toast.makeText(this, "PROGRESO", Toast.LENGTH_SHORT).show();
+
 
         });
 
@@ -164,7 +164,6 @@ public class datos_perfil_activity extends AppCompatActivity {
         findViewById(R.id.medidas_section).setOnClickListener(v -> {
             // Acción para Cerrar Sesión
             startActivity(new Intent(this, medidas_edit_activity.class));
-            Toast.makeText(this, "ABRIR METODOS DE PAGO", Toast.LENGTH_SHORT).show();
         });
 
         // Botón "Borrar cuenta"
@@ -253,7 +252,7 @@ public class datos_perfil_activity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         runOnUiThread(() -> {
-                            Toast.makeText(datos_perfil_activity.this, "Fallo: " + e, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(datos_perfil_activity.this, "Fallo: " + e, Toast.LENGTH_SHORT).show();
                         });
                     }
 
@@ -277,7 +276,6 @@ public class datos_perfil_activity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(datos_perfil_activity.this, "Cancelar reestablecer", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -349,7 +347,6 @@ public class datos_perfil_activity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(datos_perfil_activity.this, "Cancelar BorraR", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
