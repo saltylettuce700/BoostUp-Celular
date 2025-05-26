@@ -102,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="24dp"
-                android:text="@string/muchomuchotexto"
+                android:text="Al utilizar esta aplicación móvil, usted acepta estos Términos y Condiciones. Esta App permite calcular una dosis personalizada de proteína post-entrenamiento a partir de medidas corporales, realizar compras de proteína de distintos tipos y sabores, y canjearlas mediante un código QR en máquinas dispensadoras. El usuario es responsable de ingresar información veraz y declara ser mayor de edad o contar con autorización legal. La información proporcionada en la App no sustituye consejo médico profesional. El consumo de productos es bajo responsabilidad del usuario. Al seleccionar alérgenos desde el registro, se mostrará una advertencia ⚠️ en los productos que los contienen, aunque el usuario podrá elegir consumirlos bajo su propio riesgo. Solo se permite un canje cada 24 horas; intentos adicionales serán rechazados automáticamente. No nos hacemos responsables si el usuario evade esta restricción mediante múltiples cuentas. Los pagos son procesados por Stripe; no almacenamos datos bancarios ni de tarjetas. Los datos personales se tratan conforme a la legislación mexicana de protección de datos. El uso indebido, reproducción o modificación del contenido de la App está prohibido. Podemos modificar estos Términos sin previo aviso; el uso continuado implica aceptación. Cualquier disputa se resolverá conforme a las leyes de México."
                 android:textSize="16sp" />
 
 
