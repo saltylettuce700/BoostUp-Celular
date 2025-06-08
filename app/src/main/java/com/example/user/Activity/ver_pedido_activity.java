@@ -174,8 +174,8 @@ public class ver_pedido_activity extends AppCompatActivity {
                     marca_proteina.setText(marcaProteina);
                     gr_proteina.setText(proteinaGr + " gr");
                     tipo_proteina.setText("Proteina: "+ tipoProteina);
-                    int totalGramos = proteinaGr + curcumaGr;
-                    gr_proteina.setText(totalGramos + " gr");
+                    //int totalGramos = proteinaGr + curcumaGr;
+                    //gr_proteina.setText(proteinaGr + " gr");
                     sabortxt.setText(sabor);
                     marca_sabor.setText(marcaSaborizante);
                     tipo_sabor.setText("Saborizante: " + tipoSaborizante);
