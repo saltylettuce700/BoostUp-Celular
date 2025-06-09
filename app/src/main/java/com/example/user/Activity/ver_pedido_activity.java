@@ -159,8 +159,8 @@ public class ver_pedido_activity extends AppCompatActivity {
                     String marcaCurcuma = "N/A";
 
                     try {
-                        curcumaGr = obj.get("curcuma_gr").getAsInt();
-                        curcumaGrTexto = curcumaGr + " gr";
+                        curcumaGr = obj.get("curcuma_gr").getAsInt()/16;
+                        curcumaGrTexto = curcumaGr + " ml";
                         marcaCurcuma = obj.get("curcuma_marca").getAsString();
                     } catch (Exception e) {
                         Log.e("Curcuma", e.getMessage());
